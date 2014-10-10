@@ -383,6 +383,8 @@ void DijetRespCorrData::doFit(TArrayD& respcorr, TArrayD& respcorre)
       }*/
   }
 
+  //gMinuit->Command("SET STR 2");
+
   // Minimize
   gMinuit->Migrad();
 
