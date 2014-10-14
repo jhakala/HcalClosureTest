@@ -74,7 +74,7 @@ class DijetRespCorrDatum : public TObject
   void AddCandTrackP(Double_t);
   void AddCandTrackEcalE(Double_t);
   void AddCandTrackHcalE(std::map<Int_t, Double_t>);
-
+  
   // calculate the ecal, hcal, and HF energy in the tag and probe jets
   // scale the hcal and hf energy by the response corrections
   void GetTagEnergies(const TArrayD& respcorr, Double_t& ecal, Double_t& hcal, Double_t& hf) const;
@@ -121,6 +121,13 @@ class DijetRespCorrData : public TObject
   const DijetRespCorrDatum& GetAt(Int_t) const;
   Int_t GetSize(void) const;
 
+  Int_t GetMinUnfixedParameter(void) const;
+  Int_t GetMaxUnfixedParameter(void) const;
+  void  GetArray(TArrayD& array) const;
+  
+  void SetUnfixedParameters(Int_t,Int_t);
+  void SetArray(const TArrayD);
+
   // calculate the total distance between the tag and probe jets
   // given a set of response corrections
   Double_t GetLikelihoodDistance(const TArrayD& respcorr) const;
@@ -154,6 +161,13 @@ class DijetRespCorrData : public TObject
 
   // this is where the magic happens
   static void FCN(Int_t &npar, Double_t *gin, Double_t &f, Double_t *par, Int_t flag);
+
+  // Parameter array
+  TArrayD fArray;
+
+  // Unfixed parameters
+  Int_t fMinUnfixedParameter;
+  Int_t fMaxUnfixedParameter;
 
   // fit parameters
   Int_t fPrintLevel;

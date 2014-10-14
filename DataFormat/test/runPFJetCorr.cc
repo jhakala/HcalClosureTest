@@ -10,7 +10,7 @@ int main()
   tree->Add(input);
   cout << "File opened." << endl;
 
-  TString output = "/uscms_data/d3/dgsheffi/HCal/corrections/test.root";
+  TString output = "/uscms_data/d3/dgsheffi/HCal/corrections/iteration/QCD_Pt-15to3000_TuneD6R_Flat_8TeV_pythia6_dEta-0p5_Et-20_3rdEt-15_quadruple.root";
 
   DijetRespCorrData data;
 
@@ -249,7 +249,7 @@ int main()
 
   int nEvents = tree->GetEntries();
   cout << "Running over " << nEvents << " events" << endl;
-  //nEvents = 5;
+  //nEvents = 100000;
   for(int iEvent=0; iEvent<nEvents; iEvent++){
     if(iEvent % 10000 == 0){
       cout << "Processing event " << iEvent << endl;
@@ -373,9 +373,39 @@ int main()
   data.SetDoCandTrackEnergyDiff(false);
   cout << "Do CandTrack? " << data.GetDoCandTrackEnergyDiff() << endl;
 
+  Double_t array[83] = { 1.0, 1.0, 0.00628948, 1.07299, 1.12686, 2.02293, 0.792487, 1.04663, 1.50592, 1.1262, 1.26406, 1.7678, 2.01876, 0.798107, 0.923017, 0.420927, 0.574864, 0.83951, 0.684758, 0.880655, 0.650575, 0.889073, 1.6508, 1.07608, 1.03113, 1.17396, 1.49921, 0.547924, 0.498253, 0.871005, 1.12643, 1.01936, 1.0543, 0.964149, 0.982909, 1.16132, 0.850646, 1.09051, 0.667264, 1.47201, 1.0, 1.0, 1.0, 1.38092, 0.955787, 0.868702, 1.00459, 0.67584, 1.01194, 0.752132, 0.462847, 1.17157, 0.988965, 0.906444, 0.843175, 0.931157, 1.58768, 1.10727, 1.16571, 1.51047, 1.27749, 0.895397, 1.15387, 1.18491, 1.08653, 0.437563, 0.46051, 0.578493, 0.782076, 0.823559, 2.03041, 1.51857, 1.33147, 1.21818, 1.34635, 0.994477, 1.60974, 0.939918, 1.36204, 0.764004, 1.0, 1.0, 1.0 };
+//{ 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0 };
+  TArrayD tarray;
+  tarray.Set(83,array);
+  /*TArrayD tarray2;
+  data.GetArray(tarray2);
+  for(int i=0; i<tarray2.GetSize(); i++){
+    cout << tarray2[i] << " ";
+  }
+  cout << endl;*/
+
   //return 0;
-  
-  TH1D* hist = data.doFit("h_corr","Response Corrections");
+
+  for(int iterations=0; iterations<2; iterations++){
+    cout << "iteration " << iterations << endl;
+    for(int ieta=2; ieta<39; ieta++){
+      cout << "  " << ieta << "-" << ieta+3 << endl;
+      data.SetUnfixedParameters(ieta,ieta+3);
+      data.SetArray(tarray);
+      TH1D* tmphist = data.doFit("h_corr","Response Corrections");
+      
+      for(int i=0; i<tarray.GetSize(); i++){
+	tarray[i] = tmphist->GetBinContent(i+1);
+      }
+      delete tmphist;
+    }
+  }
+
+  TH1D* hist = new TH1D("h_corr","response corrections",83,-41.5,41.5);
+  for(int i=0; i<83; i++){
+    hist->SetBinContent(i+1,tarray[i]);
+  }
+
   hist->GetXaxis()->SetTitle("ieta");
   hist->GetYaxis()->SetTitle("response corrections");
 
