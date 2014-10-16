@@ -247,11 +247,11 @@ int main()
   tree->SetBranchAddress("pf_Event",&pf_Event_);
 
   // Jet
-  TH1D* h_tag_jet_Ediff_once_track_cluster_ = new TH1D("h_tag_jet_Ediff_once_track_cluster","tag (rechits - pfjet)/pfjet use rechits once tracks for candidates without rechits",200,0,2);
-  TH1D* h_tag_jet_Ediff_once_track_cluster_corr_ = new TH1D("h_tag_jet_Ediff_once_track_cluster_corr","tag (rechits - pfjet)/pfjet use rechits once tracks for candidates without rechits and corrections",200,0,2);
+  TH1D* h_tag_jet_Ediff_once_track_cluster_ = new TH1D("h_tag_jet_EoverE_nocorr","tag E_reconstructed/E_gen with c_i = 1",200,0,2);
+  TH1D* h_tag_jet_Ediff_once_track_cluster_corr_ = new TH1D("h_tag_jet_EoverE_respcorr","tag E_reconstructed/E_gen with response corrections",200,0,2);
   
-  TH1D* h_probe_jet_Ediff_once_track_cluster_ = new TH1D("h_probe_jet_Ediff_once_track_cluster","probe (rechits - pfjet)/pfjet use rechits once tracks for candidates without rechits",200,0,2);
-  TH1D* h_probe_jet_Ediff_once_track_cluster_corr_ = new TH1D("h_probe_jet_Ediff_once_track_cluster_corr","probe (rechits - pfjet)/pfjet use rechits once tracks for candidates without rechits and corrections",200,0,2);
+  TH1D* h_probe_jet_Ediff_once_track_cluster_ = new TH1D("h_probe_jet_EoverE_nocorr","probe E_reconstructed/E_gen with c_i = 1",200,0,2);
+  TH1D* h_probe_jet_Ediff_once_track_cluster_corr_ = new TH1D("h_probe_jet_EoverE_respcorr","probe E_reconstructed/E_gen with response corrections",200,0,2);
   
   int nEvents = tree->GetEntries();
   cout << "Running over " << nEvents << " events" << endl;
@@ -339,9 +339,9 @@ int main()
     }
 
     float probe_jet_E_once_track_cluster = probe_jet_rechit_E_once_cluster + probe_jet_hadEcalE + probe_jet_candNoRecHits_E + ppfjet_unkown_E_ + ppfjet_electron_E_ + ppfjet_muon_E_ + ppfjet_photon_E_;
-    h_probe_jet_Ediff_once_track_cluster_->Fill(probe_jet_E_once_track_cluster/ppfjet_E_);
+    h_probe_jet_Ediff_once_track_cluster_->Fill(probe_jet_E_once_track_cluster/ppfjet_genE_);
     float probe_jet_E_once_track_cluster_corr = probe_jet_rechit_E_once_cluster_corr + probe_jet_hadEcalE + probe_jet_candNoRecHits_E + ppfjet_unkown_E_ + ppfjet_electron_E_ + ppfjet_muon_E_ + ppfjet_photon_E_;
-    h_probe_jet_Ediff_once_track_cluster_corr_->Fill(probe_jet_E_once_track_cluster_corr/ppfjet_E_);
+    h_probe_jet_Ediff_once_track_cluster_corr_->Fill(probe_jet_E_once_track_cluster_corr/ppfjet_genE_);
   }
 
   
