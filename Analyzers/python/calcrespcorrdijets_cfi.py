@@ -5,7 +5,7 @@ calcrespcorrdijets = cms.EDAnalyzer(
     'CalcRespCorrDiJets',
     caloJetCollName     = cms.string('ak5CaloJets'),
     caloJetCorrName     = cms.string('ak5CaloL2L3'),
-    pfJetCollName       = cms.string('ak5PFJets'),
+    pfJetCollName       = cms.string('ak5PFJetsCHS'),
     pfJetCorrName       = cms.string('ak5PFL2L3'),
     genJetCollName      = cms.string('ak5GenJets'),
     genParticleCollName = cms.string('genParticles'),
