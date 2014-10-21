@@ -453,8 +453,8 @@ void DijetRespCorrData::GetBalance(const DijetRespCorrDatum& datum, const TArray
 
   tpx += 0.5*datum.GetThirdJetPx();
   tpy += 0.5*datum.GetThirdJetPy();
-  ppx -= 0.5*datum.GetThirdJetPx();
-  ppy -= 0.5*datum.GetThirdJetPy();
+  ppx += 0.5*datum.GetThirdJetPx();
+  ppy += 0.5*datum.GetThirdJetPy();
   
   Double_t tetcorr = std::sqrt(tpx*tpx + tpy*tpy);
   Double_t petcorr = std::sqrt(ppx*ppx + ppy*ppy);
