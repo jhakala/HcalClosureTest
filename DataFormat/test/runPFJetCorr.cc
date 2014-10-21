@@ -5,12 +5,15 @@ using namespace std;
 int main()
 {
   TChain* tree = new TChain("pf_dijettree");
-  TString input = "/eos/uscms/store/user/dgsheffi/QCD_Pt-15to3000_TuneD6T_Flat_8TeV_pythia6/DijetCalibration_dEta-1p5_Et-10_3rdEt-50/e02441adc4b1f61e7a01cc47fa7cba8d/tree_*.root";
+  //TString input = "/eos/uscms/store/user/dgsheffi/QCD_Pt-15to3000_TuneD6T_Flat_8TeV_pythia6/DijetCalibration_dEta-1p5_Et-10_3rdEt-50/e02441adc4b1f61e7a01cc47fa7cba8d/tree_*.root";
+  //TString input = "tree_hbhe.root";
+  TString input = "/uscms_data/d3/jhakala/cmssw/CMSSW_5_3_20/src/HcalClosureTest/tree_hbhe.root";
   cout << "Opening file: " << input << endl;
   tree->Add(input);
   cout << "File opened." << endl;
 
-  TString output = "/uscms_data/d3/dgsheffi/HCal/corrections/iteration/QCD_Pt-15to3000_TuneD6R_Flat_8TeV_pythia6_dEta-0p5_Et-20_3rdEt-15_quadruple.root";
+  //TString output = "/uscms_data/d3/dgsheffi/HCal/corrections/iteration/QCD_Pt-15to3000_TuneD6R_Flat_8TeV_pythia6_dEta-0p5_Et-20_3rdEt-15_quadruple.root";
+  TString output = "corrections.root";
 
   DijetRespCorrData data;
 
@@ -389,9 +392,9 @@ int main()
 
   for(int iterations=0; iterations<2; iterations++){
     cout << "iteration " << iterations << endl;
-    for(int ieta=2; ieta<39; ieta++){
-      cout << "  " << ieta << "-" << ieta+3 << endl;
-      data.SetUnfixedParameters(ieta,ieta+3);
+    for(int ieta=2; ieta<41; ieta++){
+      cout << "  " << ieta << "-" << ieta+1 << endl;
+      data.SetUnfixedParameters(ieta,ieta+1);
       data.SetArray(tarray);
       TH1D* tmphist = data.doFit("h_corr","Response Corrections");
       

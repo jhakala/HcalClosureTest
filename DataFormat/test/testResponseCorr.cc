@@ -9,13 +9,13 @@ int main()
   cout << "Opening file:" << input << endl;
   tree->Add(input);
 
-  TString output = "/uscms_data/d3/dgsheffi/HCal/corrections/iteration/validation/QCD_Pt-15to3000_TuneD6T_Flat_8TeV_pythia6_dEta-0p5_Et-20_3rdEt-15_double.root";
+  TString output = "/uscms_data/d3/dgsheffi/HCal/corrections/iteration/validation/QCD_Pt-15to3000_TuneD6T_Flat_8TeV_pythia6_dEta-0p5_Et-20_3rdEt-15_quadruple_v2.root";
 
-  TString corrname = "/uscms_data/d3/dgsheffi/HCal/corrections/iteration/QCD_Pt-15to3000_TuneD6R_Flat_8TeV_pythia6_dEta-0p5_Et-20_3rdEt-15_double.root";
+  TString corrname = "/uscms_data/d3/dgsheffi/HCal/corrections/iteration/QCD_Pt-15to3000_TuneD6R_Flat_8TeV_pythia6_dEta-0p5_Et-20_3rdEt-15_quadruple_v2.root";
   TFile* corrfile = new TFile(corrname);
   TH1D* h_corr_ = (TH1D*)corrfile->Get("h_corr");
   for(int i=1; i<84; i++){
-    if(h_corr_->GetBinContent(i) < 0.5 || h_corr_->GetBinContent(i) > 2.0) h_corr_->SetBinContent(i,1.0);
+    if(h_corr_->GetBinContent(i) < 0 || h_corr_->GetBinContent(i) > 3.0) h_corr_->SetBinContent(i,1.0);
   }
   
   float tpfjet_pt_, tpfjet_p_, tpfjet_E_, tpfjet_eta_, tpfjet_phi_, tpfjet_scale_;
