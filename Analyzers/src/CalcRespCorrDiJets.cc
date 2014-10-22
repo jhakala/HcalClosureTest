@@ -1701,7 +1701,7 @@ void CalcRespCorrDiJets::beginJob()
     pf_tree_->Branch("ppfjet_had_py",&ppfjet_had_py_);
     pf_tree_->Branch("ppfjet_had_pz",&ppfjet_had_pz_);
     pf_tree_->Branch("ppfjet_had_EcalE",&ppfjet_had_EcalE_);
-    pf_tree_->Branch("ppfjet_had_rawHcalE",&tpfjet_had_rawHcalE_);
+    pf_tree_->Branch("ppfjet_had_rawHcalE",&ppfjet_had_rawHcalE_);
     pf_tree_->Branch("ppfjet_had_emf",&ppfjet_had_emf_);
     pf_tree_->Branch("ppfjet_had_id",&ppfjet_had_id_);
     pf_tree_->Branch("ppfjet_had_candtrackind",&ppfjet_had_candtrackind_);
