@@ -320,11 +320,11 @@ int main()
     }
     
     float tag_jet_E_once_track_cluster = tag_jet_rechit_E_once_cluster + tag_jet_hadEcalE + tag_jet_candNoRecHits_E + tpfjet_unkown_E_ + tpfjet_electron_E_ + tpfjet_muon_E_ + tpfjet_photon_E_;
-    h_tag_jet_Ediff_once_track_cluster_->Fill(tag_jet_E_once_track_cluster/tpfjet_E_);
-    h_tag_jet_EoverE_2D_->Fill(tpfjet_eta_,tag_jet_E_once_track_cluster/tpfjet_E_);
+    h_tag_jet_Ediff_once_track_cluster_->Fill(tag_jet_E_once_track_cluster/tpfjet_genE_);
+    h_tag_jet_EoverE_2D_->Fill(tpfjet_eta_,tag_jet_E_once_track_cluster/tpfjet_genE_);
     float tag_jet_E_once_track_cluster_corr = tag_jet_rechit_E_once_cluster_corr + tag_jet_hadEcalE + tag_jet_candNoRecHits_E + tpfjet_unkown_E_ + tpfjet_electron_E_ + tpfjet_muon_E_ + tpfjet_photon_E_;
-    h_tag_jet_Ediff_once_track_cluster_corr_->Fill(tag_jet_E_once_track_cluster_corr/tpfjet_E_);
-    h_tag_jet_EoverE_2D_corr_->Fill(tpfjet_eta_,tag_jet_E_once_track_cluster_corr/tpfjet_E_);
+    h_tag_jet_Ediff_once_track_cluster_corr_->Fill(tag_jet_E_once_track_cluster_corr/tpfjet_genE_);
+    h_tag_jet_EoverE_2D_corr_->Fill(tpfjet_eta_,tag_jet_E_once_track_cluster_corr/tpfjet_genE_);
   
     float probe_jet_rechit_E_once_cluster = 0;
     float probe_jet_rechit_E_once_cluster_corr = 0;
@@ -353,10 +353,10 @@ int main()
 
     float probe_jet_E_once_track_cluster = probe_jet_rechit_E_once_cluster + probe_jet_hadEcalE + probe_jet_candNoRecHits_E + ppfjet_unkown_E_ + ppfjet_electron_E_ + ppfjet_muon_E_ + ppfjet_photon_E_;
     h_probe_jet_Ediff_once_track_cluster_->Fill(probe_jet_E_once_track_cluster/ppfjet_genE_);
-    h_probe_jet_EoverE_2D_->Fill(ppfjet_eta_,probe_jet_E_once_track_cluster/ppfjet_E_);
+    h_probe_jet_EoverE_2D_->Fill(ppfjet_eta_,probe_jet_E_once_track_cluster/ppfjet_genE_);
     float probe_jet_E_once_track_cluster_corr = probe_jet_rechit_E_once_cluster_corr + probe_jet_hadEcalE + probe_jet_candNoRecHits_E + ppfjet_unkown_E_ + ppfjet_electron_E_ + ppfjet_muon_E_ + ppfjet_photon_E_;
     h_probe_jet_Ediff_once_track_cluster_corr_->Fill(probe_jet_E_once_track_cluster_corr/ppfjet_genE_);
-    h_probe_jet_EoverE_2D_corr_->Fill(ppfjet_eta_,probe_jet_E_once_track_cluster_corr/tpfjet_E_);
+    h_probe_jet_EoverE_2D_corr_->Fill(ppfjet_eta_,probe_jet_E_once_track_cluster_corr/tpfjet_genE_);
 
     // Dijet
 
