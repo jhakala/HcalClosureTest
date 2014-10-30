@@ -5,14 +5,14 @@ using namespace std;
 int main()
 {
   TChain* tree = new TChain("pf_dijettree");
-  //TString input = "/eos/uscms/store/user/dgsheffi/QCD_Pt-15to3000_TuneD6T_Flat_8TeV_pythia6/DijetCalibration_dEta-1p5_Et-10_3rdEt-50/e02441adc4b1f61e7a01cc47fa7cba8d/tree_*.root";
-  TString input = "/uscms_data/d3/jhakala/cmssw/CMSSW_5_3_20/src/HcalClosureTest/tree_hbhe.root";
+  TString input = "/eos/uscms/store/user/dgsheffi/QCD_Pt-15to3000_TuneD6T_Flat_8TeV_pythia6/DijetCalibration_dEta-1p5_Et-10_3rdEt-50/e02441adc4b1f61e7a01cc47fa7cba8d/tree_*.root";
+  //TString input = "/uscms_data/d3/jhakala/cmssw/CMSSW_5_3_20/src/HcalClosureTest/tree_hbhe.root";
   cout << "Opening file:" << input << endl;
   tree->Add(input);
 
-  TString output = "/uscms_data/d3/dgsheffi/HCal/corrections/iteration/validation/QCD_Pt-15to3000_TuneD6T_Flat_8TeV_pythia6_dEta-0p5_Et-20_3rdEt-15_double.root";
+  TString output = "/uscms_data/d1/dgsheffi/HCal/corrections/validation/QCD_Pt-15to3000_TuneD6T_Flat_8TeV_pythia6_dEta-0p5_Et-20_3rdEt-15.root";
 
-  TString corrname = "/uscms_data/d3/dgsheffi/HCal/corrections/iteration/QCD_Pt-15to3000_TuneD6R_Flat_8TeV_pythia6_dEta-0p5_Et-20_3rdEt-15_double.root";
+  TString corrname = "/uscms_data/d1/dgsheffi/HCal/corrections/QCD_Pt-15to3000_TuneD6R_Flat_8TeV_pythia6_dEta-0p5_Et-20_3rdEt-15.root";
   TFile* corrfile = new TFile(corrname);
   TH1D* h_corr_ = (TH1D*)corrfile->Get("h_corr");
   for(int i=1; i<84; i++){
@@ -401,7 +401,58 @@ int main()
     h_dijet_balance_2D_respcorr_->Fill(ppfjet_eta_,balance_respcorr);
   }
 
+  //////////////////////////
+  // Set Labels
+  //////////////////////////
+
+  // Tag
   
+  h_tag_jet_Ediff_once_track_cluster_->SetLineColor(1);
+  h_tag_jet_Ediff_once_track_cluster_->GetXaxis()->SetTitle("E_{reconstructed}/E_{gen}");
+  h_tag_jet_Ediff_once_track_cluster_->GetYaxis()->SetTitle("events");
+
+  h_tag_jet_Ediff_once_track_cluster_corr_->SetLineColor(2);
+  h_tag_jet_Ediff_once_track_cluster_corr_->GetXaxis()->SetTitle("E_{reconstructed}/E_{gen}");
+  h_tag_jet_Ediff_once_track_cluster_corr_->GetYaxis()->SetTitle("events");
+
+  h_tag_jet_EoverE_2D_->GetXaxis()->SetTitle("#eta(probe)");
+  h_tag_jet_EoverE_2D_->GetYaxis()->SetTitle("E_{reconstructed}/E_{gen}");
+
+  h_tag_jet_EoverE_2D_corr_->GetXaxis()->SetTitle("#eta(probe)");
+  h_tag_jet_EoverE_2D_corr_->GetYaxis()->SetTitle("E_{reconstructed}/E_{gen}");
+
+  // Probe
+
+  h_probe_jet_Ediff_once_track_cluster_->SetLineColor(1);
+  h_probe_jet_Ediff_once_track_cluster_->GetXaxis()->SetTitle("E_{reconstructed}/E_{gen}");
+  h_probe_jet_Ediff_once_track_cluster_->GetYaxis()->SetTitle("events");
+
+  h_probe_jet_Ediff_once_track_cluster_corr_->SetLineColor(2);
+  h_probe_jet_Ediff_once_track_cluster_corr_->GetXaxis()->SetTitle("E_{reconstructed}/E_{gen}");
+  h_probe_jet_Ediff_once_track_cluster_corr_->GetYaxis()->SetTitle("events");
+
+  h_probe_jet_EoverE_2D_->GetXaxis()->SetTitle("#eta(probe)");
+  h_probe_jet_EoverE_2D_->GetYaxis()->SetTitle("E_{reconstructed}/E_{gen}");
+
+  h_probe_jet_EoverE_2D_corr_->GetXaxis()->SetTitle("#eta(probe)");
+  h_probe_jet_EoverE_2D_corr_->GetYaxis()->SetTitle("E_{reconstructed}/E_{gen}");
+
+  // Dijet
+
+  h_dijet_balance_nocorr_->SetLineColor(1);
+  h_dijet_balance_nocorr_->GetXaxis()->SetTitle("dijet balance");
+  h_dijet_balance_nocorr_->GetYaxis()->SetTitle("events");
+
+  h_dijet_balance_respcorr_->SetLineColor(2);
+  h_dijet_balance_respcorr_->GetXaxis()->SetTitle("dijet balance");
+  h_dijet_balance_respcorr_->GetYaxis()->SetTitle("events");
+
+  h_dijet_balance_2D_nocorr_->GetXaxis()->SetTitle("#eta(probe)");
+  h_dijet_balance_2D_nocorr_->GetYaxis()->SetTitle("dijet balance");
+  
+  h_dijet_balance_2D_respcorr_->GetXaxis()->SetTitle("#eta(probe)");
+  h_dijet_balance_2D_respcorr_->GetYaxis()->SetTitle("dijet balance");
+ 
   //////////////////////////
   // Save to file
   //////////////////////////
