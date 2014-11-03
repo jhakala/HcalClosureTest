@@ -506,6 +506,7 @@ CalcRespCorrDiJets::analyze(const edm::Event& iEvent, const edm::EventSetup& evS
       tpfjet_E_     = pf_tag.jet()->energy();
       tpfjet_eta_   = pf_tag.jet()->eta();
       tpfjet_phi_   = pf_tag.jet()->phi();
+      tpfjet_emf_   = pf_tag.jet()->photonEnergyFraction() + pf_tag.jet()->electronEnergyFraction() + pf_tag.jet()->muonEnergyFraction();
       tpfjet_scale_ = pf_tag.scale();
       tpfjet_ntwrs_=0;
       tpfjet_ncandtracks_=0;
@@ -998,6 +999,7 @@ CalcRespCorrDiJets::analyze(const edm::Event& iEvent, const edm::EventSetup& evS
       ppfjet_E_     = pf_probe.jet()->energy();
       ppfjet_eta_   = pf_probe.jet()->eta();
       ppfjet_phi_   = pf_probe.jet()->phi();
+      ppfjet_emf_   = pf_probe.jet()->photonEnergyFraction() + pf_probe.jet()->electronEnergyFraction() + pf_probe.jet()->muonEnergyFraction();
       ppfjet_scale_ = pf_probe.scale();
       ppfjet_ntwrs_=0;
       ppfjet_ncandtracks_=0;
@@ -1592,6 +1594,7 @@ void CalcRespCorrDiJets::beginJob()
     pf_tree_->Branch("tpfjet_E",&tpfjet_E_, "tpfjet_E/F");
     pf_tree_->Branch("tpfjet_eta",&tpfjet_eta_, "tpfjet_eta/F");
     pf_tree_->Branch("tpfjet_phi",&tpfjet_phi_, "tpfjet_phi/F");
+    pf_tree_->Branch("tpfjet_emf",&tpfjet_emf_, "tpfjet_emf/F");
     pf_tree_->Branch("tpfjet_scale",&tpfjet_scale_, "tpfjet_scale/F");
     if(doGenJets_){
       pf_tree_->Branch("tpfjet_genpt",&tpfjet_genpt_, "tpfjet_genpt/F");
@@ -1664,6 +1667,7 @@ void CalcRespCorrDiJets::beginJob()
     pf_tree_->Branch("ppfjet_E",&ppfjet_E_, "ppfjet_E/F");
     pf_tree_->Branch("ppfjet_eta",&ppfjet_eta_, "ppfjet_eta/F");
     pf_tree_->Branch("ppfjet_phi",&ppfjet_phi_, "ppfjet_phi/F");
+    pf_tree_->Branch("ppfjet_emf",&ppfjet_emf_, "ppfjet_emf/F");
     pf_tree_->Branch("ppfjet_scale",&ppfjet_scale_, "ppfjet_scale/F");
     if(doGenJets_){
       pf_tree_->Branch("ppfjet_genpt",&ppfjet_genpt_, "ppfjet_genpt/F");
