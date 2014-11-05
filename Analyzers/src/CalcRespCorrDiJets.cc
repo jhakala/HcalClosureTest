@@ -506,10 +506,15 @@ CalcRespCorrDiJets::analyze(const edm::Event& iEvent, const edm::EventSetup& evS
       tpfjet_E_     = pf_tag.jet()->energy();
       tpfjet_eta_   = pf_tag.jet()->eta();
       tpfjet_phi_   = pf_tag.jet()->phi();
-      tpfjet_emf_   = pf_tag.jet()->photonEnergyFraction() + pf_tag.jet()->electronEnergyFraction() + pf_tag.jet()->muonEnergyFraction();
       tpfjet_scale_ = pf_tag.scale();
       tpfjet_ntwrs_=0;
       tpfjet_ncandtracks_=0;
+
+      int tag_had_EcalE = 0;
+      for(int i=0; i<tpfjet_had_n_; i++){
+	tag_had_EcalE += tpfjet_had_EcalE_[i];
+      }
+      tpfjet_emf_   = pf_tag.jet()->photonEnergyFraction() + pf_tag.jet()->electronEnergyFraction() + pf_tag.jet()->muonEnergyFraction() + static_cast<float>(tag_had_EcalE)/pf_tag.jet()->energy();
 
       if(iEvent.id().event() == debugEvent){
 	std::cout << "Tag eta: " << tpfjet_eta_ << " phi: " << tpfjet_phi_ << std::endl;
@@ -999,10 +1004,15 @@ CalcRespCorrDiJets::analyze(const edm::Event& iEvent, const edm::EventSetup& evS
       ppfjet_E_     = pf_probe.jet()->energy();
       ppfjet_eta_   = pf_probe.jet()->eta();
       ppfjet_phi_   = pf_probe.jet()->phi();
-      ppfjet_emf_   = pf_probe.jet()->photonEnergyFraction() + pf_probe.jet()->electronEnergyFraction() + pf_probe.jet()->muonEnergyFraction();
       ppfjet_scale_ = pf_probe.scale();
       ppfjet_ntwrs_=0;
       ppfjet_ncandtracks_=0;
+
+      int probe_had_EcalE = 0;
+      for(int i=0; i<ppfjet_had_n_; i++){
+	probe_had_EcalE += ppfjet_had_EcalE_[i];
+      }
+      ppfjet_emf_   = pf_probe.jet()->photonEnergyFraction() + pf_probe.jet()->electronEnergyFraction() + pf_probe.jet()->muonEnergyFraction() + static_cast<float>(probe_had_EcalE)/pf_tag.jet()->energy();
 
       if(iEvent.id().event() == debugEvent){
 	std::cout << "Probe eta: " << ppfjet_eta_ << " phi: " << ppfjet_phi_ << std::endl;
