@@ -510,12 +510,6 @@ CalcRespCorrDiJets::analyze(const edm::Event& iEvent, const edm::EventSetup& evS
       tpfjet_ntwrs_=0;
       tpfjet_ncandtracks_=0;
 
-      int tag_had_EcalE = 0;
-      for(int i=0; i<tpfjet_had_n_; i++){
-	tag_had_EcalE += tpfjet_had_EcalE_[i];
-      }
-      tpfjet_emf_   = pf_tag.jet()->photonEnergyFraction() + pf_tag.jet()->electronEnergyFraction() + pf_tag.jet()->muonEnergyFraction() + static_cast<float>(tag_had_EcalE)/pf_tag.jet()->energy();
-
       if(iEvent.id().event() == debugEvent){
 	std::cout << "Tag eta: " << tpfjet_eta_ << " phi: " << tpfjet_phi_ << std::endl;
       }
@@ -993,6 +987,14 @@ CalcRespCorrDiJets::analyze(const edm::Event& iEvent, const edm::EventSetup& evS
 	}
       } // Loop over PF constitutents
 
+      int tag_had_EcalE = 0;
+      int tag_had_rawHcalE = 0;
+      for(int i=0; i<tpfjet_had_n_; i++){
+	tag_had_EcalE += tpfjet_had_EcalE_[i];
+	tag_had_rawHcalE += tpfjet_had_rawHcalE_[i];
+      }
+      tpfjet_emf_ = 1.0 - tag_had_rawHcalE/(tag_had_rawHcalE + tag_had_EcalE + tpfjet_unkown_E_ + tpfjet_electron_E_ + tpfjet_muon_E_ + tpfjet_photon_E_);
+
       if(debug_ && tpfjet_ntwrs_ == 0) std::cout << "no rechits " << iEvent.id().event() << std::endl;
 
       h_types_->Fill(types);
@@ -1007,12 +1009,6 @@ CalcRespCorrDiJets::analyze(const edm::Event& iEvent, const edm::EventSetup& evS
       ppfjet_scale_ = pf_probe.scale();
       ppfjet_ntwrs_=0;
       ppfjet_ncandtracks_=0;
-
-      int probe_had_EcalE = 0;
-      for(int i=0; i<ppfjet_had_n_; i++){
-	probe_had_EcalE += ppfjet_had_EcalE_[i];
-      }
-      ppfjet_emf_   = pf_probe.jet()->photonEnergyFraction() + pf_probe.jet()->electronEnergyFraction() + pf_probe.jet()->muonEnergyFraction() + static_cast<float>(probe_had_EcalE)/pf_tag.jet()->energy();
 
       if(iEvent.id().event() == debugEvent){
 	std::cout << "Probe eta: " << ppfjet_eta_ << " phi: " << ppfjet_phi_ << std::endl;
@@ -1478,6 +1474,14 @@ CalcRespCorrDiJets::analyze(const edm::Event& iEvent, const edm::EventSetup& evS
 	  break;
 	}
       } // Loop over PF constitutents
+
+      int probe_had_EcalE = 0;
+      int probe_had_rawHcalE = 0;
+      for(int i=0; i<ppfjet_had_n_; i++){
+	probe_had_EcalE += ppfjet_had_EcalE_[i];
+	probe_had_rawHcalE += ppfjet_had_rawHcalE_[i];
+      }
+      ppfjet_emf_ = 1.0 - probe_had_rawHcalE/(probe_had_rawHcalE + probe_had_EcalE + ppfjet_unkown_E_ + ppfjet_electron_E_ + ppfjet_muon_E_ + ppfjet_photon_E_);
       
       if(doGenJets_){
 	// fill genjet tag/probe variables
