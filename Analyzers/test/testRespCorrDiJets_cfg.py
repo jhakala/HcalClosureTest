@@ -12,8 +12,6 @@ process.GlobalTag.globaltag=autoCond['startup']
 
 #load the response corrections calculator
 process.load('HcalClosureTest.Analyzers.calcrespcorrdijets_cfi')
-process.load('JetMETCorrections.Configuration.JetCorrectionProducers_cff')
-process.load('JetMETCorrections.Configuration.JetCorrectionServices_cff')
 
 # run over files
 
@@ -46,6 +44,7 @@ from RecoJets.JetProducers.ak5PFJets_cfi import *
 process.ak5PFJetsCHS = ak5PFJets.clone(
     src = cms.InputTag("pfNoPileUp")
     )
+process.load('HcalClosureTest.Analyzers.calcrespcorr_CHSJECs_cff')
 
 # timing
 #process.Timing = cms.Service('Timing')

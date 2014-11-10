@@ -366,7 +366,8 @@ CalcRespCorrDiJets::analyze(const edm::Event& iEvent, const edm::EventSetup& evS
     std::set<PFJetCorretPair, PFJetCorretPairComp> pfjetcorretpairset;
     for(reco::PFJetCollection::const_iterator it=pfjets->begin(); it!=pfjets->end(); ++it) {
       const reco::PFJet* jet=&(*it);
-      pfjetcorretpairset.insert( PFJetCorretPair(jet, correctorPF->correction(jet->p4())) );
+      double jec = correctorPF->correction(*it, iEvent, evSetup);
+      pfjetcorretpairset.insert( PFJetCorretPair(jet, jec));
     }
 
     PFJetCorretPair pf_tag, pf_probe;
