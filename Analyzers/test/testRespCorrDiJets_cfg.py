@@ -12,8 +12,6 @@ process.GlobalTag.globaltag=autoCond['startup']
 
 #load the response corrections calculator
 process.load('HcalClosureTest.Analyzers.calcrespcorrdijets_cfi')
-process.load('JetMETCorrections.Configuration.JetCorrectionProducers_cff')
-process.load('JetMETCorrections.Configuration.JetCorrectionServices_cff')
 
 # run over files
 
@@ -38,7 +36,17 @@ process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1) )
 process.MessageLogger.cerr.FwkReport.reportEvery=cms.untracked.int32(1000)
 process.options = cms.untracked.PSet( wantSummary = cms.untracked.bool(True) )
 
+# Load pfNoPileUP
+
+process.load("CommonTools.ParticleFlow.pfNoPileUp_cff")
+process.load("CommonTools.ParticleFlow.PF2PAT_cff")
+from RecoJets.JetProducers.ak5PFJets_cfi import *
+process.ak5PFJetsCHS = ak5PFJets.clone(
+    src = cms.InputTag("pfNoPileUp")
+    )
+process.load('HcalClosureTest.Analyzers.calcrespcorr_CHSJECs_cff')
+
 # timing
 #process.Timing = cms.Service('Timing')
 
-process.p = cms.Path(process.calcrespcorrdijets)
+process.p = cms.Path(process.pfNoPileUpSequence+process.PF2PAT+process.ak5PFJetsCHS+process.calcrespcorrdijets)
