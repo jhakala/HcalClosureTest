@@ -14,7 +14,7 @@ int main()
 
   DijetRespCorrData data;
 
-  float tjet_pt_, tjet_p_, tjet_E_, tjet_eta_, tjet_phi_, tjet_scale_;
+  float tjet_pt_, tjet_p_, tjet_E_, tjet_eta_, tjet_phi_, tjet_EMfrac_, tjet_hadEcalEfrac_, tjet_scale_;
   float tjet_gendr_, tjet_genpt_, tjet_genp_, tjet_genE_;
   //float tjet_EBE_, tjet_EEE_, tjet_HBE_, tjet_HEE_, tjet_HFE_;
   float tjet_unkown_E_, tjet_unkown_px_, tjet_unkown_py_, tjet_unkown_pz_, tjet_unkown_EcalE_;
@@ -54,7 +54,7 @@ int main()
   vector<float>* tjet_candtrack_py_ = 0;
   vector<float>* tjet_candtrack_pz_ = 0;
   vector<float>* tjet_candtrack_EcalE_ = 0;
-  float pjet_pt_, pjet_p_, pjet_E_, pjet_eta_, pjet_phi_, pjet_scale_;
+  float pjet_pt_, pjet_p_, pjet_E_, pjet_eta_, pjet_phi_, pjet_EMfrac_, pjet_hadEcalEfrac_, pjet_scale_;
   float pjet_gendr_, pjet_genpt_, pjet_genp_, pjet_genE_;
   //float pjet_EBE_, pjet_EEE_, pjet_HBE_, pjet_HEE_, pjet_HFE_;
   float pjet_unkown_E_, pjet_unkown_px_, pjet_unkown_py_, pjet_unkown_pz_, pjet_unkown_EcalE_;
@@ -105,6 +105,8 @@ int main()
   tree->SetBranchAddress("tpfjet_E",&tjet_E_);
   tree->SetBranchAddress("tpfjet_eta",&tjet_eta_);
   tree->SetBranchAddress("tpfjet_phi",&tjet_phi_);
+  tree->SetBranchAddress("tpfjet_EMfrac",&tjet_EMfrac_);
+  tree->SetBranchAddress("tpfjet_hadEcalEfrac",&tjet_hadEcalEfrac_);
   tree->SetBranchAddress("tpfjet_scale",&tjet_scale_);
   tree->SetBranchAddress("tpfjet_genpt",&tjet_genpt_);
   tree->SetBranchAddress("tpfjet_genp",&tjet_genp_);
@@ -172,6 +174,8 @@ int main()
   tree->SetBranchAddress("ppfjet_E",&pjet_E_);
   tree->SetBranchAddress("ppfjet_eta",&pjet_eta_);
   tree->SetBranchAddress("ppfjet_phi",&pjet_phi_);
+  tree->SetBranchAddress("ppfjet_EMfrac",&pjet_EMfrac_);
+  tree->SetBranchAddress("ppfjet_hadEcalEfrac",&pjet_hadEcalEfrac_);
   tree->SetBranchAddress("ppfjet_scale",&pjet_scale_);
   tree->SetBranchAddress("ppfjet_genpt",&pjet_genpt_);
   tree->SetBranchAddress("ppfjet_genp",&pjet_genp_);
@@ -270,10 +274,12 @@ int main()
     float minJetEt_ = 20.0;//20.0;
     float maxThirdJetEt_ = 15.0;//15.0;
     float maxDeltaEta_ = 0.5;//0.5;
+    float maxJetEMFrac = 0.05;
     if(tjet_Et + pjet_Et < minSumJetEt_) passSel |= 0x1;
     if(tjet_Et < minJetEt_ || pjet_Et < minJetEt_) passSel |= 0x2;
     if(sqrt(thirdjet_px_*thirdjet_px_ + thirdjet_py_*thirdjet_py_) > maxThirdJetEt_) passSel |= 0x4;
     if(dijet_deta_ > maxDeltaEta_) passSel |= 0x8;
+    if(tjet_EMfrac_ > maxJetEMFrac || pjet_EMfrac_ > maxJetEMFrac) passSel |= 0x100;
     
     h_PassSel_->Fill(passSel);
     if(passSel) continue;

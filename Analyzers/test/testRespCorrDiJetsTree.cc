@@ -21,7 +21,7 @@ int main()
     if(h_corr_->GetBinContent(i) < 0.5 || h_corr_->GetBinContent(i) > 2.0) h_corr_->SetBinContent(i,1.0);
     }*/
   
-  float tpfjet_pt_, tpfjet_p_, tpfjet_E_, tpfjet_eta_, tpfjet_phi_, tpfjet_scale_;
+  float tpfjet_pt_, tpfjet_p_, tpfjet_E_, tpfjet_eta_, tpfjet_phi_, tpfjet_EMfrac_, tpfjet_hadEcalEfrac_, tpfjet_scale_;
   float tpfjet_gendr_, tpfjet_genpt_, tpfjet_genp_, tpfjet_genE_;
   //float tpfjet_EBE_, tpfjet_EEE_, tpfjet_HBE_, tpfjet_HEE_, tpfjet_HFE_;
   float tpfjet_unkown_E_, tpfjet_unkown_px_, tpfjet_unkown_py_, tpfjet_unkown_pz_, tpfjet_unkown_EcalE_;
@@ -61,7 +61,7 @@ int main()
   vector<float>* tpfjet_candtrack_py_ = 0;
   vector<float>* tpfjet_candtrack_pz_ = 0;
   vector<float>* tpfjet_candtrack_EcalE_ = 0;
-  float ppfjet_pt_, ppfjet_p_, ppfjet_E_, ppfjet_eta_, ppfjet_phi_, ppfjet_scale_;
+  float ppfjet_pt_, ppfjet_p_, ppfjet_E_, ppfjet_eta_, ppfjet_phi_, ppfjet_EMfrac_, ppfjet_hadEcalEfrac_, ppfjet_scale_;
   float ppfjet_gendr_, ppfjet_genpt_, ppfjet_genp_, ppfjet_genE_;
   //float ppfjet_EBE_, ppfjet_EEE_, ppfjet_HBE_, ppfjet_HEE_, ppfjet_HFE_;
   float ppfjet_unkown_E_, ppfjet_unkown_px_, ppfjet_unkown_py_, ppfjet_unkown_pz_, ppfjet_unkown_EcalE_;
@@ -111,6 +111,8 @@ int main()
   tree->SetBranchAddress("tpfjet_E",&tpfjet_E_);
   tree->SetBranchAddress("tpfjet_eta",&tpfjet_eta_);
   tree->SetBranchAddress("tpfjet_phi",&tpfjet_phi_);
+  tree->SetBranchAddress("tpfjet_EMfrac",&tpfjet_EMfrac_);
+  tree->SetBranchAddress("tpfjet_hadEcalEfrac",&tpfjet_hadEcalEfrac_);
   tree->SetBranchAddress("tpfjet_scale",&tpfjet_scale_);
   tree->SetBranchAddress("tpfjet_genpt",&tpfjet_genpt_);
   tree->SetBranchAddress("tpfjet_genp",&tpfjet_genp_);
@@ -178,6 +180,8 @@ int main()
   tree->SetBranchAddress("ppfjet_E",&ppfjet_E_);
   tree->SetBranchAddress("ppfjet_eta",&ppfjet_eta_);
   tree->SetBranchAddress("ppfjet_phi",&ppfjet_phi_);
+  tree->SetBranchAddress("ppfjet_EMfrac",&ppfjet_EMfrac_);
+  tree->SetBranchAddress("ppfjet_hadEcalEfrac",&ppfjet_hadEcalEfrac_);
   tree->SetBranchAddress("ppfjet_scale",&ppfjet_scale_);
   tree->SetBranchAddress("ppfjet_genpt",&ppfjet_genpt_);
   tree->SetBranchAddress("ppfjet_genp",&ppfjet_genp_);

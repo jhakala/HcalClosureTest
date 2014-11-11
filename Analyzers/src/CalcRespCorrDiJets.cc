@@ -994,7 +994,8 @@ CalcRespCorrDiJets::analyze(const edm::Event& iEvent, const edm::EventSetup& evS
 	tag_had_EcalE += tpfjet_had_EcalE_[i];
 	tag_had_rawHcalE += tpfjet_had_rawHcalE_[i];
       }
-      tpfjet_emf_ = 1.0 - tag_had_rawHcalE/(tag_had_rawHcalE + tag_had_EcalE + tpfjet_unkown_E_ + tpfjet_electron_E_ + tpfjet_muon_E_ + tpfjet_photon_E_);
+      tpfjet_EMfrac_ = 1.0 - tag_had_rawHcalE/(tag_had_rawHcalE + tag_had_EcalE + tpfjet_unkown_E_ + tpfjet_electron_E_ + tpfjet_muon_E_ + tpfjet_photon_E_);
+      tpfjet_hadEcalEfrac_ = tag_had_EcalE/(tag_had_rawHcalE + tag_had_EcalE + tpfjet_unkown_E_ + tpfjet_electron_E_ + tpfjet_muon_E_ + tpfjet_photon_E_);
 
       if(debug_ && tpfjet_ntwrs_ == 0) std::cout << "no rechits " << iEvent.id().event() << std::endl;
 
@@ -1482,7 +1483,8 @@ CalcRespCorrDiJets::analyze(const edm::Event& iEvent, const edm::EventSetup& evS
 	probe_had_EcalE += ppfjet_had_EcalE_[i];
 	probe_had_rawHcalE += ppfjet_had_rawHcalE_[i];
       }
-      ppfjet_emf_ = 1.0 - probe_had_rawHcalE/(probe_had_rawHcalE + probe_had_EcalE + ppfjet_unkown_E_ + ppfjet_electron_E_ + ppfjet_muon_E_ + ppfjet_photon_E_);
+      ppfjet_EMfrac_ = 1.0 - probe_had_rawHcalE/(probe_had_rawHcalE + probe_had_EcalE + ppfjet_unkown_E_ + ppfjet_electron_E_ + ppfjet_muon_E_ + ppfjet_photon_E_);
+      ppfjet_hadEcalEfrac_ = probe_had_EcalE/(probe_had_rawHcalE + probe_had_EcalE + ppfjet_unkown_E_ + ppfjet_electron_E_ + ppfjet_muon_E_ + ppfjet_photon_E_);
       
       if(doGenJets_){
 	// fill genjet tag/probe variables
@@ -1609,7 +1611,8 @@ void CalcRespCorrDiJets::beginJob()
     pf_tree_->Branch("tpfjet_E",&tpfjet_E_, "tpfjet_E/F");
     pf_tree_->Branch("tpfjet_eta",&tpfjet_eta_, "tpfjet_eta/F");
     pf_tree_->Branch("tpfjet_phi",&tpfjet_phi_, "tpfjet_phi/F");
-    pf_tree_->Branch("tpfjet_emf",&tpfjet_emf_, "tpfjet_emf/F");
+    pf_tree_->Branch("tpfjet_EMfrac",&tpfjet_EMfrac_, "tpfjet_EMfrac/F");
+    pf_tree_->Branch("tpfjet_hadEcalEfrac",&tpfjet_hadEcalEfrac_, "tpfjet_hadEcalEfrac/F");
     pf_tree_->Branch("tpfjet_scale",&tpfjet_scale_, "tpfjet_scale/F");
     if(doGenJets_){
       pf_tree_->Branch("tpfjet_genpt",&tpfjet_genpt_, "tpfjet_genpt/F");
@@ -1682,7 +1685,8 @@ void CalcRespCorrDiJets::beginJob()
     pf_tree_->Branch("ppfjet_E",&ppfjet_E_, "ppfjet_E/F");
     pf_tree_->Branch("ppfjet_eta",&ppfjet_eta_, "ppfjet_eta/F");
     pf_tree_->Branch("ppfjet_phi",&ppfjet_phi_, "ppfjet_phi/F");
-    pf_tree_->Branch("ppfjet_emf",&ppfjet_emf_, "ppfjet_emf/F");
+    pf_tree_->Branch("ppfjet_EMfrac",&ppfjet_EMfrac_, "ppfjet_EMfrac/F");
+    pf_tree_->Branch("ppfjet_hadEcalEfrac",&ppfjet_hadEcalEfrac_, "ppfjet_hadEcalEfrac/F");
     pf_tree_->Branch("ppfjet_scale",&ppfjet_scale_, "ppfjet_scale/F");
     if(doGenJets_){
       pf_tree_->Branch("ppfjet_genpt",&ppfjet_genpt_, "ppfjet_genpt/F");
