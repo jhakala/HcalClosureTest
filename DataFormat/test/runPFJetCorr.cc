@@ -16,7 +16,6 @@ int main()
 
   float tjet_pt_, tjet_p_, tjet_E_, tjet_eta_, tjet_phi_, tjet_EMfrac_, tjet_hadEcalEfrac_, tjet_scale_;
   float tjet_gendr_, tjet_genpt_, tjet_genp_, tjet_genE_;
-  //float tjet_EBE_, tjet_EEE_, tjet_HBE_, tjet_HEE_, tjet_HFE_;
   float tjet_unkown_E_, tjet_unkown_px_, tjet_unkown_py_, tjet_unkown_pz_, tjet_unkown_EcalE_;
   float tjet_electron_E_, tjet_electron_px_, tjet_electron_py_, tjet_electron_pz_, tjet_electron_EcalE_;
   float tjet_muon_E_, tjet_muon_px_, tjet_muon_py_, tjet_muon_pz_, tjet_muon_EcalE_;
@@ -56,7 +55,6 @@ int main()
   vector<float>* tjet_candtrack_EcalE_ = 0;
   float pjet_pt_, pjet_p_, pjet_E_, pjet_eta_, pjet_phi_, pjet_EMfrac_, pjet_hadEcalEfrac_, pjet_scale_;
   float pjet_gendr_, pjet_genpt_, pjet_genp_, pjet_genE_;
-  //float pjet_EBE_, pjet_EEE_, pjet_HBE_, pjet_HEE_, pjet_HFE_;
   float pjet_unkown_E_, pjet_unkown_px_, pjet_unkown_py_, pjet_unkown_pz_, pjet_unkown_EcalE_;
   float pjet_electron_E_, pjet_electron_px_, pjet_electron_py_, pjet_electron_pz_, pjet_electron_EcalE_;
   float pjet_muon_E_, pjet_muon_px_, pjet_muon_py_, pjet_muon_pz_, pjet_muon_EcalE_;
@@ -298,22 +296,7 @@ int main()
 	sumt += tjet_twr_hade_->at(i)*tjet_twr_frac_->at(i);
       }
     }
-    /*datum.SetCandTrackN(tjet_ncandtracks_);
-    for(int i=0; i<tjet_ncandtracks_; i++){
-      datum.AddCandTrackP(sqrt(tjet_candtrack_px_->at(i)*tjet_candtrack_px_->at(i) + tjet_candtrack_py_->at(i)*tjet_candtrack_py_->at(i) + tjet_candtrack_pz_->at(i)*tjet_candtrack_pz_->at(i)));
-      datum.AddCandTrackEcalE(tjet_candtrack_EcalE_->at(i));
-      map<Int_t, Double_t> clusterEnergies;
-      for(int j=0; j<tjet_ntwrs_; j++){
-	if(tjet_twr_candtrackind_->at(j) == i){
-	  if(tjet_twr_hade_->at(j) > 0.0){
-	    assert(tjet_twr_ieta_->at(j)<=41 && tjet_twr_ieta_->at(j)>=-41 && tjet_twr_ieta_->at(j)!=0);
-	    //clusterEnergies[tjet_twr_ieta_[j]] = tjet_twr_hade_[j];
-	    clusterEnergies[tjet_twr_ieta_->at(j)] = tjet_twr_hade_->at(j)*tjet_twr_frac_->at(j);
-	  }
-	}
-      }
-      datum.AddCandTrackHcalE(clusterEnergies);
-      }*/
+
     float tjet_had_EcalE_total = 0;
     float tjet_had_candNoRecHits_E = 0;
     for(int iHad=0; iHad<tjet_had_n_; iHad++){
@@ -328,28 +311,12 @@ int main()
     datum.SetProbeEta(pjet_eta_);
     datum.SetProbePhi(pjet_phi_);
     for(int i=0; i<pjet_ntwrs_; i++){
-      //cout << pjet_twr_clusterind_->size() << " " << pjet_twr_clusterind_->at(i) << " " << pjet_cluster_n_ << endl;
       if(pjet_twr_hade_->at(i) > 0.0 && (pjet_twr_clusterind_->at(i) < 0 || pjet_cluster_dR_->at(pjet_twr_clusterind_->at(i)) < 0.5)){
 	datum.AddProbeHcalE(pjet_twr_hade_->at(i)*pjet_twr_frac_->at(i),pjet_twr_ieta_->at(i));
 	sump += pjet_twr_hade_->at(i)*pjet_twr_frac_->at(i);
       }
     }
-    /*datum.SetCandTrackN(pjet_ncandtracks_);
-    for(int i=0; i<pjet_ncandtracks_; i++){
-      datum.AddCandTrackP(sqrt(pjet_candtrack_px_->at(i)*pjet_candtrack_px_->at(i) + pjet_candtrack_py_->at(i)*pjet_candtrack_py_->at(i) + pjet_candtrack_pz_->at(i)*pjet_candtrack_pz_->at(i)));
-      datum.AddCandTrackEcalE(pjet_candtrack_EcalE_->at(i));
-      map<Int_t, Double_t> clusterEnergies;
-      for(int j=0; j<pjet_ntwrs_; j++){
-	if(pjet_twr_candtrackind_->at(j) == i){
-	  if(pjet_twr_hade_->at(j) > 0.0){
-	    assert(pjet_twr_ieta_->at(j)<=41 && pjet_twr_ieta_->at(j)>=-41 && pjet_twr_ieta_->at(j)!=0);
-	    //clusterEnergies[tjet_twr_ieta_->at(j)] = tjet_twr_hade_->at(j);
-	    clusterEnergies[pjet_twr_ieta_->at(j)] = pjet_twr_hade_->at(j)*pjet_twr_frac_->at(j);
-	  }
-	}
-      }
-      datum.AddCandTrackHcalE(clusterEnergies);
-      }*/
+
     float pjet_had_EcalE_total = 0;
     float pjet_had_candNoRecHits_E = 0;
     for(int iHad=0; iHad<pjet_had_n_; iHad++){
