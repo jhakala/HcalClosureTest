@@ -5,12 +5,12 @@ using namespace std;
 int main()
 {
   TChain* tree = new TChain("pf_dijettree");
-  TString input = "/eos/uscms/store/user/dgsheffi/QCD_Pt-15to3000_TuneD6T_Flat_8TeV_pythia6/DijetCalibration_dEta-1p5_Et-10_3rdEt-50/e02441adc4b1f61e7a01cc47fa7cba8d/tree_*.root";
+  TString input = "/eos/uscms/store/user/dgsheffi/QCD_Pt-15to3000_TuneD6T_Flat_8TeV_pythia6/DijetCalibration_dEta-1p5_Et-10_3rdEt-50_CHS/22aa682901968e0f6dec73335f20b19e/tree_*.root";
   cout << "Opening file: " << input << endl;
   tree->Add(input);
   cout << "File opened." << endl;
 
-  TString output = "/uscms_data/d3/dgsheffi/HCal/corrections/test.root";
+  TString output = "/uscms_data/d3/dgsheffi/HCal/corrections/QCD_Pt-15to3000_TuneD6T_Flat_8TeV_pythia6_dEta-0p5_leadingEt-50_3rdEt-15_fEM-1_unweighted_CHS.root";
 
   DijetRespCorrData data;
 
@@ -268,13 +268,13 @@ int main()
     }
     float tjet_Et = tjet_E_/cosh(tjet_eta_);
     float pjet_Et = pjet_E_/cosh(pjet_eta_);
-    float minSumJetEt_ = 40.0;//40.0;
-    float minJetEt_ = 20.0;//20.0;
+    float minSumJetEt_ = 0.0;//40.0;
+    float minJetEt_ = 50.0;//20.0;
     float maxThirdJetEt_ = 15.0;//15.0;
     float maxDeltaEta_ = 0.5;//0.5;
-    float maxJetEMFrac = 0.05;
+    float maxJetEMFrac = 1.1;
     if(tjet_Et + pjet_Et < minSumJetEt_) passSel |= 0x1;
-    if(tjet_Et < minJetEt_ || pjet_Et < minJetEt_) passSel |= 0x2;
+    if((tjet_Et > pjet_Et && tjet_Et < minJetEt_) || (tjet_Et <= pjet_Et && pjet_Et < minJetEt_)) passSel |= 0x2;
     if(sqrt(thirdjet_px_*thirdjet_px_ + thirdjet_py_*thirdjet_py_) > maxThirdJetEt_) passSel |= 0x4;
     if(dijet_deta_ > maxDeltaEta_) passSel |= 0x8;
     if(tjet_EMfrac_ > maxJetEMFrac || pjet_EMfrac_ > maxJetEMFrac) passSel |= 0x100;
@@ -285,7 +285,8 @@ int main()
     DijetRespCorrDatum datum;
     
     // Fill datum
-    datum.SetWeight(weight_);
+    //datum.SetWeight(weight_);
+    datum.SetWeight(1.0);
 
     float sumt = 0;
     datum.SetTagEta(tjet_eta_);
@@ -349,7 +350,7 @@ int main()
   //return 0;
   
   TH1D* hist = data.doFit("h_corr","Response Corrections");
-  hist->GetXaxis()->SetTitle("ieta");
+  hist->GetXaxis()->SetTitle("i_{#eta}");
   hist->GetYaxis()->SetTitle("response corrections");
 
   TFile* fout = new TFile(output,"RECREATE");
