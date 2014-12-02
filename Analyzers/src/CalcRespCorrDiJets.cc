@@ -511,6 +511,41 @@ CalcRespCorrDiJets::analyze(const edm::Event& iEvent, const edm::EventSetup& evS
       tpfjet_ntwrs_=0;
       tpfjet_ncandtracks_=0;
 
+      tpfjet_jetID_ = 0; // Not a loose, medium, or tight jet
+      if(fabs(pf_tag.jet()->eta()) < 2.4){
+	if(pf_tag.jet()->chargedHadronEnergyFraction() > 0 &&
+	   pf_tag.jet()->chargedMultiplicity() > 0 &&
+	   pf_tag.jet()->chargedEmEnergyFraction() < 0.99 &&
+	   (pf_tag.jet()->chargedMultiplicity() + pf_tag.jet()->neutralMultiplicity()) > 1){
+	  if(pf_tag.jet()->neutralHadronEnergyFraction() < 0.9 &&
+	     pf_tag.jet()->neutralEmEnergyFraction() < 0.9){
+	    tpfjet_jetID_ = 3; // Tight jet
+	  }
+	  else if(pf_tag.jet()->neutralHadronEnergyFraction() < 0.95 &&
+		  pf_tag.jet()->neutralEmEnergyFraction() < 0.95){
+	    tpfjet_jetID_ = 2; // Medium jet
+	  }
+	  else if(pf_tag.jet()->neutralHadronEnergyFraction() < 0.99 &&
+		  pf_tag.jet()->neutralEmEnergyFraction() < 0.99){
+	    tpfjet_jetID_ = 1; // Loose jet
+	  }
+	}
+      }
+      else if((pf_tag.jet()->chargedMultiplicity() + pf_tag.jet()->neutralMultiplicity()) > 1){
+	if(pf_tag.jet()->neutralHadronEnergyFraction() < 0.9 &&
+	   pf_tag.jet()->neutralEmEnergyFraction() < 0.9){
+	  tpfjet_jetID_ = 3; // Tight jet
+	}
+	else if(pf_tag.jet()->neutralHadronEnergyFraction() < 0.95 &&
+		pf_tag.jet()->neutralEmEnergyFraction() < 0.95){
+	  tpfjet_jetID_ = 2; // Medium jet
+	}
+	else if(pf_tag.jet()->neutralHadronEnergyFraction() < 0.99 &&
+		pf_tag.jet()->neutralEmEnergyFraction() < 0.99){
+	  tpfjet_jetID_ = 1; // Loose jet
+	}
+      }
+
       if(iEvent.id().event() == debugEvent){
 	std::cout << "Tag eta: " << tpfjet_eta_ << " phi: " << tpfjet_phi_ << std::endl;
       }
@@ -1011,6 +1046,41 @@ CalcRespCorrDiJets::analyze(const edm::Event& iEvent, const edm::EventSetup& evS
       ppfjet_scale_ = pf_probe.scale();
       ppfjet_ntwrs_=0;
       ppfjet_ncandtracks_=0;
+
+      ppfjet_jetID_ = 0; // Not a loose, medium, or tight jet
+      if(fabs(pf_probe.jet()->eta()) < 2.4){
+	if(pf_probe.jet()->chargedHadronEnergyFraction() > 0 &&
+	   pf_probe.jet()->chargedMultiplicity() > 0 &&
+	   pf_probe.jet()->chargedEmEnergyFraction() < 0.99 &&
+	   (pf_probe.jet()->chargedMultiplicity() + pf_probe.jet()->neutralMultiplicity()) > 1){
+	  if(pf_probe.jet()->neutralHadronEnergyFraction() < 0.9 &&
+	     pf_probe.jet()->neutralEmEnergyFraction() < 0.9){
+	    ppfjet_jetID_ = 3; // Tight jet
+	  }
+	  else if(pf_probe.jet()->neutralHadronEnergyFraction() < 0.95 &&
+		  pf_probe.jet()->neutralEmEnergyFraction() < 0.95){
+	    ppfjet_jetID_ = 2; // Medium jet
+	  }
+	  else if(pf_probe.jet()->neutralHadronEnergyFraction() < 0.99 &&
+		  pf_probe.jet()->neutralEmEnergyFraction() < 0.99){
+	    ppfjet_jetID_ = 1; // Loose jet
+	  }
+	}
+      }
+      else if((pf_probe.jet()->chargedMultiplicity() + pf_probe.jet()->neutralMultiplicity()) > 1){
+	if(pf_probe.jet()->neutralHadronEnergyFraction() < 0.9 &&
+	   pf_probe.jet()->neutralEmEnergyFraction() < 0.9){
+	  ppfjet_jetID_ = 3; // Tight jet
+	}
+	else if(pf_probe.jet()->neutralHadronEnergyFraction() < 0.95 &&
+		pf_probe.jet()->neutralEmEnergyFraction() < 0.95){
+	  ppfjet_jetID_ = 2; // Medium jet
+	}
+	else if(pf_probe.jet()->neutralHadronEnergyFraction() < 0.99 &&
+		pf_probe.jet()->neutralEmEnergyFraction() < 0.99){
+	  ppfjet_jetID_ = 1; // Loose jet
+	}
+      }
 
       if(iEvent.id().event() == debugEvent){
 	std::cout << "Probe eta: " << ppfjet_eta_ << " phi: " << ppfjet_phi_ << std::endl;
@@ -1614,6 +1684,7 @@ void CalcRespCorrDiJets::beginJob()
     pf_tree_->Branch("tpfjet_EMfrac",&tpfjet_EMfrac_, "tpfjet_EMfrac/F");
     pf_tree_->Branch("tpfjet_hadEcalEfrac",&tpfjet_hadEcalEfrac_, "tpfjet_hadEcalEfrac/F");
     pf_tree_->Branch("tpfjet_scale",&tpfjet_scale_, "tpfjet_scale/F");
+    pf_tree_->Branch("tpfjet_jetID",&tpfjet_jetID_, "tpfjet_jetID/I");
     if(doGenJets_){
       pf_tree_->Branch("tpfjet_genpt",&tpfjet_genpt_, "tpfjet_genpt/F");
       pf_tree_->Branch("tpfjet_genp",&tpfjet_genp_, "tpfjet_genp/F");
@@ -1688,6 +1759,7 @@ void CalcRespCorrDiJets::beginJob()
     pf_tree_->Branch("ppfjet_EMfrac",&ppfjet_EMfrac_, "ppfjet_EMfrac/F");
     pf_tree_->Branch("ppfjet_hadEcalEfrac",&ppfjet_hadEcalEfrac_, "ppfjet_hadEcalEfrac/F");
     pf_tree_->Branch("ppfjet_scale",&ppfjet_scale_, "ppfjet_scale/F");
+    pf_tree_->Branch("ppfjet_jetID",&ppfjet_jetID_, "ppfjet_jetID/I");
     if(doGenJets_){
       pf_tree_->Branch("ppfjet_genpt",&ppfjet_genpt_, "ppfjet_genpt/F");
       pf_tree_->Branch("ppfjet_genp",&ppfjet_genp_, "ppfjet_genp/F");
