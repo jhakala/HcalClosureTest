@@ -351,6 +351,19 @@ CalcRespCorrDiJets::analyze(const edm::Event& iEvent, const edm::EventSetup& evS
     h_HBHE_n_->Fill(HBHE_n);
     h_HF_n_->Fill(HF_n);
     h_HO_n_->Fill(HO_n);
+
+    // Get primary vertices
+    edm::Handle<std::vector<reco::Vertex>> pv;
+    iEvent.getByLabel("offlinePrimaryVertices",pv);
+    if(!pv.isValid()) {
+      throw edm::Exception(edm::errors::ProductNotFound)
+	<< " could not find Vertex named " << "offlinePrimaryVertices" << ".\n";
+      return;
+    }
+    pf_NPV_ = 0;
+    for(std::vector<reco::Vertex>::const_iterator it=pv->begin(); it!=pv->end(); ++it){
+      if(!it->isFake() && it->ndof() > 4) ++pf_NPV_;
+    }
     
     // Get jet corrections
     const JetCorrector* correctorPF = JetCorrector::getJetCorrector(pfJetCorrName_,evSetup);
@@ -1834,6 +1847,7 @@ void CalcRespCorrDiJets::beginJob()
     pf_tree_->Branch("pf_Run",&pf_Run_, "pf_Run/I");
     pf_tree_->Branch("pf_Lumi",&pf_Lumi_, "pf_Lumi/I");
     pf_tree_->Branch("pf_Event",&pf_Event_, "pf_Event/I");
+    pf_tree_->Branch("pf_NPV",&pf_NPV_, "pf_NPV/I");
     if(doGenJets_){    
       pf_tree_->Branch("pf_weight",&pf_weight_, "pf_weight/F");
     }

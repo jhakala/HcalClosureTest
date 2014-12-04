@@ -18,11 +18,11 @@ process.load('HcalClosureTest.Analyzers.calcrespcorrdijets_cfi')
 process.calcrespcorrdijets.rootHistFilename = cms.string('tree.root')
 process.calcrespcorrdijets.doCaloJets = cms.bool(False)
 #process.calcrespcorrdijets.doPFJets = cms.bool(False)
-process.calcrespcorrdijets.doGenJets = cms.bool(False)
+#process.calcrespcorrdijets.doGenJets = cms.bool(False)
 #process.calcrespcorrdijets.debug = cms.untracked.bool(True)
 #process.calcrespcorrdijets.maxDeltaEta = cms.double(0.5)
 process.calcrespcorrdijets.minJetEt = cms.double(10.)
-process.calcrespcorrdijets.minSumJetEt = cms.double(20.)
+process.calcrespcorrdijets.minSumJetEt = cms.double(0.0)
 process.calcrespcorrdijets.maxThirdJetEt = cms.double(50.)
 
 #import FWCore.Python.FileUtils as FileUtils

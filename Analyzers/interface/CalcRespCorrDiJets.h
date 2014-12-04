@@ -216,6 +216,7 @@ class CalcRespCorrDiJets : public edm::EDAnalyzer {
   float pf_dijet_deta_, pf_dijet_dphi_, pf_dijet_balance_;
   float pf_thirdjet_px_, pf_thirdjet_py_;
   int pf_Run_, pf_Lumi_, pf_Event_;
+  int pf_NPV_;
   float pf_weight_;
 
   // helper functions
