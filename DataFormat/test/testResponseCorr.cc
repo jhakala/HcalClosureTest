@@ -5,22 +5,24 @@ using namespace std;
 int main()
 {
   TChain* tree = new TChain("pf_dijettree");
-  //TString input = "/eos/uscms/store/user/dgsheffi/QCD_Pt-15to3000_TuneD6T_Flat_8TeV_pythia6/DijetCalibration_dEta-1p5_Et-10_3rdEt-50/e02441adc4b1f61e7a01cc47fa7cba8d/tree_*.root";
-  TString input = "/eos/uscms/store/user/dgsheffi/QCD_Pt-15to3000_TuneD6T_Flat_8TeV_pythia6/DijetCalibration_dEta-1p5_Et-10_3rdEt-50_CHS/22aa682901968e0f6dec73335f20b19e/tree_*.root";
-  //TString input = "/uscms_data/d3/jhakala/cmssw/CMSSW_5_3_20/src/HcalClosureTest/tree_hbhe.root";
+  TString input = "/eos/uscms/store/user/dgsheffi/QCD_Pt-1800_TuneZ2star_8TeV_pythia6/DijetCalibration_dEta-1p5_Et-20_3rdEt-50/b4567834a2ef8afdd36a5bd021a58fe5/tree_*.root";
   cout << "Opening file:" << input << endl;
   tree->Add(input);
 
-  TString output = "/uscms_data/d1/dgsheffi/HCal/corrections/validation/QCD_Pt-15to3000_TuneD6T_Flat_8TeV_pythia6_dEta-0p5_Et-50_3rdEt-15_fEM-1_unweighted_CHS.root";
+  TString output = "/uscms_data/d1/dgsheffi/HCal/corrections/validation/QCD_Pt-1800_dEta-0p5_Et-50_3rdEt-15.root";
 
-  TString corrname = "/uscms_data/d3/dgsheffi/HCal/corrections/QCD_Pt-15to3000_TuneD6T_Flat_8TeV_pythia6_dEta-0p5_leadingEt-50_3rdEt-15_fEM-1_unweighted_CHS.root";
+  TString corrname = "/uscms_data/d3/dgsheffi/HCal/corrections/QCD_Pt-1800_dEta-0p5_Et-50_3rdEt-15.root";
   TFile* corrfile = new TFile(corrname);
   TH1D* h_corr_ = (TH1D*)corrfile->Get("h_corr");
   for(int i=1; i<84; i++){
+    if(i < 42-15 || i > 42+15){
+      h_corr_->SetBinContent(i,1.0);
+    }
     //if(h_corr_->GetBinContent(i) < 0.5 || h_corr_->GetBinContent(i) > 2.0) h_corr_->SetBinContent(i,1.0);
   }
   
   float tpfjet_pt_, tpfjet_p_, tpfjet_E_, tpfjet_eta_, tpfjet_phi_, tpfjet_EMfrac_, tpfjet_hadEcalEfrac_, tpfjet_scale_;
+  int tpfjet_jetID_;
   float tpfjet_gendr_, tpfjet_genpt_, tpfjet_genp_, tpfjet_genE_;
   //float tpfjet_EBE_, tpfjet_EEE_, tpfjet_HBE_, tpfjet_HEE_, tpfjet_HFE_;
   float tpfjet_unkown_E_, tpfjet_unkown_px_, tpfjet_unkown_py_, tpfjet_unkown_pz_, tpfjet_unkown_EcalE_;
@@ -61,6 +63,7 @@ int main()
   vector<float>* tpfjet_candtrack_pz_ = 0;
   vector<float>* tpfjet_candtrack_EcalE_ = 0;
   float ppfjet_pt_, ppfjet_p_, ppfjet_E_, ppfjet_eta_, ppfjet_phi_, ppfjet_EMfrac_, ppfjet_hadEcalEfrac_, ppfjet_scale_;
+  int ppfjet_jetID_;
   float ppfjet_gendr_, ppfjet_genpt_, ppfjet_genp_, ppfjet_genE_;
   //float ppfjet_EBE_, ppfjet_EEE_, ppfjet_HBE_, ppfjet_HEE_, ppfjet_HFE_;
   float ppfjet_unkown_E_, ppfjet_unkown_px_, ppfjet_unkown_py_, ppfjet_unkown_pz_, ppfjet_unkown_EcalE_;
@@ -113,6 +116,7 @@ int main()
   tree->SetBranchAddress("tpfjet_EMfrac",&tpfjet_EMfrac_);
   tree->SetBranchAddress("tpfjet_hadEcalEfrac",&tpfjet_hadEcalEfrac_);
   tree->SetBranchAddress("tpfjet_scale",&tpfjet_scale_);
+  tree->SetBranchAddress("tpfjet_jetID",&tpfjet_jetID_);
   tree->SetBranchAddress("tpfjet_genpt",&tpfjet_genpt_);
   tree->SetBranchAddress("tpfjet_genp",&tpfjet_genp_);
   tree->SetBranchAddress("tpfjet_genE",&tpfjet_genE_);
@@ -182,6 +186,7 @@ int main()
   tree->SetBranchAddress("ppfjet_EMfrac",&ppfjet_EMfrac_);
   tree->SetBranchAddress("ppfjet_hadEcalEfrac",&ppfjet_hadEcalEfrac_);
   tree->SetBranchAddress("ppfjet_scale",&ppfjet_scale_);
+  tree->SetBranchAddress("ppfjet_jetID",&ppfjet_jetID_);
   tree->SetBranchAddress("ppfjet_genpt",&ppfjet_genpt_);
   tree->SetBranchAddress("ppfjet_genp",&ppfjet_genp_);
   tree->SetBranchAddress("ppfjet_genE",&ppfjet_genE_);
@@ -290,12 +295,13 @@ int main()
     float maxThirdJetEt_ = 15.0;//15.0;
     float maxDeltaEta_ = 0.5;//0.5;
     float maxJetEMFrac = 1.1;
-    float maxProbeJetEta = 2.4;
+    float maxProbeJetEta = 1.305;//2.4;
     if(tjet_Et + pjet_Et < minSumJetEt_) passSel |= 0x1;
     if(tjet_Et < minJetEt_ || pjet_Et < minJetEt_) passSel |= 0x2;
     if(sqrt(pf_thirdjet_px_*pf_thirdjet_px_ + pf_thirdjet_py_*pf_thirdjet_py_) > maxThirdJetEt_) passSel |= 0x4;
     if(pf_dijet_deta_ > maxDeltaEta_) passSel |= 0x8;
-    if(tpfjet_EMfrac_ > maxJetEMFrac || ppfjet_EMfrac_ > maxJetEMFrac) passSel |= 0x100;
+    //if(tpfjet_EMfrac_ > maxJetEMFrac || ppfjet_EMfrac_ > maxJetEMFrac) passSel |= 0x100;
+    if(tpfjet_jetID_ != 3 || ppfjet_jetID_ != 3) passSel |= 0x100;
 
     if(fabs(ppfjet_eta_) > maxProbeJetEta) passSel |= 0x10;
     if(passSel) continue;

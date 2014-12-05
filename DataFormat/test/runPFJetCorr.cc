@@ -5,16 +5,17 @@ using namespace std;
 int main()
 {
   TChain* tree = new TChain("pf_dijettree");
-  TString input = "/eos/uscms/store/user/dgsheffi/QCD_Pt-15to3000_TuneD6T_Flat_8TeV_pythia6/DijetCalibration_dEta-1p5_Et-10_3rdEt-50_CHS/22aa682901968e0f6dec73335f20b19e/tree_*.root";
+  TString input = "/eos/uscms/store/user/dgsheffi/QCD_Pt-1800_TuneZ2star_8TeV_pythia6/DijetCalibration_dEta-1p5_Et-20_3rdEt-50/b4567834a2ef8afdd36a5bd021a58fe5/tree_*.root";
   cout << "Opening file: " << input << endl;
   tree->Add(input);
   cout << "File opened." << endl;
 
-  TString output = "/uscms_data/d3/dgsheffi/HCal/corrections/QCD_Pt-15to3000_TuneD6T_Flat_8TeV_pythia6_dEta-0p5_leadingEt-50_3rdEt-15_fEM-1_unweighted_CHS.root";
+  TString output = "/uscms_data/d3/dgsheffi/HCal/corrections/QCD_Pt-1800_dEta-0p5_Et-50_3rdEt-15.root";
 
   DijetRespCorrData data;
 
   float tjet_pt_, tjet_p_, tjet_E_, tjet_eta_, tjet_phi_, tjet_EMfrac_, tjet_hadEcalEfrac_, tjet_scale_;
+  int tjet_jetID_;
   float tjet_gendr_, tjet_genpt_, tjet_genp_, tjet_genE_;
   float tjet_unkown_E_, tjet_unkown_px_, tjet_unkown_py_, tjet_unkown_pz_, tjet_unkown_EcalE_;
   float tjet_electron_E_, tjet_electron_px_, tjet_electron_py_, tjet_electron_pz_, tjet_electron_EcalE_;
@@ -54,6 +55,7 @@ int main()
   vector<float>* tjet_candtrack_pz_ = 0;
   vector<float>* tjet_candtrack_EcalE_ = 0;
   float pjet_pt_, pjet_p_, pjet_E_, pjet_eta_, pjet_phi_, pjet_EMfrac_, pjet_hadEcalEfrac_, pjet_scale_;
+  int pjet_jetID_;
   float pjet_gendr_, pjet_genpt_, pjet_genp_, pjet_genE_;
   float pjet_unkown_E_, pjet_unkown_px_, pjet_unkown_py_, pjet_unkown_pz_, pjet_unkown_EcalE_;
   float pjet_electron_E_, pjet_electron_px_, pjet_electron_py_, pjet_electron_pz_, pjet_electron_EcalE_;
@@ -106,6 +108,7 @@ int main()
   tree->SetBranchAddress("tpfjet_EMfrac",&tjet_EMfrac_);
   tree->SetBranchAddress("tpfjet_hadEcalEfrac",&tjet_hadEcalEfrac_);
   tree->SetBranchAddress("tpfjet_scale",&tjet_scale_);
+  tree->SetBranchAddress("tpfjet_jetID",&tjet_jetID_);
   tree->SetBranchAddress("tpfjet_genpt",&tjet_genpt_);
   tree->SetBranchAddress("tpfjet_genp",&tjet_genp_);
   tree->SetBranchAddress("tpfjet_genE",&tjet_genE_);
@@ -175,6 +178,7 @@ int main()
   tree->SetBranchAddress("ppfjet_EMfrac",&pjet_EMfrac_);
   tree->SetBranchAddress("ppfjet_hadEcalEfrac",&pjet_hadEcalEfrac_);
   tree->SetBranchAddress("ppfjet_scale",&pjet_scale_);
+  tree->SetBranchAddress("ppfjet_jetID",&pjet_jetID_);
   tree->SetBranchAddress("ppfjet_genpt",&pjet_genpt_);
   tree->SetBranchAddress("ppfjet_genp",&pjet_genp_);
   tree->SetBranchAddress("ppfjet_genE",&pjet_genE_);
@@ -277,7 +281,8 @@ int main()
     if((tjet_Et > pjet_Et && tjet_Et < minJetEt_) || (tjet_Et <= pjet_Et && pjet_Et < minJetEt_)) passSel |= 0x2;
     if(sqrt(thirdjet_px_*thirdjet_px_ + thirdjet_py_*thirdjet_py_) > maxThirdJetEt_) passSel |= 0x4;
     if(dijet_deta_ > maxDeltaEta_) passSel |= 0x8;
-    if(tjet_EMfrac_ > maxJetEMFrac || pjet_EMfrac_ > maxJetEMFrac) passSel |= 0x100;
+    //if(tjet_EMfrac_ > maxJetEMFrac || pjet_EMfrac_ > maxJetEMFrac) passSel |= 0x100;
+    if(tjet_jetID_ != 3 || pjet_jetID_ != 3) passSel |= 0x100;
     
     h_PassSel_->Fill(passSel);
     if(passSel) continue;
