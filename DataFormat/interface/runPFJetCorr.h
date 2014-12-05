@@ -12,4 +12,6 @@
 
 #include "HcalClosureTest/DataFormat/src/DijetRespCorrData.cc"
 
+double getNeutralPUCorr(double, int, double, bool);
+
 #endif
