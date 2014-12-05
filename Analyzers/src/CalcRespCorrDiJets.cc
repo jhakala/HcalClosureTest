@@ -521,6 +521,7 @@ CalcRespCorrDiJets::analyze(const edm::Event& iEvent, const edm::EventSetup& evS
       tpfjet_eta_   = pf_tag.jet()->eta();
       tpfjet_phi_   = pf_tag.jet()->phi();
       tpfjet_scale_ = pf_tag.scale();
+      tpfjet_area_  = pf_tag.jet()->jetArea();
       tpfjet_ntwrs_=0;
       tpfjet_ncandtracks_=0;
 
@@ -1057,6 +1058,7 @@ CalcRespCorrDiJets::analyze(const edm::Event& iEvent, const edm::EventSetup& evS
       ppfjet_eta_   = pf_probe.jet()->eta();
       ppfjet_phi_   = pf_probe.jet()->phi();
       ppfjet_scale_ = pf_probe.scale();
+      ppfjet_area_  = pf_probe.jet()->jetArea();
       ppfjet_ntwrs_=0;
       ppfjet_ncandtracks_=0;
 
@@ -1697,6 +1699,7 @@ void CalcRespCorrDiJets::beginJob()
     pf_tree_->Branch("tpfjet_EMfrac",&tpfjet_EMfrac_, "tpfjet_EMfrac/F");
     pf_tree_->Branch("tpfjet_hadEcalEfrac",&tpfjet_hadEcalEfrac_, "tpfjet_hadEcalEfrac/F");
     pf_tree_->Branch("tpfjet_scale",&tpfjet_scale_, "tpfjet_scale/F");
+    pf_tree_->Branch("tpfjet_area",&tpfjet_area_, "tpfjet_area/F");
     pf_tree_->Branch("tpfjet_jetID",&tpfjet_jetID_, "tpfjet_jetID/I");
     if(doGenJets_){
       pf_tree_->Branch("tpfjet_genpt",&tpfjet_genpt_, "tpfjet_genpt/F");
@@ -1772,6 +1775,7 @@ void CalcRespCorrDiJets::beginJob()
     pf_tree_->Branch("ppfjet_EMfrac",&ppfjet_EMfrac_, "ppfjet_EMfrac/F");
     pf_tree_->Branch("ppfjet_hadEcalEfrac",&ppfjet_hadEcalEfrac_, "ppfjet_hadEcalEfrac/F");
     pf_tree_->Branch("ppfjet_scale",&ppfjet_scale_, "ppfjet_scale/F");
+    pf_tree_->Branch("ppfjet_area",&ppfjet_area_, "ppfjet_area/F");
     pf_tree_->Branch("ppfjet_jetID",&ppfjet_jetID_, "ppfjet_jetID/I");
     if(doGenJets_){
       pf_tree_->Branch("ppfjet_genpt",&ppfjet_genpt_, "ppfjet_genpt/F");
