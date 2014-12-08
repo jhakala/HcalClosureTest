@@ -215,7 +215,7 @@ class CalcRespCorrDiJets : public edm::EDAnalyzer {
   int ppfjet_ncandtracks_;
   std::vector<float> ppfjet_candtrack_px_, ppfjet_candtrack_py_, ppfjet_candtrack_pz_, ppfjet_candtrack_EcalE_;
   float pf_dijet_deta_, pf_dijet_dphi_, pf_dijet_balance_;
-  float pf_thirdjet_px_, pf_thirdjet_py_;
+  float pf_thirdjet_px_, pf_thirdjet_py_, pf_thirdjet_px_uncorr_, pf_thirdjet_py_uncorr_;
   int pf_Run_, pf_Lumi_, pf_Event_;
   int pf_NPV_;
   float pf_weight_;
@@ -225,6 +225,7 @@ class CalcRespCorrDiJets : public edm::EDAnalyzer {
   double deltaR(const double eta1, const double phi1, const double eta2, const double phi2);
   int getEtaPhi(const DetId id);
   int getEtaPhi(const HcalDetId id);
+  double getNeutralPUCorr(double eta, int intNPV, double area, bool isMC_);
 
   struct CaloJetCorretPairComp {
     inline bool operator() ( const CaloJetCorretPair& a, const CaloJetCorretPair& b) {
