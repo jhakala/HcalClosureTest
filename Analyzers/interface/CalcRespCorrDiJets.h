@@ -123,6 +123,7 @@ class CalcRespCorrDiJets : public edm::EDAnalyzer {
   std::string hbheRecHitName_;      // label for HBHERecHits collection
   std::string hfRecHitName_;        // label for HFRecHit collection
   std::string hoRecHitName_;        // label for HORecHit collection
+  std::string pvCollName_;          // label for primary vertex collection
   std::string rootHistFilename_;    // name of the histogram file
   double maxDeltaEta_;              // maximum delta-|Eta| between Jets
   double minTagJetEta_;             // minimum |eta| of the tag jet

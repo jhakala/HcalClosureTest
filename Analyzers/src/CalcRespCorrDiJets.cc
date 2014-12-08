@@ -40,6 +40,7 @@ CalcRespCorrDiJets::CalcRespCorrDiJets(const edm::ParameterSet& iConfig)
   hbheRecHitName_      = iConfig.getParameter<std::string>("hbheRecHitName");
   hfRecHitName_        = iConfig.getParameter<std::string>("hfRecHitName");
   hoRecHitName_        = iConfig.getParameter<std::string>("hoRecHitName");
+  pvCollName_          = iConfig.getParameter<std::string>("pvCollName");
   rootHistFilename_    = iConfig.getParameter<std::string>("rootHistFilename");
   maxDeltaEta_         = iConfig.getParameter<double>("maxDeltaEta");
   minTagJetEta_        = iConfig.getParameter<double>("minTagJetEta");
@@ -354,10 +355,10 @@ CalcRespCorrDiJets::analyze(const edm::Event& iEvent, const edm::EventSetup& evS
 
     // Get primary vertices
     edm::Handle<std::vector<reco::Vertex>> pv;
-    iEvent.getByLabel("offlinePrimaryVertices",pv);
+    iEvent.getByLabel(pvCollName_,pv);
     if(!pv.isValid()) {
       throw edm::Exception(edm::errors::ProductNotFound)
-	<< " could not find Vertex named " << "offlinePrimaryVertices" << ".\n";
+	<< " could not find Vertex named " << pvCollName_ << ".\n";
       return;
     }
     pf_NPV_ = 0;
