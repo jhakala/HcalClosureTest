@@ -261,18 +261,24 @@ int main()
   // Jet
   TH1D* h_tag_jet_Ediff_once_track_cluster_ = new TH1D("h_tag_jet_EoverE_nocorr","tag E_{reconstructed}/E_{gen} with c_{i} = 1",200,0,2);
   TH1D* h_tag_jet_Ediff_once_track_cluster_corr_ = new TH1D("h_tag_jet_EoverE_respcorr","tag E_{reconstructed}/E_{gen} with response corrections",200,0,2);
-  TH2D* h_tag_jet_EoverE_2D_ = new TH2D("h_tag_jet_EoverE_2D_nocorr","tag E_{reconstructed}/E_{gen} vs. #eta with c_{i} = 1",100,-5,5,100,0,2);
-  TH2D* h_tag_jet_EoverE_2D_corr_ = new TH2D("h_tag_jet_EoverE_2D_respcorr","tag E_{reconstructed}/E_{gen} vs. #eta with response corrections",100,-5,5,100,0,2);
+  TH2D* h_tag_jet_EoverEvsEta_ = new TH2D("h_tag_jet_EoverEvsEta_nocorr","tag E_{reconstructed}/E_{gen} vs. #eta with c_{i} = 1",100,-5,5,100,0,2);
+  TH2D* h_tag_jet_EoverEvsEta_corr_ = new TH2D("h_tag_jet_EoverEvsEta_respcorr","tag E_{reconstructed}/E_{gen} vs. #eta with response corrections",100,-5,5,100,0,2);
+  TH2D* h_tag_jet_EoverEvsPhi_ = new TH2D("h_tag_jet_EoverEvsPhi_nocorr","tag E_{reconstructed}/E_{gen} vs. #phi with c_{i} = 1",100,-3.141593,3.141593,100,0,2);
+  TH2D* h_tag_jet_EoverEvsPhi_corr_ = new TH2D("h_tag_jet_EoverEvsPhi_respcorr","tag E_{reconstructed}/E_{gen} vs. #phi with response corrections",100,-3.141593,3.141593,100,0,2);
   
   TH1D* h_probe_jet_Ediff_once_track_cluster_ = new TH1D("h_probe_jet_EoverE_nocorr","probe E_{reconstructed}/E_{gen} with c_{i} = 1",200,0,2);
   TH1D* h_probe_jet_Ediff_once_track_cluster_corr_ = new TH1D("h_probe_jet_EoverE_respcorr","probe E_{reconstructed}/E_{gen} with response corrections",200,0,2);
-  TH2D* h_probe_jet_EoverE_2D_ = new TH2D("h_probe_jet_EoverE_2D_nocorr","probe E_{reconstructed}/E_{gen} vs. #eta with c_{i} = 1",100,-5,5,100,0,2);
-  TH2D* h_probe_jet_EoverE_2D_corr_ = new TH2D("h_probe_jet_EoverE_2D_respcorr","probe E_{reconstructed}/E_{gen} vs. #eta with response corrections",100,-5,5,100,0,2);
+  TH2D* h_probe_jet_EoverEvsEta_ = new TH2D("h_probe_jet_EoverEvsEta_nocorr","probe E_{reconstructed}/E_{gen} vs. #eta with c_{i} = 1",100,-5,5,100,0,2);
+  TH2D* h_probe_jet_EoverEvsEta_corr_ = new TH2D("h_probe_jet_EoverEvsEta_respcorr","probe E_{reconstructed}/E_{gen} vs. #eta with response corrections",100,-5,5,100,0,2);
+  TH2D* h_probe_jet_EoverEvsPhi_ = new TH2D("h_probe_jet_EoverEvsPhi_nocorr","probe E_{reconstructed}/E_{gen} vs. #phi with c_{i} = 1",100,-3.141593,3.141593,100,0,2);
+  TH2D* h_probe_jet_EoverEvsPhi_corr_ = new TH2D("h_probe_jet_EoverEvsPhi_respcorr","probe E_{reconstructed}/E_{gen} vs. #phi with response corrections",100,-3.141593,3.141593,100,0,2);
 
   TH1D* h_dijet_balance_nocorr_ = new TH1D("h_dijet_balance_nocorr","Dijet balance with c_{i} = 1",200,-1,1);
   TH1D* h_dijet_balance_respcorr_ = new TH1D("h_dijet_balance_respcorr","Dijet balance with response corrections",200,-1,1);
-  TH2D* h_dijet_balance_2D_nocorr_ = new TH2D("h_dijet_balance_2D_nocorr","Dijet balance vs. #eta with c_{i} = 1",100,-5,5,100,-1,1);
-  TH2D* h_dijet_balance_2D_respcorr_ = new TH2D("h_dijet_balance_2D_respcorr","Dijet balance vs. #eta with response corrections",100,-5,5,100,-1,1);
+  TH2D* h_dijet_balancevsEta_nocorr_ = new TH2D("h_dijet_balancevsEta_nocorr","Dijet balance vs. #eta with c_{i} = 1",100,-5,5,100,-1,1);
+  TH2D* h_dijet_balancevsEta_respcorr_ = new TH2D("h_dijet_balancevsEta_respcorr","Dijet balance vs. #eta with response corrections",100,-5,5,100,-1,1);
+  TH2D* h_dijet_balancevsPhi_nocorr_ = new TH2D("h_dijet_balancevsPhi_nocorr","Dijet balance vs. #phi with c_{i} = 1",100,-3.141593,3.141593,100,-1,1);
+  TH2D* h_dijet_balancevsPhi_respcorr_ = new TH2D("h_dijet_balancevsPhi_respcorr","Dijet balance vs. #phi with response corrections",100,-3.141593,3.141593,100,-1,1);
   
   
   int nEvents = tree->GetEntries();
@@ -294,7 +300,7 @@ int main()
     float minJetEt_ = 50.0;//20.0;
     float maxThirdJetEt_ = 15.0;//15.0;
     float maxDeltaEta_ = 0.5;//0.5;
-    float maxJetEMFrac = 1.1;
+    //float maxJetEMFrac = 1.1;
     float maxProbeJetEta = 1.305;//2.4;
     if(tjet_Et + pjet_Et < minSumJetEt_) passSel |= 0x1;
     if(tjet_Et < minJetEt_ || pjet_Et < minJetEt_) passSel |= 0x2;
@@ -337,10 +343,12 @@ int main()
     
     float tag_jet_E_once_track_cluster = tag_jet_rechit_E_once_cluster + tag_jet_hadEcalE + tag_jet_candNoRecHits_E + tpfjet_unkown_E_ + tpfjet_electron_E_ + tpfjet_muon_E_ + tpfjet_photon_E_;
     h_tag_jet_Ediff_once_track_cluster_->Fill(tag_jet_E_once_track_cluster/tpfjet_genE_,pf_weight_);
-    h_tag_jet_EoverE_2D_->Fill(tpfjet_eta_,tag_jet_E_once_track_cluster/tpfjet_genE_,pf_weight_);
+    h_tag_jet_EoverEvsEta_->Fill(tpfjet_eta_,tag_jet_E_once_track_cluster/tpfjet_genE_,pf_weight_);
+    h_tag_jet_EoverEvsPhi_->Fill(tpfjet_phi_,tag_jet_E_once_track_cluster/tpfjet_genE_,pf_weight_);
     float tag_jet_E_once_track_cluster_corr = tag_jet_rechit_E_once_cluster_corr + tag_jet_hadEcalE + tag_jet_candNoRecHits_E + tpfjet_unkown_E_ + tpfjet_electron_E_ + tpfjet_muon_E_ + tpfjet_photon_E_;
     h_tag_jet_Ediff_once_track_cluster_corr_->Fill(tag_jet_E_once_track_cluster_corr/tpfjet_genE_,pf_weight_);
-    h_tag_jet_EoverE_2D_corr_->Fill(tpfjet_eta_,tag_jet_E_once_track_cluster_corr/tpfjet_genE_,pf_weight_);
+    h_tag_jet_EoverEvsEta_corr_->Fill(tpfjet_eta_,tag_jet_E_once_track_cluster_corr/tpfjet_genE_,pf_weight_);
+    h_tag_jet_EoverEvsPhi_corr_->Fill(tpfjet_phi_,tag_jet_E_once_track_cluster_corr/tpfjet_genE_,pf_weight_);
   
     float probe_jet_rechit_E_once_cluster = 0;
     float probe_jet_rechit_E_once_cluster_corr = 0;
@@ -369,10 +377,12 @@ int main()
 
     float probe_jet_E_once_track_cluster = probe_jet_rechit_E_once_cluster + probe_jet_hadEcalE + probe_jet_candNoRecHits_E + ppfjet_unkown_E_ + ppfjet_electron_E_ + ppfjet_muon_E_ + ppfjet_photon_E_;
     h_probe_jet_Ediff_once_track_cluster_->Fill(probe_jet_E_once_track_cluster/ppfjet_genE_,pf_weight_);
-    h_probe_jet_EoverE_2D_->Fill(ppfjet_eta_,probe_jet_E_once_track_cluster/ppfjet_genE_,pf_weight_);
+    h_probe_jet_EoverEvsEta_->Fill(ppfjet_eta_,probe_jet_E_once_track_cluster/ppfjet_genE_,pf_weight_);
+    h_probe_jet_EoverEvsPhi_->Fill(ppfjet_phi_,probe_jet_E_once_track_cluster/ppfjet_genE_,pf_weight_);
     float probe_jet_E_once_track_cluster_corr = probe_jet_rechit_E_once_cluster_corr + probe_jet_hadEcalE + probe_jet_candNoRecHits_E + ppfjet_unkown_E_ + ppfjet_electron_E_ + ppfjet_muon_E_ + ppfjet_photon_E_;
     h_probe_jet_Ediff_once_track_cluster_corr_->Fill(probe_jet_E_once_track_cluster_corr/ppfjet_genE_,pf_weight_);
-    h_probe_jet_EoverE_2D_corr_->Fill(ppfjet_eta_,probe_jet_E_once_track_cluster_corr/tpfjet_genE_,pf_weight_);
+    h_probe_jet_EoverEvsEta_corr_->Fill(ppfjet_eta_,probe_jet_E_once_track_cluster_corr/tpfjet_genE_,pf_weight_);
+    h_probe_jet_EoverEvsPhi_corr_->Fill(ppfjet_phi_,probe_jet_E_once_track_cluster_corr/tpfjet_genE_,pf_weight_);
 
     // Dijet
 
@@ -394,7 +404,8 @@ int main()
 
     double balance_nocorr = 2.0*(tag_jet_Et_nocorr_prime - probe_jet_Et_nocorr_prime)/(tag_jet_Et_nocorr_prime + probe_jet_Et_nocorr_prime);
     h_dijet_balance_nocorr_->Fill(balance_nocorr,pf_weight_);
-    h_dijet_balance_2D_nocorr_->Fill(ppfjet_eta_,balance_nocorr,pf_weight_);
+    h_dijet_balancevsEta_nocorr_->Fill(ppfjet_eta_,balance_nocorr,pf_weight_);
+    h_dijet_balancevsPhi_nocorr_->Fill(ppfjet_phi_,balance_nocorr,pf_weight_);
 
     double tag_jet_Et_respcorr = tag_jet_E_once_track_cluster_corr/cosh(tpfjet_eta_);
     double probe_jet_Et_respcorr = probe_jet_E_once_track_cluster_corr/cosh(ppfjet_eta_);
@@ -414,7 +425,8 @@ int main()
 
     double balance_respcorr = 2.0*(tag_jet_Et_respcorr_prime - probe_jet_Et_respcorr_prime)/(tag_jet_Et_respcorr_prime + probe_jet_Et_respcorr_prime);
     h_dijet_balance_respcorr_->Fill(balance_respcorr,pf_weight_);
-    h_dijet_balance_2D_respcorr_->Fill(ppfjet_eta_,balance_respcorr,pf_weight_);
+    h_dijet_balancevsEta_respcorr_->Fill(ppfjet_eta_,balance_respcorr,pf_weight_);
+    h_dijet_balancevsPhi_respcorr_->Fill(ppfjet_phi_,balance_respcorr,pf_weight_);
   }
 
   //////////////////////////
@@ -431,11 +443,17 @@ int main()
   h_tag_jet_Ediff_once_track_cluster_corr_->GetXaxis()->SetTitle("E_{reconstructed}/E_{gen}");
   h_tag_jet_Ediff_once_track_cluster_corr_->GetYaxis()->SetTitle("events");
 
-  h_tag_jet_EoverE_2D_->GetXaxis()->SetTitle("#eta(probe)");
-  h_tag_jet_EoverE_2D_->GetYaxis()->SetTitle("E_{reconstructed}/E_{gen}");
+  h_tag_jet_EoverEvsEta_->GetXaxis()->SetTitle("#eta(probe)");
+  h_tag_jet_EoverEvsEta_->GetYaxis()->SetTitle("E_{reconstructed}/E_{gen}");
 
-  h_tag_jet_EoverE_2D_corr_->GetXaxis()->SetTitle("#eta(probe)");
-  h_tag_jet_EoverE_2D_corr_->GetYaxis()->SetTitle("E_{reconstructed}/E_{gen}");
+  h_tag_jet_EoverEvsEta_corr_->GetXaxis()->SetTitle("#eta(probe)");
+  h_tag_jet_EoverEvsEta_corr_->GetYaxis()->SetTitle("E_{reconstructed}/E_{gen}");
+
+  h_tag_jet_EoverEvsPhi_->GetXaxis()->SetTitle("#phi(probe)");
+  h_tag_jet_EoverEvsPhi_->GetYaxis()->SetTitle("E_{reconstructed}/E_{gen}");
+
+  h_tag_jet_EoverEvsPhi_corr_->GetXaxis()->SetTitle("#phi(probe)");
+  h_tag_jet_EoverEvsPhi_corr_->GetYaxis()->SetTitle("E_{reconstructed}/E_{gen}");
 
   // Probe
 
@@ -447,11 +465,17 @@ int main()
   h_probe_jet_Ediff_once_track_cluster_corr_->GetXaxis()->SetTitle("E_{reconstructed}/E_{gen}");
   h_probe_jet_Ediff_once_track_cluster_corr_->GetYaxis()->SetTitle("events");
 
-  h_probe_jet_EoverE_2D_->GetXaxis()->SetTitle("#eta(probe)");
-  h_probe_jet_EoverE_2D_->GetYaxis()->SetTitle("E_{reconstructed}/E_{gen}");
+  h_probe_jet_EoverEvsEta_->GetXaxis()->SetTitle("#eta(probe)");
+  h_probe_jet_EoverEvsEta_->GetYaxis()->SetTitle("E_{reconstructed}/E_{gen}");
 
-  h_probe_jet_EoverE_2D_corr_->GetXaxis()->SetTitle("#eta(probe)");
-  h_probe_jet_EoverE_2D_corr_->GetYaxis()->SetTitle("E_{reconstructed}/E_{gen}");
+  h_probe_jet_EoverEvsEta_corr_->GetXaxis()->SetTitle("#eta(probe)");
+  h_probe_jet_EoverEvsEta_corr_->GetYaxis()->SetTitle("E_{reconstructed}/E_{gen}");
+
+  h_probe_jet_EoverEvsPhi_->GetXaxis()->SetTitle("#phi(probe)");
+  h_probe_jet_EoverEvsPhi_->GetYaxis()->SetTitle("E_{reconstructed}/E_{gen}");
+
+  h_probe_jet_EoverEvsPhi_corr_->GetXaxis()->SetTitle("#phi(probe)");
+  h_probe_jet_EoverEvsPhi_corr_->GetYaxis()->SetTitle("E_{reconstructed}/E_{gen}");
 
   // Dijet
 
@@ -463,11 +487,17 @@ int main()
   h_dijet_balance_respcorr_->GetXaxis()->SetTitle("dijet balance");
   h_dijet_balance_respcorr_->GetYaxis()->SetTitle("events");
 
-  h_dijet_balance_2D_nocorr_->GetXaxis()->SetTitle("#eta(probe)");
-  h_dijet_balance_2D_nocorr_->GetYaxis()->SetTitle("dijet balance");
+  h_dijet_balancevsEta_nocorr_->GetXaxis()->SetTitle("#eta(probe)");
+  h_dijet_balancevsEta_nocorr_->GetYaxis()->SetTitle("dijet balance");
   
-  h_dijet_balance_2D_respcorr_->GetXaxis()->SetTitle("#eta(probe)");
-  h_dijet_balance_2D_respcorr_->GetYaxis()->SetTitle("dijet balance");
+  h_dijet_balancevsEta_respcorr_->GetXaxis()->SetTitle("#eta(probe)");
+  h_dijet_balancevsEta_respcorr_->GetYaxis()->SetTitle("dijet balance");
+
+  h_dijet_balancevsPhi_nocorr_->GetXaxis()->SetTitle("#phi(probe)");
+  h_dijet_balancevsPhi_nocorr_->GetYaxis()->SetTitle("dijet balance");
+  
+  h_dijet_balancevsPhi_respcorr_->GetXaxis()->SetTitle("#phi(probe)");
+  h_dijet_balancevsPhi_respcorr_->GetYaxis()->SetTitle("dijet balance");
  
   //////////////////////////
   // Save to file
@@ -478,18 +508,24 @@ int main()
 
   h_tag_jet_Ediff_once_track_cluster_->Write();
   h_tag_jet_Ediff_once_track_cluster_corr_->Write();
-  h_tag_jet_EoverE_2D_->Write();
-  h_tag_jet_EoverE_2D_corr_->Write();
+  h_tag_jet_EoverEvsEta_->Write();
+  h_tag_jet_EoverEvsEta_corr_->Write();
+  h_tag_jet_EoverEvsPhi_->Write();
+  h_tag_jet_EoverEvsPhi_corr_->Write();
   
   h_probe_jet_Ediff_once_track_cluster_->Write();
   h_probe_jet_Ediff_once_track_cluster_corr_->Write();
-  h_probe_jet_EoverE_2D_->Write();
-  h_probe_jet_EoverE_2D_corr_->Write();
+  h_probe_jet_EoverEvsEta_->Write();
+  h_probe_jet_EoverEvsEta_corr_->Write();
+  h_probe_jet_EoverEvsPhi_->Write();
+  h_probe_jet_EoverEvsPhi_corr_->Write();
 
   h_dijet_balance_nocorr_->Write();
   h_dijet_balance_respcorr_->Write();
-  h_dijet_balance_2D_nocorr_->Write();
-  h_dijet_balance_2D_respcorr_->Write();
+  h_dijet_balancevsEta_nocorr_->Write();
+  h_dijet_balancevsEta_respcorr_->Write();
+  h_dijet_balancevsPhi_nocorr_->Write();
+  h_dijet_balancevsPhi_respcorr_->Write();
   
   fout->Close();
   cout << "Created file:" << output << endl;
