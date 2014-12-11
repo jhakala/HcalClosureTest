@@ -10,7 +10,7 @@ import re
 file = r.TFile("DijetRespCorrs.root")
 # change this file ^^^ to point to the generated dijet balancing respcorrs.
 
-template = open("scriptingtools/Reference_MC_RespCorrs_fromSalavat.txt", "r")
+template = open("scriptingtools/preexisting_RespCorrs.txt", "r")
 out_file =  open("scriptingtools/output.txt", "w");
 hist=file.Get("h_corr")
 
