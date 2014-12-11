@@ -4,15 +4,17 @@ using namespace std;
 
 int main()
 {
-  bool isMC = true;
+  bool isMC = false;
 
   TChain* tree = new TChain("pf_dijettree");
-  TString input = "/eos/uscms/store/user/dgsheffi/QCD_Pt-1800_TuneZ2star_8TeV_pythia6/DijetCalibration_dEta-1p5_Et-20_3rdEt-50/b4567834a2ef8afdd36a5bd021a58fe5/tree_*.root";
+  //TString input = "/eos/uscms/store/user/dgsheffi/QCD_Pt-1800_TuneZ2star_8TeV_pythia6/DijetCalibration_dEta-1p5_Et-20_3rdEt-50/b4567834a2ef8afdd36a5bd021a58fe5/tree_*.root";
+  TString input = "/uscmst1b_scratch/lpc1/old_scratch/lpceg/yurii/EnSc/HCAL/ProduceDATA/multijet_2012a_0.root";
   cout << "Opening file: " << input << endl;
   tree->Add(input);
   cout << "File opened." << endl;
 
-  TString output = "/uscms_data/d3/dgsheffi/HCal/corrections/QCD_Pt-1800_dEta-0p5_Et-50_3rdEt-15.root";
+  //TString output = "/uscms_data/d3/dgsheffi/HCal/corrections/QCD_Pt-1800_dEta-0p5_Et-50_3rdEt-15.root";
+  TString output = "/uscms_data/d1/dgsheffi/HCal/corrections/test.root";
 
   DijetRespCorrData data;
 
@@ -112,10 +114,12 @@ int main()
   tree->SetBranchAddress("tpfjet_scale",&tjet_scale_);
   tree->SetBranchAddress("tpfjet_area",&tjet_area_);
   tree->SetBranchAddress("tpfjet_jetID",&tjet_jetID_);
-  tree->SetBranchAddress("tpfjet_genpt",&tjet_genpt_);
-  tree->SetBranchAddress("tpfjet_genp",&tjet_genp_);
-  tree->SetBranchAddress("tpfjet_genE",&tjet_genE_);
-  tree->SetBranchAddress("tpfjet_gendr",&tjet_gendr_);
+  if(isMC){
+    tree->SetBranchAddress("tpfjet_genpt",&tjet_genpt_);
+    tree->SetBranchAddress("tpfjet_genp",&tjet_genp_);
+    tree->SetBranchAddress("tpfjet_genE",&tjet_genE_);
+    tree->SetBranchAddress("tpfjet_gendr",&tjet_gendr_);
+  }
   tree->SetBranchAddress("tpfjet_unkown_E",&tjet_unkown_E_);
   tree->SetBranchAddress("tpfjet_electron_E",&tjet_electron_E_);
   tree->SetBranchAddress("tpfjet_muon_E",&tjet_muon_E_);
@@ -150,8 +154,10 @@ int main()
   tree->SetBranchAddress("tpfjet_had_emf",&tjet_had_emf_);
   tree->SetBranchAddress("tpfjet_had_id",&tjet_had_id_);
   tree->SetBranchAddress("tpfjet_had_candtrackind",&tjet_had_candtrackind_);
-  tree->SetBranchAddress("tpfjet_had_E_mctruth",&tjet_had_E_mctruth_);
-  tree->SetBranchAddress("tpfjet_had_mcpdgId",&tjet_had_mcpdgId_);
+  if(isMC){
+    tree->SetBranchAddress("tpfjet_had_E_mctruth",&tjet_had_E_mctruth_);
+    tree->SetBranchAddress("tpfjet_had_mcpdgId",&tjet_had_mcpdgId_);
+  }
   tree->SetBranchAddress("tpfjet_had_ntwrs",&tjet_had_ntwrs_);
   tree->SetBranchAddress("tpfjet_ntwrs",&tjet_ntwrs_);
   tree->SetBranchAddress("tpfjet_twr_ieta",&tjet_twr_ieta_);
@@ -183,10 +189,12 @@ int main()
   tree->SetBranchAddress("ppfjet_scale",&pjet_scale_);
   tree->SetBranchAddress("ppfjet_area",&pjet_area_);
   tree->SetBranchAddress("ppfjet_jetID",&pjet_jetID_);
-  tree->SetBranchAddress("ppfjet_genpt",&pjet_genpt_);
-  tree->SetBranchAddress("ppfjet_genp",&pjet_genp_);
-  tree->SetBranchAddress("ppfjet_genE",&pjet_genE_);
-  tree->SetBranchAddress("ppfjet_gendr",&pjet_gendr_);
+  if(isMC){
+    tree->SetBranchAddress("ppfjet_genpt",&pjet_genpt_);
+    tree->SetBranchAddress("ppfjet_genp",&pjet_genp_);
+    tree->SetBranchAddress("ppfjet_genE",&pjet_genE_);
+    tree->SetBranchAddress("ppfjet_gendr",&pjet_gendr_);
+  }
   tree->SetBranchAddress("ppfjet_unkown_E",&pjet_unkown_E_);
   tree->SetBranchAddress("ppfjet_electron_E",&pjet_electron_E_);
   tree->SetBranchAddress("ppfjet_muon_E",&pjet_muon_E_);
@@ -221,8 +229,10 @@ int main()
   tree->SetBranchAddress("ppfjet_had_emf",&pjet_had_emf_);
   tree->SetBranchAddress("ppfjet_had_id",&pjet_had_id_);
   tree->SetBranchAddress("ppfjet_had_candtrackind",&pjet_had_candtrackind_);
-  tree->SetBranchAddress("ppfjet_had_E_mctruth",&pjet_had_E_mctruth_);
-  tree->SetBranchAddress("ppfjet_had_mcpdgId",&pjet_had_mcpdgId_);
+  if(isMC){
+    tree->SetBranchAddress("ppfjet_had_E_mctruth",&pjet_had_E_mctruth_);
+    tree->SetBranchAddress("ppfjet_had_mcpdgId",&pjet_had_mcpdgId_);
+  }
   tree->SetBranchAddress("ppfjet_had_ntwrs",&pjet_had_ntwrs_);
   tree->SetBranchAddress("ppfjet_ntwrs",&pjet_ntwrs_);
   tree->SetBranchAddress("ppfjet_twr_ieta",&pjet_twr_ieta_);
@@ -253,7 +263,12 @@ int main()
   tree->SetBranchAddress("pf_Lumi",&pf_Lumi_);
   tree->SetBranchAddress("pf_Event",&pf_Event_);
   tree->SetBranchAddress("pf_NPV",&pf_NPV_);
-  tree->SetBranchAddress("pf_weight",&weight_);
+  if(isMC){
+    tree->SetBranchAddress("pf_weight",&weight_);
+  }
+  else{
+    weight_ = 1.0;
+  }
 
   TH1D* h_PassSel_ = new TH1D("h_PassSelection", "Selection Pass Failures",256,-0.5,255.5);
   int fails = 0;
