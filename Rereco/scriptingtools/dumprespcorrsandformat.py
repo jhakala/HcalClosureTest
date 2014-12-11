@@ -33,8 +33,7 @@ for i in range (0,num_lines):
 			# change response correction column for the HB, HE, and HF. I leave HO out since we use run1 data. I leave out ZDC since it will be read out by CASTOR in run2.
 			if bits[4] in ('HB', 'HE', 'HF'):
 				bits[5] = "%.6f" % (float(bits[5])*hist.GetBinContent(int(bits[1])+42))		
-		
-			# The last line kills all the calibrations in phi and depth for HB, HE, and HF. More code needs to be inserted here to restore those.			
+			# The last line modifies the respcorrs by multipling the dijet balancing respcorrs with the reference respcorrs.			
 
 			for j in range (0, len(bits)):
 				bits[j]=bits[j].rjust(7)
