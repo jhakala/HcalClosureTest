@@ -4,27 +4,32 @@ using namespace std;
 
 int main()
 {
-  bool isMC = false;
+  bool isMC = true;
 
   TChain* tree = new TChain("pf_dijettree");
   //TString input = "/eos/uscms/store/user/dgsheffi/QCD_Pt-1800_TuneZ2star_8TeV_pythia6/DijetCalibration_dEta-1p5_Et-20_3rdEt-50/b4567834a2ef8afdd36a5bd021a58fe5/tree_*.root";
-  TString input = "/uscmst1b_scratch/lpc1/old_scratch/lpceg/yurii/EnSc/HCAL/ProduceDATA/multijet_2012a_0.root";
+  //TString input = "/uscmst1b_scratch/lpc1/old_scratch/lpceg/yurii/EnSc/HCAL/ProduceDATA/multijet_2012a_0.root";
+  //TString input = "/uscmst1b_scratch/lpc1/old_scratch/lpceg/yurii/EnSc/HCAL/ProduceDATA/multijet_2012a_*.root";
+  TString input = "/eos/uscms/store/user/dgsheffi/QCD_Pt-120to170_TuneZ2star_8TeV_pythia6/DijetCalibration_dEta-1p5_Et-10_3rdEt-50/c1cd07ae23ea077dd65d1e10c6b04785/tree_*.root";
   cout << "Opening file:" << input << endl;
   tree->Add(input);
 
   //TString output = "/uscms_data/d1/dgsheffi/HCal/corrections/validation/QCD_Pt-1800_dEta-0p5_Et-50_3rdEt-15.root";
-  TString output = "/uscms_data/d1/dgsheffi/HCal/corrections/validation/test.root";
+  //TString output = "/uscms_data/d1/dgsheffi/HCal/corrections/validation/MultiJet_2012A_dEta-0p5_Et-50_3rdEt-15_test_central.root";
+  TString output = "/uscms_data/d1/dgsheffi/HCal/corrections/validation/QCD_Pt-120To170_dEta-0p5_Et-50_3rdEt-15_sigma-10.root";
 
   //TString corrname = "/uscms_data/d3/dgsheffi/HCal/corrections/QCD_Pt-1800_dEta-0p5_Et-50_3rdEt-15.root";
-  TString corrname = "/uscms_data/d1/dgsheffi/HCal/corrections/test.root";
+  //TString corrname = "/uscms_data/d1/dgsheffi/HCal/corrections/MultiJet_2012A_dEta-0p5_Et-50_3rdEt-15_test.root";
+  TString corrname = "/uscms_data/d1/dgsheffi/HCal/corrections/QCD_Pt-120To170_dEta-0p5_Et-50_3rdEt-15.root";
   TFile* corrfile = new TFile(corrname);
   TH1D* h_corr_ = (TH1D*)corrfile->Get("h_corr");
-  /*for(int i=1; i<84; i++){
-    if(i < 42-15 || i > 42+15){
+  for(int i=1; i<84; i++){
+    //if(i < 42-15 || i > 42+15){
+    if(i < 42-28 || i > 42+28){
       h_corr_->SetBinContent(i,1.0);
     }
     //if(h_corr_->GetBinContent(i) < 0.5 || h_corr_->GetBinContent(i) > 2.0) h_corr_->SetBinContent(i,1.0);
-    }*/
+  }
   
   float tpfjet_pt_, tpfjet_p_, tpfjet_E_, tpfjet_eta_, tpfjet_phi_, tpfjet_EMfrac_, tpfjet_hadEcalEfrac_, tpfjet_scale_;
   int tpfjet_jetID_;
@@ -310,7 +315,7 @@ int main()
     double sum = 0.0;
     int num = 0;
     for(int j=0; j<84; ++j){
-      if(false){//j < 42-15 || j > 42+15 || (j >= 41 && j <= 43)){
+      if(j < 42-28 || j > 42+28 || (j >= 41 && j <= 43)){//j < 42-15 || j > 42+15 || (j >= 41 && j <= 43)){
 	randCorr[i][j] = 1.0;
 	h_randCorr_->Fill(static_cast<double>(j) - 41.5,1.0);
       }
@@ -337,6 +342,9 @@ int main()
       h_randCorr_->Fill(static_cast<double>(j) - 41.5,randCorr[i][j]);
     }
   }
+
+  double L_nocorr = 0;
+  double L_respcorr = 0;
   
   int nEvents = tree->GetEntries();
   cout << "Running over " << nEvents << " events" << endl;
@@ -358,7 +366,7 @@ int main()
     float maxThirdJetEt_ = 15.0;//15.0;
     float maxDeltaEta_ = 0.5;//0.5;
     //float maxJetEMFrac = 1.1;
-    float maxProbeJetEta = 1.305;//2.4;
+    float maxProbeJetEta = 2.4;//1.305;//2.4;
     if(tjet_Et + pjet_Et < minSumJetEt_) passSel |= 0x1;
     if(tjet_Et < minJetEt_ || pjet_Et < minJetEt_) passSel |= 0x2;
     if(sqrt(pf_thirdjet_px_*pf_thirdjet_px_ + pf_thirdjet_py_*pf_thirdjet_py_) > maxThirdJetEt_) passSel |= 0x4;
@@ -499,6 +507,7 @@ int main()
     h_dijet_balance_nocorr_->Fill(balance_nocorr,pf_weight_);
     h_dijet_balancevsEta_nocorr_->Fill(ppfjet_eta_,balance_nocorr,pf_weight_);
     h_dijet_balancevsPhi_nocorr_->Fill(ppfjet_phi_,balance_nocorr,pf_weight_);
+    L_nocorr += balance_nocorr*balance_nocorr;
 
     double tag_jet_Et_respcorr = tag_jet_E_once_track_cluster_corr/cosh(tpfjet_eta_);
     double probe_jet_Et_respcorr = probe_jet_E_once_track_cluster_corr/cosh(ppfjet_eta_);
@@ -520,6 +529,7 @@ int main()
     h_dijet_balance_respcorr_->Fill(balance_respcorr,pf_weight_);
     h_dijet_balancevsEta_respcorr_->Fill(ppfjet_eta_,balance_respcorr,pf_weight_);
     h_dijet_balancevsPhi_respcorr_->Fill(ppfjet_phi_,balance_respcorr,pf_weight_);
+    L_respcorr += balance_respcorr*balance_respcorr;
   }
 
   //////////////////////////
@@ -629,6 +639,9 @@ int main()
   
   fout->Close();
   cout << "Created file:" << output << endl;
+
+  cout << "Likelihood with c_i = 1:     " << L_nocorr << endl;
+  cout << "Likelihood with found c_i's: " << L_respcorr << endl;
 
   return 0;
 }
