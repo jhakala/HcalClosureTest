@@ -2,19 +2,51 @@
 
 using namespace std;
 
-int main()
+int main(int argc, char* argv[])
 {
   bool isMC = false;
+  float maxDeltaEta_ = 0.5;
+  float minJetEt_ = 50.0;
+  float maxThirdJetEt_ = 15.0;
+
+  cout << argc << endl;
+  if(argc == 5){
+    if(atoi(argv[1]) == 1){
+      isMC = true;
+    }
+    else if(atoi(argv[1]) == 0){
+      isMC = false;
+    }
+    else{
+      cout << " Usage: runPFJetCorr isMC dEta leadingEt 3rdEt" << endl;
+      return 1;
+    }
+    maxDeltaEta_   = atof(argv[2]);
+    minJetEt_      = atof(argv[3]);
+    maxThirdJetEt_ = atof(argv[4]);
+  }
+  else{
+    cout << "Not right number of arguments." << endl;
+    cout << " Usage: runPFJetCorr isMC dEta leadingEt 3rdEt" << endl;
+    return 1;
+  }
 
   TChain* tree = new TChain("pf_dijettree");
   //TString input = "/eos/uscms/store/user/dgsheffi/QCD_Pt-1800_TuneZ2star_8TeV_pythia6/DijetCalibration_dEta-1p5_Et-20_3rdEt-50/b4567834a2ef8afdd36a5bd021a58fe5/tree_*.root";
-  TString input = "/uscmst1b_scratch/lpc1/old_scratch/lpceg/yurii/EnSc/HCAL/ProduceDATA/multijet_2012a_0.root";
+  //TString input1 = "/uscmst1b_scratch/lpc1/old_scratch/lpceg/yurii/EnSc/HCAL/ProduceDATA/*.root";
+  TString input = "/eos/uscms/store/user/dgsheffi/QCD_Pt-120to170_TuneZ2star_8TeV_pythia6/DijetCalibration_dEta-1p5_Et-10_3rdEt-50/c1cd07ae23ea077dd65d1e10c6b04785/tree_*.root";
+  //TString input2 = "/uscmst1b_scratch/lpc1/old_scratch/lpceg/yurii/EnSc/HCAL/ProduceDATA2/*root";
   cout << "Opening file: " << input << endl;
   tree->Add(input);
+  //tree->Add(input1);
+  //tree->Add(input2);
   cout << "File opened." << endl;
 
   //TString output = "/uscms_data/d3/dgsheffi/HCal/corrections/QCD_Pt-1800_dEta-0p5_Et-50_3rdEt-15.root";
-  TString output = "/uscms_data/d1/dgsheffi/HCal/corrections/test.root";
+  //TString output = "/uscms_data/d1/dgsheffi/HCal/corrections/MultiJet_2012AD_dEta-0p5_Et-50_3rdEt-15_test.root";
+  //TString output = "/uscms_data/d1/dgsheffi/HCal/corrections/QCD_Pt-120To170_dEta-0p5_Et-50_3rdEt-15.root";
+  int decimal = static_cast<int>(maxDeltaEta_*10)-static_cast<int>(maxDeltaEta_)*10;
+  TString output = "QCD_Pt-120To170_dEta-"+to_string(static_cast<int>(maxDeltaEta_))+"p"+to_string(decimal)+"_Et-"+to_string(static_cast<int>(minJetEt_))+"_3rdEt-"+to_string(static_cast<int>(maxThirdJetEt_))+".root";
 
   DijetRespCorrData data;
 
@@ -293,9 +325,9 @@ int main()
     float tjet_Et = tjet_E_/cosh(tjet_eta_);
     float pjet_Et = pjet_E_/cosh(pjet_eta_);
     float minSumJetEt_ = 0.0;//40.0;
-    float minJetEt_ = 50.0;//20.0;
-    float maxThirdJetEt_ = 15.0;//15.0;
-    float maxDeltaEta_ = 0.5;//0.5;
+    //float minJetEt_ = 50.0;//20.0;
+    //float maxThirdJetEt_ = 15.0;//15.0;
+    //float maxDeltaEta_ = 0.5;//0.5;
     //float maxJetEMFrac = 1.1;
     if(tjet_Et + pjet_Et < minSumJetEt_) passSel |= 0x1;
     if((tjet_Et > pjet_Et && tjet_Et < minJetEt_) || (tjet_Et <= pjet_Et && pjet_Et < minJetEt_)) passSel |= 0x2;
