@@ -16,11 +16,11 @@ int main()
 
   //TString output = "/uscms_data/d1/dgsheffi/HCal/corrections/validation/QCD_Pt-1800_dEta-0p5_Et-50_3rdEt-15.root";
   //TString output = "/uscms_data/d1/dgsheffi/HCal/corrections/validation/MultiJet_2012A_dEta-0p5_Et-50_3rdEt-15_test_central.root";
-  TString output = "/uscms_data/d1/dgsheffi/HCal/corrections/validation/QCD_Pt-120To170_dEta-0p5_Et-50_3rdEt-15_sigma-10.root";
+  TString output = "/uscms_data/d1/dgsheffi/HCal/corrections/validation/QCD_Pt-120To170_dEta-0p5_Et-50_3rdEt-15_sigma-10_noNeutralPUcorr.root";
 
   //TString corrname = "/uscms_data/d3/dgsheffi/HCal/corrections/QCD_Pt-1800_dEta-0p5_Et-50_3rdEt-15.root";
   //TString corrname = "/uscms_data/d1/dgsheffi/HCal/corrections/MultiJet_2012A_dEta-0p5_Et-50_3rdEt-15_test.root";
-  TString corrname = "/uscms_data/d1/dgsheffi/HCal/corrections/QCD_Pt-120To170_dEta-0p5_Et-50_3rdEt-15.root";
+  TString corrname = "/uscms_data/d1/dgsheffi/HCal/corrections/QCD_Pt-120To170_dEta-0p5_Et-50_3rdEt-15_noNeutralPUcorr.root";
   TFile* corrfile = new TFile(corrname);
   TH1D* h_corr_ = (TH1D*)corrfile->Get("h_corr");
   for(int i=1; i<84; i++){
@@ -269,8 +269,8 @@ int main()
   tree->SetBranchAddress("pf_dijet_deta",&pf_dijet_deta_);
   tree->SetBranchAddress("pf_dijet_dphi",&pf_dijet_dphi_);
   tree->SetBranchAddress("pf_dijet_balance",&pf_dijet_balance_);
-  tree->SetBranchAddress("pf_thirdjet_px",&pf_thirdjet_px_);
-  tree->SetBranchAddress("pf_thirdjet_py",&pf_thirdjet_py_);
+  tree->SetBranchAddress("pf_thirdjet_px_uncorr",&pf_thirdjet_px_);
+  tree->SetBranchAddress("pf_thirdjet_py_uncorr",&pf_thirdjet_py_);
   tree->SetBranchAddress("pf_Run",&pf_Run_);
   tree->SetBranchAddress("pf_Lumi",&pf_Lumi_);
   tree->SetBranchAddress("pf_Event",&pf_Event_);
