@@ -2,9 +2,34 @@
 
 using namespace std;
 
-int main()
+int main(int argc, char* argv[])
 {
-  bool isMC = true;
+  bool isMC = false;
+  float maxDeltaEta_ = 0.5;
+  float minJetEt_ = 50.0;
+  float maxThirdJetEt_ = 15.0;
+
+  cout << argc << endl;
+  if(argc == 5){
+    if(atoi(argv[1]) == 1){
+      isMC = true;
+    }
+    else if(atoi(argv[1]) == 0){
+      isMC = false;
+    }
+    else{
+      cout << " Usage: runPFJetCorr isMC dEta leadingEt 3rdEt" << endl;
+      return 1;
+    }
+    maxDeltaEta_   = atof(argv[2]);
+    minJetEt_      = atof(argv[3]);
+    maxThirdJetEt_ = atof(argv[4]);
+  }
+  else{
+    cout << "Not right number of arguments." << endl;
+    cout << " Usage: runPFJetCorr isMC dEta leadingEt 3rdEt" << endl;
+    return 1;
+  }
 
   TChain* tree = new TChain("pf_dijettree");
   //TString input = "/eos/uscms/store/user/dgsheffi/QCD_Pt-1800_TuneZ2star_8TeV_pythia6/DijetCalibration_dEta-1p5_Et-20_3rdEt-50/b4567834a2ef8afdd36a5bd021a58fe5/tree_*.root";
@@ -16,11 +41,16 @@ int main()
 
   //TString output = "/uscms_data/d1/dgsheffi/HCal/corrections/validation/QCD_Pt-1800_dEta-0p5_Et-50_3rdEt-15.root";
   //TString output = "/uscms_data/d1/dgsheffi/HCal/corrections/validation/MultiJet_2012A_dEta-0p5_Et-50_3rdEt-15_test_central.root";
-  TString output = "/uscms_data/d1/dgsheffi/HCal/corrections/validation/QCD_Pt-120To170_dEta-0p5_Et-50_3rdEt-15_sigma-10_noNeutralPUcorr.root";
+  int decimal = static_cast<int>(maxDeltaEta_*10)-static_cast<int>(maxDeltaEta_)*10;
+  int decimal2 = static_cast<int>(maxThirdJetEt_*10)-static_cast<int>(maxThirdJetEt_)*10;
+  //TString output = "/uscms_data/d1/dgsheffi/HCal/corrections/Tuning/validation/QCD_Pt-120To170_dEta-"+to_string(static_cast<int>(maxDeltaEta_))+"p"+to_string(decimal)+"_Et-"+to_string(static_cast<int>(minJetEt_))+"_3rdEt-"+to_string(static_cast<int>(maxThirdJetEt_))+".root";//"_constant.root";
+  TString output = "/uscms_data/d1/dgsheffi/HCal/corrections/Tuning/validation/QCD_Pt-120To170_dEta-"+to_string(static_cast<int>(maxDeltaEta_))+"p"+to_string(decimal)+"_Et-"+to_string(static_cast<int>(minJetEt_))+"_alpha-"+to_string(static_cast<int>(maxThirdJetEt_))+"p"+to_string(decimal2)+"_constant.root";//"_constant.root";
 
   //TString corrname = "/uscms_data/d3/dgsheffi/HCal/corrections/QCD_Pt-1800_dEta-0p5_Et-50_3rdEt-15.root";
   //TString corrname = "/uscms_data/d1/dgsheffi/HCal/corrections/MultiJet_2012A_dEta-0p5_Et-50_3rdEt-15_test.root";
-  TString corrname = "/uscms_data/d1/dgsheffi/HCal/corrections/QCD_Pt-120To170_dEta-0p5_Et-50_3rdEt-15_noNeutralPUcorr.root";
+  //TString corrname = "/uscms_data/d1/dgsheffi/HCal/corrections/Tuning/QCD_Pt-120To170_dEta-0p1_Et-50_3rdEt-15.root";
+  //TString corrname = "/uscms_data/d1/dgsheffi/HCal/corrections/Tuning/QCD_Pt-120To170_dEta-"+to_string(static_cast<int>(maxDeltaEta_))+"p"+to_string(decimal)+"_Et-"+to_string(static_cast<int>(minJetEt_))+"_3rdEt-"+to_string(static_cast<int>(maxThirdJetEt_))+".root";
+  TString corrname = "/uscms_data/d1/dgsheffi/HCal/corrections/Tuning/QCD_Pt-120To170_dEta-"+to_string(static_cast<int>(maxDeltaEta_))+"p"+to_string(decimal)+"_Et-"+to_string(static_cast<int>(minJetEt_))+"_alpha-"+to_string(static_cast<int>(maxThirdJetEt_))+"p"+to_string(decimal2)+".root";
   TFile* corrfile = new TFile(corrname);
   TH1D* h_corr_ = (TH1D*)corrfile->Get("h_corr");
   for(int i=1; i<84; i++){
@@ -362,14 +392,21 @@ int main()
     float tjet_Et = tpfjet_E_/cosh(tpfjet_eta_);
     float pjet_Et = ppfjet_E_/cosh(ppfjet_eta_);
     float minSumJetEt_ = 0.0;//40.0;
-    float minJetEt_ = 50.0;//20.0;
-    float maxThirdJetEt_ = 15.0;//15.0;
-    float maxDeltaEta_ = 0.5;//0.5;
+    //float minJetEt_ = 50.0;//20.0;
+    //float maxThirdJetEt_ = 15.0;//15.0;
+    //float maxDeltaEta_ = 0.5;//0.5;
     //float maxJetEMFrac = 1.1;
+    minJetEt_ = 20;
+    maxThirdJetEt_ = 100;
+    maxDeltaEta_ = 1;
+
     float maxProbeJetEta = 2.4;//1.305;//2.4;
     if(tjet_Et + pjet_Et < minSumJetEt_) passSel |= 0x1;
     if(tjet_Et < minJetEt_ || pjet_Et < minJetEt_) passSel |= 0x2;
     if(sqrt(pf_thirdjet_px_*pf_thirdjet_px_ + pf_thirdjet_py_*pf_thirdjet_py_) > maxThirdJetEt_) passSel |= 0x4;
+    //double ThirdEt = sqrt(pf_thirdjet_px_*pf_thirdjet_px_ + pf_thirdjet_py_*pf_thirdjet_py_);
+    //double alpha = 2.0*ThirdEt/(tjet_Et + pjet_Et);
+    //if(alpha > maxThirdJetEt_ && ThirdEt > 5) passSel |= 0x4;
     if(pf_dijet_deta_ > maxDeltaEta_) passSel |= 0x8;
     //if(tpfjet_EMfrac_ > maxJetEMFrac || ppfjet_EMfrac_ > maxJetEMFrac) passSel |= 0x100;
     if(tpfjet_jetID_ != 3 || ppfjet_jetID_ != 3) passSel |= 0x100;
