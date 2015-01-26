@@ -96,7 +96,7 @@ CalcRespCorrDiJets::analyze(const edm::Event& iEvent, const edm::EventSetup& evS
 
   // Run over PFJets
 
-    unsigned int debugEvent = 0;
+  //unsigned int debugEvent = 0;
     
     pf_Run_ = iEvent.id().run();
     pf_Lumi_ = iEvent.id().luminosityBlock();
@@ -241,7 +241,7 @@ CalcRespCorrDiJets::analyze(const edm::Event& iEvent, const edm::EventSetup& evS
 	  const reco::PFJet *jet=&(*it);
 	  std::cout << "istag=" << (jet==pf_tag.jet()) << "; isprobe=" << (jet==pf_probe.jet()) << "; et=" << jet->et() << "; eta=" << jet->eta() << std::endl;
 	}
-      }
+	}
 
       // Reset particle variables
       tpfjet_unkown_E_ = tpfjet_unkown_px_ = tpfjet_unkown_py_ = tpfjet_unkown_pz_ = tpfjet_unkown_EcalE_ = 0.0;
@@ -371,9 +371,9 @@ CalcRespCorrDiJets::analyze(const edm::Event& iEvent, const edm::EventSetup& evS
 	}
       }
 
-      if(iEvent.id().event() == debugEvent){
+      /*      if(iEvent.id().event() == debugEvent){
 	std::cout << "Tag eta: " << tpfjet_eta_ << " phi: " << tpfjet_phi_ << std::endl;
-      }
+	}*/
       
       /////////////////////////////////////////////
       // Get PF constituents and fill HCAL towers
@@ -820,7 +820,7 @@ CalcRespCorrDiJets::analyze(const edm::Event& iEvent, const edm::EventSetup& evS
       tpfjet_EMfrac_ = 1.0 - tag_had_rawHcalE/(tag_had_rawHcalE + tag_had_EcalE + tpfjet_unkown_E_ + tpfjet_electron_E_ + tpfjet_muon_E_ + tpfjet_photon_E_);
       tpfjet_hadEcalEfrac_ = tag_had_EcalE/(tag_had_rawHcalE + tag_had_EcalE + tpfjet_unkown_E_ + tpfjet_electron_E_ + tpfjet_muon_E_ + tpfjet_photon_E_);
 
-      if(debug_ && tpfjet_ntwrs_ == 0) std::cout << "no rechits " << iEvent.id().event() << std::endl;
+      //if(debug_ && tpfjet_ntwrs_ == 0) std::cout << "no rechits " << iEvent.id().event() << std::endl;
 
       // fill probe jet variables
       ppfjet_pt_    = pf_probe.jet()->pt();
@@ -868,9 +868,9 @@ CalcRespCorrDiJets::analyze(const edm::Event& iEvent, const edm::EventSetup& evS
 	}
       }
 
-      if(iEvent.id().event() == debugEvent){
+      /*if(iEvent.id().event() == debugEvent){
 	std::cout << "Probe eta: " << ppfjet_eta_ << " phi: " << ppfjet_phi_ << std::endl;
-      }
+	}*/
 
       // Get PF constituents and fill HCAL towers
       std::vector<reco::PFCandidatePtr> probeconst=pf_probe.jet()->getPFConstituents();
