@@ -29,6 +29,7 @@
 
 #include "DataFormats/JetReco/interface/CaloJetCollection.h"
 #include "DataFormats/JetReco/interface/PFJetCollection.h"
+#include "DataFormats/JetReco/interface/GenJetCollection.h"
 #include "DataFormats/HcalRecHit/interface/HBHERecHit.h"
 #include "DataFormats/HcalRecHit/interface/HFRecHit.h"
 #include "DataFormats/HcalRecHit/interface/HORecHit.h"
@@ -46,6 +47,7 @@
 #include "SimDataFormats/GeneratorProducts/interface/GenEventInfoProduct.h"
 #include "CondFormats/JetMETObjects/interface/JetCorrectorParameters.h"
 #include "JetMETCorrections/Objects/interface/JetCorrectionsRecord.h"
+#include "DataFormats/VertexReco/interface/VertexFwd.h"
 
 // forward declarations
 class TH1D;
@@ -110,6 +112,16 @@ class CalcRespCorrDiJets : public edm::EDAnalyzer {
   double maxThirdJetEt_;            // maximum 3rd jet Et
   double maxJetEMF_;                // maximum EMF of the tag and probe jets
   bool doGenJets_;                  // use GenJets
+
+  edm::EDGetTokenT<reco::PFJetCollection>           tok_PFJet_;
+  edm::EDGetTokenT<std::vector<reco::GenJet> >      tok_GenJet_;
+  edm::EDGetTokenT<std::vector<reco::GenParticle> > tok_GenPart_;
+  edm::EDGetTokenT<GenEventInfoProduct>             tok_GenEvInfo_; 
+  edm::EDGetTokenT<edm::SortedCollection<HBHERecHit,edm::StrictWeakOrdering<HBHERecHit> > > tok_HBHE_;
+  edm::EDGetTokenT<edm::SortedCollection<HFRecHit,edm::StrictWeakOrdering<HFRecHit> > >     tok_HF_;
+  edm::EDGetTokenT<edm::SortedCollection<HORecHit,edm::StrictWeakOrdering<HORecHit> > >     tok_HO_;
+  edm::EDGetTokenT<reco::VertexCollection>           tok_Vertex_;
+
 
   // root file/histograms
   TFile* rootfile_;
