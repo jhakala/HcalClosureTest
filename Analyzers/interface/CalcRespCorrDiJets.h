@@ -57,27 +57,6 @@ class TTree;
 // class declarations
 //
 
-class CaloJetCorretPair : protected std::pair<const reco::CaloJet*, double> {
- public:
-  CaloJetCorretPair() {
-    first=0;
-    second=1.0;
-  }
-  CaloJetCorretPair(const reco::CaloJet* j, double s) {
-    first=j;
-    second=s;
-  }
-  ~CaloJetCorretPair() {}
-
-  inline const reco::CaloJet* jet(void) const { return first; }
-  inline void jet(const reco::CaloJet* j) { first=j; return; }
-  inline double scale(void) const { return second; }
-  inline void scale(double d) { second=d; return; }
-
- private:
-  
-};
-
 class PFJetCorretPair : protected std::pair<const reco::PFJet*, double> {
  public:
   PFJetCorretPair() {
@@ -113,8 +92,6 @@ class CalcRespCorrDiJets : public edm::EDAnalyzer {
   
   // parameters
   bool debug_;                      // print debug statements
-  std::string caloJetCollName_;     // label for the calo jet collection
-  std::string caloJetCorrName_;     // label for the calo jet correction service
   std::string pfJetCollName_;       // label for the PF jet collection
   std::string pfJetCorrName_;       // label for the PF jet correction service
   std::string genJetCollName_;      // label for the genjet collection
@@ -132,49 +109,31 @@ class CalcRespCorrDiJets : public edm::EDAnalyzer {
   double minJetEt_;                 // minimum Jet Et
   double maxThirdJetEt_;            // maximum 3rd jet Et
   double maxJetEMF_;                // maximum EMF of the tag and probe jets
-  bool doCaloJets_;                 // use CaloJets
-  bool doPFJets_;                   // use PFJets
   bool doGenJets_;                  // use GenJets
 
   // root file/histograms
   TFile* rootfile_;
 
-  TH1D* hPassSelCalo_;
+  //  TH1D* hPassSelCalo_;
   TH1D* hPassSelPF_;
-  TH1D* h_types_;
-  TH1D* h_ntypes_;
-  TH1D* h_ietaHCAL_;
-  TH1D* h_etaHFHAD_;
-  TH1D* h_etaHFEM_;
-  TH1D* h_ietaHO_;
-  TH1D* h_HFHAD_n_;
-  TH1D* h_HFEM_n_;
-  TH1D* h_HFHAD_type_;
-  TH1D* h_HFEM_type_;
-  TH1D* h_HBHE_n_;
-  TH1D* h_HF_n_;
-  TH1D* h_HO_n_;
-  TH1D* h_twrietas_;
-  TH2D* h_rechitspos_;
-  TH1D* h_hbherecoieta_;
-  TTree* calo_tree_;
+  //TH1D* h_types_;
+  //TH1D* h_ntypes_;
+  //TH1D* h_ietaHCAL_;
+  //TH1D* h_etaHFHAD_;
+  //TH1D* h_etaHFEM_;
+  //TH1D* h_ietaHO_;
+  //TH1D* h_HFHAD_n_;
+  //TH1D* h_HFEM_n_;
+  //TH1D* h_HFHAD_type_;
+  //TH1D* h_HFEM_type_;
+  //TH1D* h_HBHE_n_;
+  //TH1D* h_HF_n_;
+  //TH1D* h_HO_n_;
+  //TH1D* h_twrietas_;
+  //TH2D* h_rechitspos_;
+  //TH1D* h_hbherecoieta_;
+  //TTree* calo_tree_;
   TTree* pf_tree_;
-  
-  float tcalojet_pt_, tcalojet_p_, tcalojet_eta_, tcalojet_phi_, tcalojet_emf_, tcalojet_scale_;
-  float tcalojet_gendr_, tcalojet_genpt_, tcalojet_genp_;
-  float tcalojet_EBE_, tcalojet_EEE_, tcalojet_HBE_, tcalojet_HEE_, tcalojet_HFE_;
-  int tcalojet_ntwrs_;
-  int tcalojet_twr_ieta_[100];
-  float tcalojet_twr_eme_[100], tcalojet_twr_hade_[100];
-  float pcalojet_pt_, pcalojet_p_, pcalojet_eta_, pcalojet_phi_, pcalojet_emf_, pcalojet_scale_;
-  float pcalojet_gendr_, pcalojet_genpt_, pcalojet_genp_;
-  float pcalojet_EBE_, pcalojet_EEE_, pcalojet_HBE_, pcalojet_HEE_, pcalojet_HFE_;
-  int pcalojet_ntwrs_;
-  int pcalojet_twr_ieta_[100];
-  float pcalojet_twr_eme_[100], pcalojet_twr_hade_[100];
-  float calo_dijet_deta_, calo_dijet_dphi_, calo_dijet_balance_;
-  float calo_thirdjet_px_, calo_thirdjet_py_;
-  int calo_Event_;
 
   float tpfjet_pt_, tpfjet_p_, tpfjet_E_, tpfjet_eta_, tpfjet_phi_, tpfjet_EMfrac_, tpfjet_hadEcalEfrac_, tpfjet_scale_, tpfjet_area_;
   int tpfjet_jetID_;
@@ -225,13 +184,6 @@ class CalcRespCorrDiJets : public edm::EDAnalyzer {
   double deltaR(const double eta1, const double phi1, const double eta2, const double phi2);
   int getEtaPhi(const DetId id);
   int getEtaPhi(const HcalDetId id);
-  double getNeutralPUCorr(double eta, int intNPV, double area, bool isMC_);
-
-  struct CaloJetCorretPairComp {
-    inline bool operator() ( const CaloJetCorretPair& a, const CaloJetCorretPair& b) {
-      return (a.jet()->pt()*a.scale()) > (b.jet()->pt()*b.scale());
-    }
-  };
 
   struct PFJetCorretPairComp {
     inline bool operator() ( const PFJetCorretPair& a, const PFJetCorretPair& b) {

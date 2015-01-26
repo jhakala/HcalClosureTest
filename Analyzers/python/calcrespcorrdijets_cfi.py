@@ -3,11 +3,13 @@ import FWCore.ParameterSet.Config as cms
 #calcrespcorrdijets = cms.EDProducer(
 calcrespcorrdijets = cms.EDAnalyzer(
     'CalcRespCorrDiJets',
-    caloJetCollName     = cms.string('ak5CaloJets'),
-    caloJetCorrName     = cms.string('ak5CaloL2L3'),
-    pfJetCollName       = cms.string('ak5PFJetsCHS'),
-    pfJetCorrName       = cms.string('ak5PFJetschsL1FastL2L3'),
-    genJetCollName      = cms.string('ak5GenJets'),
+    #caloJetCollName     = cms.string('ak5CaloJets'),
+    #caloJetCorrName     = cms.string('ak5CaloL2L3'),
+    pfJetCollName       = cms.string('ak4PFJetsCHS'),
+    #pfJetCollName       = cms.string('ak5PFJets'),
+    pfJetCorrName       = cms.string('ak4PFJetsL2L3'),
+    genJetCollName      = cms.string('ak4GenJets'),
+    #genJetCollName      = cms.string('ak5GenJets'),
     genParticleCollName = cms.string('genParticles'),
     genEventInfoName    = cms.string('generator'),
     hbheRecHitName      = cms.string('hbhereco'),
@@ -22,8 +24,8 @@ calcrespcorrdijets = cms.EDAnalyzer(
     minJetEt            = cms.double(5.0), #5.0
     maxThirdJetEt       = cms.double(100.), #100.
     maxJetEMF           = cms.double(0.9),
-    doCaloJets          = cms.bool(True),
-    doPFJets            = cms.bool(True),
+    #doCaloJets          = cms.bool(True),
+    #doPFJets            = cms.bool(True),
     doGenJets           = cms.bool(True),
     debug               = cms.untracked.bool(False)
     )
