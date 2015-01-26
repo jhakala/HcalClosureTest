@@ -114,25 +114,7 @@ class CalcRespCorrDiJets : public edm::EDAnalyzer {
   // root file/histograms
   TFile* rootfile_;
 
-  //  TH1D* hPassSelCalo_;
   TH1D* hPassSelPF_;
-  //TH1D* h_types_;
-  //TH1D* h_ntypes_;
-  //TH1D* h_ietaHCAL_;
-  //TH1D* h_etaHFHAD_;
-  //TH1D* h_etaHFEM_;
-  //TH1D* h_ietaHO_;
-  //TH1D* h_HFHAD_n_;
-  //TH1D* h_HFEM_n_;
-  //TH1D* h_HFHAD_type_;
-  //TH1D* h_HFEM_type_;
-  //TH1D* h_HBHE_n_;
-  //TH1D* h_HF_n_;
-  //TH1D* h_HO_n_;
-  //TH1D* h_twrietas_;
-  //TH2D* h_rechitspos_;
-  //TH1D* h_hbherecoieta_;
-  //TTree* calo_tree_;
   TTree* pf_tree_;
 
   float tpfjet_pt_, tpfjet_p_, tpfjet_E_, tpfjet_eta_, tpfjet_phi_, tpfjet_EMfrac_, tpfjet_hadEcalEfrac_, tpfjet_scale_, tpfjet_area_;

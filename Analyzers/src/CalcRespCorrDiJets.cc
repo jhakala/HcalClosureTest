@@ -149,29 +149,15 @@ CalcRespCorrDiJets::analyze(const edm::Event& iEvent, const edm::EventSetup& evS
     int HBHE_n = 0;
     for(edm::SortedCollection<HBHERecHit,edm::StrictWeakOrdering<HBHERecHit>>::const_iterator ith=hbhereco->begin(); ith!=hbhereco->end(); ++ith){
       HBHE_n++;
-      //h_hbherecoieta_->Fill((*ith).id().ieta());
-      if(iEvent.id().event() == debugEvent){
-	std::cout << (*ith).id().ieta() << " " << (*ith).id().iphi() << std::endl;
-	//h_rechitspos_->Fill((*ith).id().ieta(), (*ith).id().iphi());
-      }
     }
     int HF_n = 0;
     for(edm::SortedCollection<HFRecHit,edm::StrictWeakOrdering<HFRecHit>>::const_iterator ith=hfreco->begin(); ith!=hfreco->end(); ++ith){
       HF_n++;
-      if(iEvent.id().event() == debugEvent){
-	//h_rechitspos_->Fill((*ith).id().ieta(), (*ith).id().iphi());
-      }
     }
     int HO_n = 0;
     for(edm::SortedCollection<HORecHit,edm::StrictWeakOrdering<HORecHit>>::const_iterator ith=horeco->begin(); ith!=horeco->end(); ++ith){
       HO_n++;
-      if(iEvent.id().event() == debugEvent){
-	//h_rechitspos_->Fill((*ith).id().ieta(), (*ith).id().iphi());
-      }
     }
-    //h_HBHE_n_->Fill(HBHE_n);
-    //h_HF_n_->Fill(HF_n);
-    //h_HO_n_->Fill(HO_n);
 
     // Get primary vertices
     edm::Handle<std::vector<reco::Vertex>> pv;
@@ -247,7 +233,6 @@ CalcRespCorrDiJets::analyze(const edm::Event& iEvent, const edm::EventSetup& evS
     }
     
     hPassSelPF_->Fill(passSelPF);
-    //if(!passSelPF){
     if(passSelPF) return;
       // dump
       if(debug_) {
@@ -389,10 +374,6 @@ CalcRespCorrDiJets::analyze(const edm::Event& iEvent, const edm::EventSetup& evS
       if(iEvent.id().event() == debugEvent){
 	std::cout << "Tag eta: " << tpfjet_eta_ << " phi: " << tpfjet_phi_ << std::endl;
       }
-      
-      //std::cout << pf_tag.jet()->print() << std::endl;
-      //int types = 0;
-      //int ntypes = 0;
       
       /////////////////////////////////////////////
       // Get PF constituents and fill HCAL towers
@@ -598,9 +579,6 @@ CalcRespCorrDiJets::analyze(const edm::Event& iEvent, const edm::EventSetup& evS
 	  for(unsigned iEle=0; iEle<elements.size(); iEle++) {
 	    if(elements[iEle].index() == (*it)->elementsInBlocks()[e].second){
 	      if(elements[iEle].type() == reco::PFBlockElement::HCAL){ // Element is HB or HE
-		//types |= 0x1;
-		//ntypes++;
-		//HF_type_ |= 0x1;
 		// Get cluster and hits
 		reco::PFClusterRef clusterref = elements[iEle].clusterRef();
 		reco::PFCluster cluster = *clusterref;
@@ -621,10 +599,6 @@ CalcRespCorrDiJets::analyze(const edm::Event& iEvent, const edm::EventSetup& evS
 		for(int iHit=0; iHit<nHits; iHit++){
 		  int etaPhiPF = getEtaPhi(hitsAndFracs[iHit].first);
 		  
-		  //int tmpzside = ((hitsAndFracs[iHit].first.rawId() >> 13) & 0x1) ? 1 : -1;
-		  //int tmpieta = ((hitsAndFracs[iHit].first.rawId() >> 7) & 0x3F);
-		  //h_ietaHCAL_->Fill(tmpzside*tmpieta);
-
 		  for(edm::SortedCollection<HBHERecHit,edm::StrictWeakOrdering<HBHERecHit>>::const_iterator ith=hbhereco->begin(); ith!=hbhereco->end(); ++ith){
 		    int etaPhiRecHit = getEtaPhi((*ith).id());
 		    if(etaPhiPF == etaPhiRecHit){
@@ -687,12 +661,6 @@ CalcRespCorrDiJets::analyze(const edm::Event& iEvent, const edm::EventSetup& evS
 		} // Loop over hits
 	      } // Test if element is from HCAL
 	      else if(elements[iEle].type() == reco::PFBlockElement::HFHAD){ // Element is HF
-		//types |= 0x2;
-		//ntypes++;
-		//HFHAD_n_++;
-		//HF_type_ |= 0x2;
-		
-		//h_etaHFHAD_->Fill((*it)->eta());
 		
 		for(edm::SortedCollection<HFRecHit,edm::StrictWeakOrdering<HFRecHit>>::const_iterator ith=hfreco->begin(); ith!=hfreco->end(); ++ith){
 		  if((*ith).id().depth() == 1) continue; // Remove long fibers
@@ -703,7 +671,6 @@ CalcRespCorrDiJets::analyze(const edm::Event& iEvent, const edm::EventSetup& evS
 		  if((*it)->eta() < cv[0].eta() && (*it)->eta() > cv[2].eta()){
 		    if((*it)->phi() < cv[0].phi() && (*it)->phi() > cv[2].phi()) passMatch = true;
 		    else if(cv[0].phi() < cv[2].phi()){
-		      //std::cout << "HFHAD tag" << std::endl;
 		      if((*it)->phi() < cv[0].phi()) passMatch = true;
 		      else if((*it)->phi() > cv[2].phi()) passMatch = true;
 		    }
@@ -731,12 +698,6 @@ CalcRespCorrDiJets::analyze(const edm::Event& iEvent, const edm::EventSetup& evS
 		}
 	      }
 	      else if(elements[iEle].type() == reco::PFBlockElement::HFEM){ // Element is HF
-		//types |= 0x4;
-		//ntypes++;
-		//HFEM_n_++;
-		//HF_type_ |= 0x4;
-
-		//h_etaHFEM_->Fill((*it)->eta());
 
 		for(edm::SortedCollection<HFRecHit,edm::StrictWeakOrdering<HFRecHit>>::const_iterator ith=hfreco->begin(); ith!=hfreco->end(); ++ith){
 		  if((*ith).id().depth() == 2) continue; // Remove short fibers
@@ -747,7 +708,6 @@ CalcRespCorrDiJets::analyze(const edm::Event& iEvent, const edm::EventSetup& evS
 		  if((*it)->eta() < cv[0].eta() && (*it)->eta() > cv[2].eta()){
 		    if((*it)->phi() < cv[0].phi() && (*it)->phi() > cv[2].phi()) passMatch = true;
 		    else if(cv[0].phi() < cv[2].phi()){
-		      //std::cout << "HFEM tag" << std::endl;
 		      if((*it)->phi() < cv[0].phi()) passMatch = true;
 		      else if((*it)->phi() > cv[2].phi()) passMatch = true;
 		    }
@@ -775,9 +735,6 @@ CalcRespCorrDiJets::analyze(const edm::Event& iEvent, const edm::EventSetup& evS
 		}
 	      }
 	      else if(elements[iEle].type() == reco::PFBlockElement::HO){ // Element is HO
-		//types |= 0x8;
-		//ntypes++;
-		//HF_type_ |= 0x8;
 		reco::PFClusterRef clusterref = elements[iEle].clusterRef();
 		reco::PFCluster cluster = *clusterref;
 		double cluster_dR = deltaR(tpfjet_eta_,tpfjet_phi_,cluster.eta(),cluster.phi());
@@ -794,10 +751,6 @@ CalcRespCorrDiJets::analyze(const edm::Event& iEvent, const edm::EventSetup& evS
 		int nHits = hitsAndFracs.size();
 		for(int iHit=0; iHit<nHits; iHit++){
 		  int etaPhiPF = getEtaPhi(hitsAndFracs[iHit].first);
-
-		  //int tmpzside = ((hitsAndFracs[iHit].first.rawId() >> 13) & 0x1) ? 1 : -1;
-		  //int tmpieta = ((hitsAndFracs[iHit].first.rawId() >> 7) & 0x3F);
-		  //h_ietaHO_->Fill(tmpzside*tmpieta);
 
 		  for(edm::SortedCollection<HORecHit,edm::StrictWeakOrdering<HORecHit>>::const_iterator ith=horeco->begin(); ith!=horeco->end(); ++ith){
 		    int etaPhiRecHit = getEtaPhi((*ith).id());
@@ -844,17 +797,12 @@ CalcRespCorrDiJets::analyze(const edm::Event& iEvent, const edm::EventSetup& evS
 	    } // Test for right element index
 	  } // Loop over elements
 	} // Loop over elements in blocks
-	//h_HFHAD_n_->Fill(HFHAD_n_);
-	//h_HFEM_n_->Fill(HFEM_n_);
-	//h_twrietas_->Fill(twrietas.size());
 
 	switch(candidateType){
 	case reco::PFCandidate::h_HF:
-	  //h_HFHAD_type_->Fill(HF_type_);
 	  tpfjet_had_emf_.push_back(HFEM_E/(HFEM_E + HFHAD_E));
 	  break;
 	case reco::PFCandidate::egamma_HF:
-	  //h_HFEM_type_->Fill(HF_type_);
 	  tpfjet_had_emf_.push_back(-1);
 	  break;
 	default:
@@ -873,9 +821,6 @@ CalcRespCorrDiJets::analyze(const edm::Event& iEvent, const edm::EventSetup& evS
       tpfjet_hadEcalEfrac_ = tag_had_EcalE/(tag_had_rawHcalE + tag_had_EcalE + tpfjet_unkown_E_ + tpfjet_electron_E_ + tpfjet_muon_E_ + tpfjet_photon_E_);
 
       if(debug_ && tpfjet_ntwrs_ == 0) std::cout << "no rechits " << iEvent.id().event() << std::endl;
-
-      //h_types_->Fill(types);
-      //h_ntypes_->Fill(ntypes);
 
       // fill probe jet variables
       ppfjet_pt_    = pf_probe.jet()->pt();
@@ -926,7 +871,6 @@ CalcRespCorrDiJets::analyze(const edm::Event& iEvent, const edm::EventSetup& evS
       if(iEvent.id().event() == debugEvent){
 	std::cout << "Probe eta: " << ppfjet_eta_ << " phi: " << ppfjet_phi_ << std::endl;
       }
-      //std::cout << "Probe eta: " << ppfjet_eta_ << " phi: " << ppfjet_phi_ << std::endl; //debug
 
       // Get PF constituents and fill HCAL towers
       std::vector<reco::PFCandidatePtr> probeconst=pf_probe.jet()->getPFConstituents();
@@ -1115,9 +1059,6 @@ CalcRespCorrDiJets::analyze(const edm::Event& iEvent, const edm::EventSetup& evS
 
 	float HFHAD_E = 0;
 	float HFEM_E = 0;
-	//int HFHAD_n_ = 0;
-	//int HFEM_n_ = 0;
-	//int HF_type_ = 0;
 	int maxElement=(*it)->elementsInBlocks().size();
 	for(int e=0; e<maxElement; ++e){
 	  // Get elements from block
@@ -1126,7 +1067,6 @@ CalcRespCorrDiJets::analyze(const edm::Event& iEvent, const edm::EventSetup& evS
 	  for(unsigned iEle=0; iEle<elements.size(); iEle++) {
 	    if(elements[iEle].index() == (*it)->elementsInBlocks()[e].second){
 	      if(elements[iEle].type() == reco::PFBlockElement::HCAL){ // Element is HB or HE
-		//HF_type_ |= 0x1;
 		// Get cluster and hits
 		reco::PFClusterRef clusterref = elements[iEle].clusterRef();
 		reco::PFCluster cluster = *clusterref;
@@ -1175,8 +1115,6 @@ CalcRespCorrDiJets::analyze(const edm::Event& iEvent, const edm::EventSetup& evS
 			    float avgeta = (cv[0].eta() + cv[2].eta())/2.0;
 			    float avgphi = (static_cast<double>(cv[0].phi()) + static_cast<double>(cv[2].phi()))/2.0;
 			    if(cv[0].phi() < cv[2].phi()) avgphi = (2.0*3.141592653 + static_cast<double>(cv[0].phi()) + static_cast<double>(cv[2].phi()))/2.0;
-			    //if(pf_Event_ == 9413996) //debug
-			    //printf("pHB ieta: %3d iphi: %2d eta0: %6f phi0: %6f eta2: %6f phi2: %6f dR: %f\n",(*ith).id().ieta(),(*ith).id().iphi(),static_cast<double>(cv[0].eta()),static_cast<double>(cv[0].phi()),static_cast<double>(cv[2].eta()),static_cast<double>(cv[2].phi()),static_cast<double>(deltaR(ppfjet_eta_,ppfjet_phi_,avgeta,avgphi))); //debug
 			    ppfjet_twr_dR_.push_back(deltaR(ppfjet_eta_,ppfjet_phi_,avgeta,avgphi));
 			    break;
 			  }
@@ -1187,12 +1125,6 @@ CalcRespCorrDiJets::analyze(const edm::Event& iEvent, const edm::EventSetup& evS
 			    float avgeta = (cv[0].eta() + cv[2].eta())/2.0;
 			    float avgphi = (static_cast<double>(cv[0].phi()) + static_cast<double>(cv[2].phi()))/2.0;
 			    if(cv[0].phi() < cv[2].phi()) avgphi = (2.0*3.141592653 + static_cast<double>(cv[0].phi()) + static_cast<double>(cv[2].phi()))/2.0;
-			    //printf("pHE ieta: %3d iphi: %2d eta0: %6f phi0: %6f eta2: %6f phi2: %6f dR: %f\n",(*ith).id().ieta(),(*ith).id().iphi(),static_cast<double>cv[0].eta(),static_cast<double>cv[0].phi(),static_cast<double>cv[2].eta(),static_cast<double>cv[2].phi(),static_cast<double>deltaR(ppfjet_eta_,ppfjet_phi_,avgeta,avgphi)); //debug
-			    /*printf("  cv0: %f cv2: %f sum: %f avg: %f\n",
-				   static_cast<double>cv[0].phi(),
-				   static_cast<double>cv[2].phi(),
-				   (static_cast<double>cv[0].phi() + static_cast<double>cv[2].phi()),
-				   static_cast<double>((cv[0].phi() + cv[2].phi())/2.0));*/
 			    ppfjet_twr_dR_.push_back(deltaR(ppfjet_eta_,ppfjet_phi_,avgeta,avgphi));
 			    break;
 			  }
@@ -1215,12 +1147,6 @@ CalcRespCorrDiJets::analyze(const edm::Event& iEvent, const edm::EventSetup& evS
 		} // Loop over hits
 	      } // Test if element is from HCAL
 	      else if(elements[iEle].type() == reco::PFBlockElement::HFHAD){ // Element is HF
-		//types |= 0x2;
-		//ntypes++;
-		//HFHAD_n_++;
-		//HF_type_ |= 0x2;
-		
-		//h_etaHFHAD_->Fill((*it)->eta());
 
 		for(edm::SortedCollection<HFRecHit,edm::StrictWeakOrdering<HFRecHit>>::const_iterator ith=hfreco->begin(); ith!=hfreco->end(); ++ith){
 		  if((*ith).id().depth() == 1) continue; // Remove long fibers
@@ -1231,7 +1157,6 @@ CalcRespCorrDiJets::analyze(const edm::Event& iEvent, const edm::EventSetup& evS
 		  if((*it)->eta() < cv[0].eta() && (*it)->eta() > cv[2].eta()){
 		    if((*it)->phi() < cv[0].phi() && (*it)->phi() > cv[2].phi()) passMatch = true;
 		    else if(cv[0].phi() < cv[2].phi()){
-		      //std::cout << "HFHAD probe" << std::endl;
 		      if((*it)->phi() < cv[0].phi()) passMatch = true;
 		      else if((*it)->phi() > cv[2].phi()) passMatch = true;
 		    }
@@ -1259,12 +1184,6 @@ CalcRespCorrDiJets::analyze(const edm::Event& iEvent, const edm::EventSetup& evS
 		}		
 	      }
 	      else if(elements[iEle].type() == reco::PFBlockElement::HFEM){ // Element is HF
-		//types |= 0x4;
-		//ntypes++;
-		//HFEM_n_++;
-		//HF_type_ |= 0x4;
-
-		//h_etaHFEM_->Fill((*it)->eta());
 		
 		for(edm::SortedCollection<HFRecHit,edm::StrictWeakOrdering<HFRecHit>>::const_iterator ith=hfreco->begin(); ith!=hfreco->end(); ++ith){
 		  if((*ith).id().depth() == 2) continue; // Remove short fibers
@@ -1275,7 +1194,6 @@ CalcRespCorrDiJets::analyze(const edm::Event& iEvent, const edm::EventSetup& evS
 		  if((*it)->eta() < cv[0].eta() && (*it)->eta() > cv[2].eta()){
 		    if((*it)->phi() < cv[0].phi() && (*it)->phi() > cv[2].phi()) passMatch = true;
 		    else if(cv[0].phi() < cv[2].phi()){
-		      //std::cout << "HFEM probe" << std::endl;
 		      if((*it)->phi() < cv[0].phi()) passMatch = true;
 		      else if((*it)->phi() > cv[2].phi()) passMatch = true;
 		    }
@@ -1303,9 +1221,6 @@ CalcRespCorrDiJets::analyze(const edm::Event& iEvent, const edm::EventSetup& evS
 		}
 	      }
 	      else if(elements[iEle].type() == reco::PFBlockElement::HO){ // Element is HO
-		//types |= 0x8;
-		//ntypes++;
-		//HF_type_ |= 0x8;
 		reco::PFClusterRef clusterref = elements[iEle].clusterRef();
 		reco::PFCluster cluster = *clusterref;
 		double cluster_dR = deltaR(ppfjet_eta_,ppfjet_phi_,cluster.eta(),cluster.phi());
@@ -1322,10 +1237,6 @@ CalcRespCorrDiJets::analyze(const edm::Event& iEvent, const edm::EventSetup& evS
 		int nHits = hitsAndFracs.size();
 		for(int iHit=0; iHit<nHits; iHit++){
 		  int etaPhiPF = getEtaPhi(hitsAndFracs[iHit].first);
-
-		  //int tmpzside = ((hitsAndFracs[iHit].first.rawId() >> 13) & 0x1) ? 1 : -1;
-		  //int tmpieta = ((hitsAndFracs[iHit].first.rawId() >> 7) & 0x3F);
-		  //h_ietaHO_->Fill(tmpzside*tmpieta);
 
 		  for(edm::SortedCollection<HORecHit,edm::StrictWeakOrdering<HORecHit>>::const_iterator ith=horeco->begin(); ith!=horeco->end(); ++ith){
 		    int etaPhiRecHit = getEtaPhi((*ith).id());
@@ -1371,15 +1282,11 @@ CalcRespCorrDiJets::analyze(const edm::Event& iEvent, const edm::EventSetup& evS
 	    } // Test for right element index
 	  } // Loop over elements
 	} // Loop over elements in blocks
-	//h_HFHAD_n_->Fill(HFHAD_n_);
-	//h_HFEM_n_->Fill(HFEM_n_);
 	switch(candidateType){
 	case reco::PFCandidate::h_HF:
-	  //h_HFHAD_type_->Fill(HF_type_);
 	  ppfjet_had_emf_.push_back(HFEM_E/(HFEM_E + HFHAD_E));
 	  break;
 	case reco::PFCandidate::egamma_HF:
-	  //h_HFEM_type_->Fill(HF_type_);
 	  ppfjet_had_emf_.push_back(-1);
 	  break;
 	default:
@@ -1443,22 +1350,6 @@ void CalcRespCorrDiJets::beginJob()
   // book histograms
   rootfile_ = new TFile(rootHistFilename_.c_str(), "RECREATE");
 
-  //h_types_ = new TH1D("h_types","h_types",16,0,16);
-  //h_ntypes_ = new TH1D("h_ntypes","h_ntypes",50,0,50);
-  //h_ietaHCAL_ = new TH1D("h_ietaHCAL","h_ietaHCAL",83,-41.5,41.5);
-  //h_etaHFHAD_ = new TH1D("h_etaHFHAD","h_etaHFHAD",100,-5.5,5.5);
-  //h_etaHFEM_ = new TH1D("h_etaHFEM","h_etaHFEM",100,-5.5,5.5);
-  //h_ietaHO_ = new TH1D("h_ietaHO","h_ietaHO",83,-41.5,41.5);
-  //h_HFHAD_n_ = new TH1D("h_HFHAD_n","h_HFHAD_n",10,0,10);
-  //h_HFEM_n_ = new TH1D("h_HFEM_n","h_HFEM_n",10,0,10);
-  //h_HFHAD_type_ = new TH1D("h_HFHAD_type","h_HFHAD_type",16,0,16);
-  //h_HFEM_type_ = new TH1D("h_HFEM_type","h_HFEM_type",16,0,16);
-  //h_HBHE_n_ = new TH1D("h_HBHE_n","h_HBHE_n",200,0,200);
-  //h_HF_n_ = new TH1D("h_HF_n","h_HF_n",200,0,200);
-  //h_HO_n_ = new TH1D("h_HO_n","h_HO_n",200,0,200);
-  //h_twrietas_ = new TH1D("h_twrietas","h_twrietas",20,0,20);
-  //h_rechitspos_ = new TH2D("h_rechitspos","h_rechitspos",83,-41.5,41.5,72,-0.5,71.5);
-  //h_hbherecoieta_ = new TH1D("h_hbherecoieta","h_hbherecoieta",83,-41.5,41.5);
   hPassSelPF_ = new TH1D("hPassSelectionPF", "Selection Pass Failures PFJets",200,-0.5,199.5);
 
   pf_tree_ = new TTree("pf_dijettree", "tree for dijet balancing using PFJets");
@@ -1639,22 +1530,6 @@ CalcRespCorrDiJets::endJob() {
   // write histograms
   rootfile_->cd();
 
-  //h_types_->Write();
-  //h_ntypes_->Write();
-  //h_ietaHCAL_->Write();
-  //h_etaHFHAD_->Write();
-  //h_etaHFEM_->Write();
-  //h_ietaHO_->Write();
-  //h_HFHAD_n_->Write();
-  //h_HFEM_n_->Write();
-  //h_HFHAD_type_->Write();
-  //h_HFEM_type_->Write();
-  //h_HBHE_n_->Write();
-  //h_HF_n_->Write();
-  //h_HO_n_->Write();
-  //h_twrietas_->Write();
-  //h_rechitspos_->Write();
-  //h_hbherecoieta_->Write();
   hPassSelPF_->Write();
   pf_tree_->Write();
 
@@ -1679,17 +1554,6 @@ double CalcRespCorrDiJets::deltaR(const double eta1, const double phi1, const do
   if(dphi>3.1415927) dphi = 2*3.1415927 - dphi;
   return std::sqrt(deta*deta + dphi*dphi);
 }
-
-/*
-// DetId rawId bits xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-//                  1111222      3333345555556666666
-//   1 = detector
-//   2 = subdetector
-//   3 = depth
-//   4 = zside: 0 = negative z, 1 = positive z \
-//   5 = abs(ieta)                              | ieta,iphi
-//   6 = abs(iphi)                             /
-*/
 
 int CalcRespCorrDiJets::getEtaPhi(const DetId id)
 {
