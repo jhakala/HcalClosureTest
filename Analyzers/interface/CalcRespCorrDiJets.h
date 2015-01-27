@@ -59,17 +59,17 @@ class TTree;
 // class declarations
 //
 
-class PFJetCorretPair : protected std::pair<const reco::PFJet*, double> {
+class JetCorretPair : protected std::pair<const reco::PFJet*, double> {
  public:
-  PFJetCorretPair() {
+  JetCorretPair() {
     first=0;
     second=1.0;
   }
-  PFJetCorretPair(const reco::PFJet* j, double s) {
+  JetCorretPair(const reco::PFJet* j, double s) {
     first=j;
     second=s;
   }
-  ~PFJetCorretPair() {}
+  ~JetCorretPair() {}
 
   inline const reco::PFJet* jet(void) const { return first; }
   inline void jet(const reco::PFJet* j) { first=j; return; }
@@ -126,8 +126,8 @@ class CalcRespCorrDiJets : public edm::EDAnalyzer {
   // root file/histograms
   TFile* rootfile_;
 
-  TH1D* hPassSelPF_;
-  TTree* pf_tree_;
+  TH1D* h_PassSelPF_;
+  TTree* tree_;
 
   float tpfjet_pt_, tpfjet_p_, tpfjet_E_, tpfjet_eta_, tpfjet_phi_, tpfjet_EMfrac_, tpfjet_hadEcalEfrac_, tpfjet_scale_, tpfjet_area_;
   int tpfjet_jetID_;
@@ -179,8 +179,8 @@ class CalcRespCorrDiJets : public edm::EDAnalyzer {
   int getEtaPhi(const DetId id);
   int getEtaPhi(const HcalDetId id);
 
-  struct PFJetCorretPairComp {
-    inline bool operator() ( const PFJetCorretPair& a, const PFJetCorretPair& b) {
+  struct JetCorretPairComp {
+    inline bool operator() ( const JetCorretPair& a, const JetCorretPair& b) {
       return (a.jet()->pt()*a.scale()) > (b.jet()->pt()*b.scale());
     }
   };
