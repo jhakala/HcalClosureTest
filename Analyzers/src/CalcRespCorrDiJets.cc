@@ -10,22 +10,6 @@
 //
 
 #include "HcalClosureTest/Analyzers/interface/CalcRespCorrDiJets.h"
-#include "DataFormats/JetReco/interface/CaloJetCollection.h"
-#include "DataFormats/JetReco/interface/PFJetCollection.h"
-#include "DataFormats/JetReco/interface/GenJetCollection.h"
-#include "JetMETCorrections/Objects/interface/JetCorrector.h"
-#include "FWCore/Utilities/interface/EDMException.h"
-#include "DataFormats/ParticleFlowCandidate/interface/PFCandidate.h"
-
-#include "TTree.h"
-#include "TFile.h"
-#include "TH1D.h"
-#include "TH2D.h"
-#include "TClonesArray.h"
-
-#include <vector>
-#include <set>
-#include <map>
 
 CalcRespCorrDiJets::CalcRespCorrDiJets(const edm::ParameterSet& iConfig)
 {

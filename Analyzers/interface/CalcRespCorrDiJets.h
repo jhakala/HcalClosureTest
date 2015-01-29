@@ -15,18 +15,24 @@
 // system include files
 #include <memory>
 #include <string>
+#include <vector>
+#include <set>
+#include <map>
+
+#include "TTree.h"
+#include "TFile.h"
+#include "TH1D.h"
+#include "TH2D.h"
+#include "TClonesArray.h"
 
 // user include files
 #include "FWCore/Framework/interface/Frameworkfwd.h"
 #include "FWCore/Framework/interface/EDAnalyzer.h"
-
 #include "FWCore/Framework/interface/Event.h"
 #include "FWCore/Framework/interface/EventSetup.h"
 #include "FWCore/Framework/interface/MakerMacros.h"
 #include "FWCore/Framework/interface/ESHandle.h"
-
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
-
 #include "DataFormats/JetReco/interface/CaloJetCollection.h"
 #include "DataFormats/JetReco/interface/PFJetCollection.h"
 #include "DataFormats/JetReco/interface/GenJetCollection.h"
@@ -38,6 +44,7 @@
 #include "DataFormats/ParticleFlowReco/interface/PFCluster.h"
 #include "DataFormats/ParticleFlowReco/interface/PFRecHit.h"
 #include "DataFormats/ParticleFlowReco/interface/PFRecHitFwd.h"
+#include "DataFormats/ParticleFlowCandidate/interface/PFCandidate.h"
 #include "DataFormats/HcalDetId/interface/HcalDetId.h"
 #include "DataFormats/TrackReco/interface/TrackFwd.h"
 #include "Geometry/CaloGeometry/interface/CaloGeometry.h"
@@ -45,9 +52,11 @@
 #include "Geometry/Records/interface/CaloGeometryRecord.h"
 #include "DataFormats/HepMCCandidate/interface/GenParticle.h"
 #include "SimDataFormats/GeneratorProducts/interface/GenEventInfoProduct.h"
+#include "JetMETCorrections/Objects/interface/JetCorrector.h"
 #include "CondFormats/JetMETObjects/interface/JetCorrectorParameters.h"
 #include "JetMETCorrections/Objects/interface/JetCorrectionsRecord.h"
 #include "DataFormats/VertexReco/interface/VertexFwd.h"
+#include "FWCore/Utilities/interface/EDMException.h"
 
 // forward declarations
 class TH1D;
