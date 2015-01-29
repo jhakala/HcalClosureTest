@@ -12,6 +12,7 @@ process.GlobalTag.globaltag=autoCond['startup']
 
 #load the response corrections calculator
 process.load('HcalClosureTest.Analyzers.calcrespcorrdijets_cfi')
+process.load('JetMETCorrections.Configuration.JetCorrectionProducers_cff')
 
 # run over files
 

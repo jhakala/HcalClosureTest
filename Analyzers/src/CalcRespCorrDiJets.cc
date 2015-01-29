@@ -183,7 +183,7 @@ CalcRespCorrDiJets::analyze(const edm::Event& iEvent, const edm::EventSetup& evS
     
     // Get jet corrections
     // Uncomment below
-    //const JetCorrector* correctorPF = JetCorrector::getJetCorrector(pfJetCorrName_,evSetup);
+    const JetCorrector* correctorPF = JetCorrector::getJetCorrector(pfJetCorrName_,evSetup);
     
     //////////////////////////////
     // Event Selection
@@ -196,9 +196,9 @@ CalcRespCorrDiJets::analyze(const edm::Event& iEvent, const edm::EventSetup& evS
     std::set<JetCorretPair, JetCorretPairComp> pfjetcorretpairset;
     for(reco::PFJetCollection::const_iterator it=pfjets->begin(); it!=pfjets->end(); ++it) {
       const reco::PFJet* jet=&(*it);
-      double jec = 1.0;
+      //double jec = 1.0;
       // Uncomment below
-      //double jec = correctorPF->correction(*it, iEvent, evSetup);
+      double jec = correctorPF->correction(*it, iEvent, evSetup);
       pfjetcorretpairset.insert(JetCorretPair(jet, jec));
     }
 
