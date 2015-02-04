@@ -6,7 +6,8 @@ int main(int argc, char* argv[])
 {
   bool isMC = false;
   float maxDeltaEta_ = 0.5;
-  float minJetEt_ = 50.0;
+  float minSumJetEt_ = 100.0;
+  //float minJetEt_ = 50.0;
   float maxThirdJetEt_ = 15.0;
 
   cout << argc << endl;
@@ -22,25 +23,26 @@ int main(int argc, char* argv[])
       return 1;
     }
     maxDeltaEta_   = atof(argv[2]);
-    minJetEt_      = atof(argv[3]);
+    minSumJetEt_   = atof(argv[3]);
+    //minJetEt_      = atof(argv[3]);
     maxThirdJetEt_ = atof(argv[4]);
   }
   else{
     cout << "Not right number of arguments." << endl;
-    cout << " Usage: runPFJetCorr isMC dEta leadingEt 3rdEt" << endl;
+    cout << " Usage: runPFJetCorr isMC dEta sumEt 3rdEt" << endl;
     return 1;
   }
 
   cout << "isMC: " << isMC << endl;
   cout << "dEta: " << maxDeltaEta_ << endl;
-  cout << "Et: " << minJetEt_ << endl;
+  cout << "sumEt: " << minSumJetEt_ << endl;
   cout << "3rdEt: " << maxThirdJetEt_ << endl;
 
   TChain* tree = new TChain("pf_dijettree");
   //TString input = "/eos/uscms/store/user/dgsheffi/QCD_Pt-1800_TuneZ2star_8TeV_pythia6/DijetCalibration_dEta-1p5_Et-20_3rdEt-50/b4567834a2ef8afdd36a5bd021a58fe5/tree_*.root";
-  //TString input1 = "/uscmst1b_scratch/lpc1/old_scratch/lpceg/yurii/EnSc/HCAL/ProduceDATA/*.root";
-  //TString input2 = "/uscmst1b_scratch/lpc1/old_scratch/lpceg/yurii/EnSc/HCAL/ProduceDATA2/*root";
-  TString input = "/eos/uscms/store/user/dgsheffi/QCD_Pt-120to170_TuneZ2star_8TeV_pythia6/DijetCalibration_dEta-1p5_Et-10_3rdEt-50/c1cd07ae23ea077dd65d1e10c6b04785/tree_*.root";
+  //TString input = "/uscmst1b_scratch/lpc1/old_scratch/lpceg/yurii/EnSc/HCAL/ProduceDATA/*.root";
+  TString input = "/uscmst1b_scratch/lpc1/old_scratch/lpceg/yurii/EnSc/HCAL/ProduceDATA2/*root";
+  //TString input = "/eos/uscms/store/user/dgsheffi/QCD_Pt-120to170_TuneZ2star_8TeV_pythia6/DijetCalibration_dEta-1p5_Et-10_3rdEt-50/c1cd07ae23ea077dd65d1e10c6b04785/tree_*.root";
   cout << "Opening file: " << input << endl;
   tree->Add(input);
   //tree->Add(input1);
@@ -52,7 +54,7 @@ int main(int argc, char* argv[])
   //TString output = "/uscms_data/d1/dgsheffi/HCal/corrections/QCD_Pt-120To170_dEta-0p5_Et-50_3rdEt-15.root";
   int decimal = static_cast<int>(maxDeltaEta_*10)-static_cast<int>(maxDeltaEta_)*10;
   //TString output = "/uscms_data/d1/dgsheffi/HCal/corrections/QCD_Pt-120To170_dEta-"+to_string(static_cast<int>(maxDeltaEta_))+"p"+to_string(decimal)+"_Et-"+to_string(static_cast<int>(minJetEt_))+"_3rdEt-"+to_string(static_cast<int>(maxThirdJetEt_))+"_noNeutralPUcorr.root";
-  TString output = "/uscms_data/d1/dgsheffi/HCal/corrections/MultiJet_2012AD_dEta-"+to_string(static_cast<int>(maxDeltaEta_))+"p"+to_string(decimal)+"_Et-"+to_string(static_cast<int>(minJetEt_))+"_3rdEt-"+to_string(static_cast<int>(maxThirdJetEt_))+".root";
+  TString output = "/uscms_data/d1/dgsheffi/HCal/corrections/MultiJet_2012D_dEta-"+to_string(static_cast<int>(maxDeltaEta_))+"p"+to_string(decimal)+"_sumEt-"+to_string(static_cast<int>(minSumJetEt_))+"_3rdEt-"+to_string(static_cast<int>(maxThirdJetEt_))+"_resolution.root";
 
   DijetRespCorrData data;
 
@@ -313,7 +315,7 @@ int main(int argc, char* argv[])
 
   int nEvents = tree->GetEntries();
   cout << "Running over " << nEvents << " events" << endl;
-  //nEvents = 5;
+  //nEvents = 800000;
   for(int iEvent=0; iEvent<nEvents; iEvent++){
     if(iEvent % 10000 == 0){
       cout << "Processing event " << iEvent << endl;
@@ -330,13 +332,13 @@ int main(int argc, char* argv[])
     }
     float tjet_Et = tjet_E_/cosh(tjet_eta_);
     float pjet_Et = pjet_E_/cosh(pjet_eta_);
-    float minSumJetEt_ = 0.0;//40.0;
+    //float minSumJetEt_ = 0.0;//40.0;
     //float minJetEt_ = 50.0;//20.0;
     //float maxThirdJetEt_ = 15.0;//15.0;
     //float maxDeltaEta_ = 0.5;//0.5;
     //float maxJetEMFrac = 1.1;
     if(tjet_Et + pjet_Et < minSumJetEt_) passSel |= 0x1;
-    if((tjet_Et > pjet_Et && tjet_Et < minJetEt_) || (tjet_Et <= pjet_Et && pjet_Et < minJetEt_)) passSel |= 0x2;
+    //if((tjet_Et > pjet_Et && tjet_Et < minJetEt_) || (tjet_Et <= pjet_Et && pjet_Et < minJetEt_)) passSel |= 0x2;
     if(sqrt(thirdjet_px_*thirdjet_px_ + thirdjet_py_*thirdjet_py_) > maxThirdJetEt_) passSel |= 0x4;
     if(dijet_deta_ > maxDeltaEta_) passSel |= 0x8;
     //if(tjet_EMfrac_ > maxJetEMFrac || pjet_EMfrac_ > maxJetEMFrac) passSel |= 0x100;
@@ -403,7 +405,7 @@ int main(int argc, char* argv[])
     data.push_back(datum);
   }
 
-  cout << data.GetSize() << " data" << endl;
+  cout << data.GetSize() << " data out of " << nEvents << " Events" << endl;
   
   cout << "Passes: " << nEvents - fails << " Fails: " << fails << endl;
   cout << "Do CandTrack? " << data.GetDoCandTrackEnergyDiff() << endl;
@@ -424,6 +426,8 @@ int main(int argc, char* argv[])
 
   cout << "Passes: " << nEvents - fails << " Fails: " << fails << endl;
   cout << "Events that passed cuts: " << h_PassSel_->GetBinContent(1) << endl;
+
+  cout << data.GetSize() << " data out of " << nEvents << " Events" << endl;
   
   return 0;
 }
