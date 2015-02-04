@@ -36,11 +36,12 @@ int main(int argc, char* argv[])
   cout << "Et: " << minJetEt_ << endl;
   cout << "3rdEt: " << maxThirdJetEt_ << endl;
 
-  TChain* tree = new TChain("pf_dijettree");
+  TChain* tree = new TChain("dijettree");
   //TString input = "/eos/uscms/store/user/dgsheffi/QCD_Pt-1800_TuneZ2star_8TeV_pythia6/DijetCalibration_dEta-1p5_Et-20_3rdEt-50/b4567834a2ef8afdd36a5bd021a58fe5/tree_*.root";
   //TString input1 = "/uscmst1b_scratch/lpc1/old_scratch/lpceg/yurii/EnSc/HCAL/ProduceDATA/*.root";
   //TString input2 = "/uscmst1b_scratch/lpc1/old_scratch/lpceg/yurii/EnSc/HCAL/ProduceDATA2/*root";
-  TString input = "/eos/uscms/store/user/dgsheffi/QCD_Pt-120to170_TuneZ2star_8TeV_pythia6/DijetCalibration_dEta-1p5_Et-10_3rdEt-50/c1cd07ae23ea077dd65d1e10c6b04785/tree_*.root";
+  //TString input = "/eos/uscms/store/user/dgsheffi/QCD_Pt-120to170_TuneZ2star_8TeV_pythia6/DijetCalibration_dEta-1p5_Et-10_3rdEt-50/c1cd07ae23ea077dd65d1e10c6b04785/tree_*.root";
+  TString input = "/uscms_data/d1/dgsheffi/HCal/CMSSW_7_4_0_pre1/src/Calibration/HcalCalibAlgos/dijettree.root";
   cout << "Opening file: " << input << endl;
   tree->Add(input);
   //tree->Add(input1);
@@ -53,6 +54,7 @@ int main(int argc, char* argv[])
   int decimal = static_cast<int>(maxDeltaEta_*10)-static_cast<int>(maxDeltaEta_)*10;
   //TString output = "/uscms_data/d1/dgsheffi/HCal/corrections/QCD_Pt-120To170_dEta-"+to_string(static_cast<int>(maxDeltaEta_))+"p"+to_string(decimal)+"_Et-"+to_string(static_cast<int>(minJetEt_))+"_3rdEt-"+to_string(static_cast<int>(maxThirdJetEt_))+"_noNeutralPUcorr.root";
   TString output = "/uscms_data/d1/dgsheffi/HCal/corrections/MultiJet_2012AD_dEta-"+to_string(static_cast<int>(maxDeltaEta_))+"p"+to_string(decimal)+"_Et-"+to_string(static_cast<int>(minJetEt_))+"_3rdEt-"+to_string(static_cast<int>(maxThirdJetEt_))+".root";
+  output = "respcorr.root";
 
   DijetRespCorrData data;
 
@@ -295,8 +297,8 @@ int main(int argc, char* argv[])
   tree->SetBranchAddress("pf_dijet_deta",&dijet_deta_);
   tree->SetBranchAddress("pf_dijet_dphi",&dijet_dphi_);
   tree->SetBranchAddress("pf_dijet_balance",&dijet_balance_);
-  tree->SetBranchAddress("pf_thirdjet_px_uncorr",&thirdjet_px_);
-  tree->SetBranchAddress("pf_thirdjet_py_uncorr",&thirdjet_py_);
+  tree->SetBranchAddress("pf_thirdjet_px",&thirdjet_px_);
+  tree->SetBranchAddress("pf_thirdjet_py",&thirdjet_py_);
   tree->SetBranchAddress("pf_Run",&pf_Run_);
   tree->SetBranchAddress("pf_Lumi",&pf_Lumi_);
   tree->SetBranchAddress("pf_Event",&pf_Event_);
