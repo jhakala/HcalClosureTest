@@ -22,15 +22,16 @@ process.calcrespcorrdijets.rootHistFilename = cms.string('tree.root')
 #process.calcrespcorrdijets.doGenJets = cms.bool(False)
 #process.calcrespcorrdijets.debug = cms.untracked.bool(True)
 #process.calcrespcorrdijets.maxDeltaEta = cms.double(0.5)
-process.calcrespcorrdijets.minJetEt = cms.double(10.)
-process.calcrespcorrdijets.minSumJetEt = cms.double(0.0)
-process.calcrespcorrdijets.maxThirdJetEt = cms.double(50.)
+process.calcrespcorrdijets.minJetEt = cms.double(20.)
+process.calcrespcorrdijets.minSumJetEt = cms.double(50.0)
+process.calcrespcorrdijets.maxThirdJetEt = cms.double(75.)
 
 #import FWCore.Python.FileUtils as FileUtils
 #readFiles = cms.untracked.vstring( FileUtils.loadListFromFile ('Pion_Pt-50.list') )
 #process.source = cms.Source ("PoolSource",fileNames = readFiles)
 process.source = cms.Source("PoolSource", fileNames = cms.untracked.vstring(
-        'file:/eos/uscms/store/user/dgsheffi/QCD_Pt-120To170_13TeV_0002E63C-FC89-E411-B8D6-003048FFCBA8.root'
+        #'file:/eos/uscms/store/user/dgsheffi/QCD_Pt-120To170_13TeV_0002E63C-FC89-E411-B8D6-003048FFCBA8.root'
+        'file:/eos/uscms/store/user/dgsheffi/QCD_Pt-15to7000_13TeV.root'
         #'file:/uscms_data/d1/dgsheffi/HCal/001288D3-2AE3-E111-A943-0030487D5E5F.root'
 ))
 

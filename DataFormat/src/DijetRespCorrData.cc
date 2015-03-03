@@ -429,7 +429,7 @@ void DijetRespCorrData::GetBalance(const DijetRespCorrDatum& datum, const TArray
   Double_t petcorr = std::sqrt(ppx*ppx + ppy*ppy);
 
   balance_ = 2*(tetcorr-petcorr)/(tetcorr+petcorr);
-  resolution_ = 0.237;//1.0/sqrt(datum.GetWeight()); //0.035
+  resolution_ = 0.237/sqrt(datum.GetWeight()); //0.035
   return;
 }
 
