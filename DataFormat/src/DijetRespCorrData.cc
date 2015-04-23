@@ -165,7 +165,7 @@ void DijetRespCorrDatum::SetProbeEcalE(Double_t v)
 
 void DijetRespCorrDatum::SetThirdJetPx(Double_t v)
 {
-    fThirdJet Px = v;
+    fThirdJetPx = v;
     return;
 }
 
