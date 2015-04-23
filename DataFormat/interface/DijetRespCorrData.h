@@ -28,7 +28,6 @@ class TH2D;
 
 const int MAXIETA = 41;
 const int NUMTOWERS = 83;
-  
 
 //
 // class definitions
@@ -38,74 +37,78 @@ const int NUMTOWERS = 83;
 // includes the resolution, tag/probe hcal et, and tag/probe ecal et
 class DijetRespCorrDatum : public TObject
 {
- public:
-  DijetRespCorrDatum();
-  ~DijetRespCorrDatum();
+public:
+    DijetRespCorrDatum();
+    ~DijetRespCorrDatum();
 
-  Double_t GetWeight(void) const;
-  Double_t GetTagEta(void) const;
-  Double_t GetTagPhi(void) const;
-  Double_t GetTagHcalE(Int_t ieta);
-  void     GetTagHcalE(std::map<Int_t, Double_t>&) const;
-  Double_t GetTagEcalE(void) const;
-  Double_t GetProbeEta(void) const;
-  Double_t GetProbePhi(void) const;
-  Double_t GetProbeHcalE(Int_t ieta);
-  void     GetProbeHcalE(std::map<Int_t, Double_t>&) const;
-  Double_t GetProbeEcalE(void) const;
-  Double_t GetThirdJetPx(void) const;
-  Double_t GetThirdJetPy(void) const;
-  Int_t    GetCandTrackN(void) const;
-  
-  void SetWeight(Double_t);
-  void SetTagEta(Double_t);
-  void SetTagPhi(Double_t);
-  void SetTagHcalE(Double_t, Int_t ieta);
-  void AddTagHcalE(Double_t, Int_t ieta);
-  void SetTagEcalE(Double_t);
-  void SetProbeEta(Double_t);
-  void SetProbePhi(Double_t);
-  void SetProbeHcalE(Double_t, Int_t ieta);
-  void AddProbeHcalE(Double_t, Int_t ieta);
-  void SetProbeEcalE(Double_t);
-  void SetThirdJetPx(Double_t);
-  void SetThirdJetPy(Double_t);
-  void SetCandTrackN(Int_t);
-  void AddCandTrackP(Double_t);
-  void AddCandTrackEcalE(Double_t);
-  void AddCandTrackHcalE(std::map<Int_t, Double_t>);
+    Double_t GetWeight(void) const;
+    Double_t GetTagEta(void) const;
+    Double_t GetTagPhi(void) const;
+    Double_t GetTagHcalE(Int_t ieta);
+    void     GetTagHcalE(std::map<Int_t, Double_t>&) const;
+    Double_t GetTagEcalE(void) const;
+    Double_t GetProbeEta(void) const;
+    Double_t GetProbePhi(void) const;
+    Double_t GetProbeHcalE(Int_t ieta);
+    void     GetProbeHcalE(std::map<Int_t, Double_t>&) const;
+    Double_t GetProbeEcalE(void) const;
+    Double_t GetThirdJetPx(void) const;
+    Double_t GetThirdJetPy(void) const;
+    Int_t    GetCandTrackN(void) const;
 
-  // calculate the ecal, hcal, and HF energy in the tag and probe jets
-  // scale the hcal and hf energy by the response corrections
-  void GetTagEnergies(const TArrayD& respcorr, Double_t& ecal, Double_t& hcal, Double_t& hf) const;
-  void GetProbeEnergies(const TArrayD& respcorr, Double_t& ecal, Double_t& hcal, Double_t& hf) const;
-  // Calculate the candidate track momentum, ecal energy, and hcal energy
-  // scale the hcal energy by the response corrections
-  void GetTrackVariables(const TArrayD& respcorr, const Int_t index_,  Double_t& TrackP_, Double_t& EcalE_, Double_t& HcalE_) const;
+    void SetWeight(Double_t);
+    void SetTagEta(Double_t);
+    void SetTagPhi(Double_t);
+    void SetTagHcalE(Double_t, Int_t ieta);
+    void AddTagHcalE(Double_t, Int_t ieta);
+    void SetTagEcalE(Double_t);
+    void SetProbeEta(Double_t);
+    void SetProbePhi(Double_t);
+    void SetProbeHcalE(Double_t, Int_t ieta);
+    void AddProbeHcalE(Double_t, Int_t ieta);
+    void SetProbeEcalE(Double_t);
+    void SetThirdJetPx(Double_t);
+    void SetThirdJetPy(Double_t);
+    void SetCandTrackN(Int_t);
+    void AddCandTrackP(Double_t);
+    void AddCandTrackEcalE(Double_t);
+    void AddCandTrackHcalE(std::map<Int_t, Double_t>);
 
- private:
-  // event weight
-  Double_t fWeight;
+    // calculate the ecal, hcal, and HF energy in the tag and probe jets
+    // scale the hcal and hf energy by the response corrections
+    void GetTagEnergies(const TArrayD& respcorr, Double_t& ecal, Double_t& hcal,
+			Double_t& hf) const;
+    void GetProbeEnergies(const TArrayD& respcorr, Double_t& ecal,
+			  Double_t& hcal, Double_t& hf) const;
+    // Calculate the candidate track momentum, ecal energy, and hcal energy
+    // scale the hcal energy by the response corrections
+    void GetTrackVariables(const TArrayD& respcorr, const Int_t index_,
+			   Double_t& TrackP_, Double_t& EcalE_,
+			   Double_t& HcalE_) const;
 
-  // tag jet info
-  Double_t fTagEta, fTagPhi;
-  std::map<Int_t, Double_t> fTagHcalE;
-  Double_t fTagEcalE;
+private:
+    // event weight
+    Double_t fWeight;
 
-  // probe jet info
-  Double_t fProbeEta, fProbePhi;
-  std::map<Int_t, Double_t> fProbeHcalE;
-  Double_t fProbeEcalE;
+    // tag jet info
+    Double_t fTagEta, fTagPhi;
+    std::map<Int_t, Double_t> fTagHcalE;
+    Double_t fTagEcalE;
 
-  // third jet info
-  Double_t fThirdJetPx, fThirdJetPy;
+    // probe jet info
+    Double_t fProbeEta, fProbePhi;
+    std::map<Int_t, Double_t> fProbeHcalE;
+    Double_t fProbeEcalE;
 
-  // Track energy comparison info
-  Int_t fCandTrackN;
-  std::vector<Double_t> fCandTrackP, fCandTrackEcalE;
-  std::vector<std::map<Int_t, Double_t> > fCandTrackHcalE;
-  
-  ClassDef(DijetRespCorrDatum, 1);
+    // third jet info
+    Double_t fThirdJetPx, fThirdJetPy;
+
+    // Track energy comparison info
+    Int_t fCandTrackN;
+    std::vector<Double_t> fCandTrackP, fCandTrackEcalE;
+    std::vector<std::map<Int_t, Double_t> > fCandTrackHcalE;
+
+    ClassDef(DijetRespCorrDatum, 1);
 };
 
 // vector of DijetRespCorrDatum
@@ -113,59 +116,64 @@ class DijetRespCorrDatum : public TObject
 // provide a fitting tool to determine the response corrections
 class DijetRespCorrData : public TObject
 {
- public:
-  DijetRespCorrData();
-  ~DijetRespCorrData();
+public:
+    DijetRespCorrData();
+    ~DijetRespCorrData();
 
-  void push_back(const DijetRespCorrDatum&);
-  const DijetRespCorrDatum& GetAt(Int_t) const;
-  Int_t GetSize(void) const;
+    void push_back(const DijetRespCorrDatum&);
+    const DijetRespCorrDatum& GetAt(Int_t) const;
+    Int_t GetSize(void) const;
 
-  // calculate the total distance between the tag and probe jets
-  // given a set of response corrections
-  Double_t GetLikelihoodDistance(const TArrayD& respcorr) const;
+    // calculate the total distance between the tag and probe jets
+    // given a set of response corrections
+    Double_t GetLikelihoodDistance(const TArrayD& respcorr) const;
 
-  // fit for the response corrections
-  //  TArrayD doFit(const TArrayD& respCorrInit, Int_t maxIetaFixed);
-  void doFit(TArrayD& respcorr, TArrayD& respcorre); // use default resp corrections
-  TH1D* doFit(const char* name, const char* title); // use default resp corrections
+    // fit for the response corrections
+    //  TArrayD doFit(const TArrayD& respCorrInit, Int_t maxIetaFixed);
+    void doFit(TArrayD& respcorr, TArrayD& respcorre); // use default resp corrections
+    TH1D* doFit(const char* name, const char* title);  // use default resp corrections
 
-  // fitting parameters
-  inline void SetPrintLevel(Int_t p) { fPrintLevel=p; }
-  inline void SetParStep(Double_t p) { fParStep=p; }
-  inline void SetParMin(Double_t p) { fParMin=p; }
-  inline void SetParMax(Double_t p) { fParMax=p; }
-  inline void SetEcalRes(Double_t p=0.07) { fEcalRes=p; }
-  inline void SetHcalRes(Double_t p=1.15) { fHcalRes=p; }
-  inline void SetHfRes(Double_t p=1.35) { fHfRes=p; }
-  
-  inline void SetDoCandTrackEnergyDiff(Bool_t p) { fDoCandTrackEnergyDiff=p; }
-  inline Bool_t GetDoCandTrackEnergyDiff(void) const { return fDoCandTrackEnergyDiff; }
+    // fitting parameters
+    inline void SetPrintLevel(Int_t p) { fPrintLevel=p; }
+    inline void SetParStep(Double_t p) { fParStep=p; }
+    inline void SetParMin(Double_t p) { fParMin=p; }
+    inline void SetParMax(Double_t p) { fParMax=p; }
+    inline void SetEcalRes(Double_t p=0.07) { fEcalRes=p; }
+    inline void SetHcalRes(Double_t p=1.15) { fHcalRes=p; }
+    inline void SetHfRes(Double_t p=1.35) { fHfRes=p; }
 
- private:
-  // calculate the balance parameter and its resolution for a given dijet pair
-  void GetBalance(const DijetRespCorrDatum& datum, const TArrayD& respcorr, Double_t& balance_, Double_t& resolution_) const;
-  // Calculate the difference in energy between the hits and the candidate's track
-  //void GetTrackEnergyDiff(const DijetRespCorrDatum& datum, const Int_t& index, const TArrayD& respcorr, Double_t& Ediff_, Double_t& dEdiff_) const;
-  void GetTrackEnergyDiff(const DijetRespCorrDatum& datum, const Int_t index, const TArrayD& respcorr, Double_t& Ediff_, Double_t& dEdiff_) const;
+    inline void SetDoCandTrackEnergyDiff(Bool_t p) { fDoCandTrackEnergyDiff=p; }
+    inline Bool_t GetDoCandTrackEnergyDiff(void) const
+    {
+	return fDoCandTrackEnergyDiff;
+    }
 
-  // actual data
-  std::vector<DijetRespCorrDatum> fData;
+private:
+    // calculate the balance parameter and its resolution for a given dijet pair
+    void GetBalance(const DijetRespCorrDatum& datum, const TArrayD& respcorr,
+		    Double_t& balance_, Double_t& resolution_) const;
+    // Calculate the difference in energy between the hits and the candidate's track
+    //void GetTrackEnergyDiff(const DijetRespCorrDatum& datum, const Int_t& index, const TArrayD& respcorr, Double_t& Ediff_, Double_t& dEdiff_) const;
+    void GetTrackEnergyDiff(const DijetRespCorrDatum& datum, const Int_t index,
+			    const TArrayD& respcorr, Double_t& Ediff_,
+			    Double_t& dEdiff_) const;
 
-  // this is where the magic happens
-  static void FCN(Int_t &npar, Double_t *gin, Double_t &f, Double_t *par, Int_t flag);
+    // actual data
+    std::vector<DijetRespCorrDatum> fData;
 
-  // fit parameters
-  Int_t fPrintLevel;
-  Double_t fParStep;
-  Double_t fParMin;
-  Double_t fParMax;
-  Double_t fEcalRes, fHcalRes, fHfRes;
+    // this is where the magic happens
+    static void FCN(Int_t &npar, Double_t *gin, Double_t &f, Double_t *par, Int_t flag);
 
-  Bool_t fDoCandTrackEnergyDiff;
+    // fit parameters
+    Int_t fPrintLevel;
+    Double_t fParStep;
+    Double_t fParMin;
+    Double_t fParMax;
+    Double_t fEcalRes, fHcalRes, fHfRes;
 
-  ClassDef(DijetRespCorrData, 1);
+    Bool_t fDoCandTrackEnergyDiff;
+
+    ClassDef(DijetRespCorrData, 1);
 };
 
 #endif
-
