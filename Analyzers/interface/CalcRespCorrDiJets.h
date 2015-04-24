@@ -15,20 +15,27 @@
 // system include files
 #include <memory>
 #include <string>
+#include <vector>
+#include <set>
+#include <map>
+
+#include "TTree.h"
+#include "TFile.h"
+#include "TH1D.h"
+#include "TH2D.h"
+#include "TClonesArray.h"
 
 // user include files
 #include "FWCore/Framework/interface/Frameworkfwd.h"
 #include "FWCore/Framework/interface/EDAnalyzer.h"
-
 #include "FWCore/Framework/interface/Event.h"
 #include "FWCore/Framework/interface/EventSetup.h"
 #include "FWCore/Framework/interface/MakerMacros.h"
 #include "FWCore/Framework/interface/ESHandle.h"
-
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
-
 #include "DataFormats/JetReco/interface/CaloJetCollection.h"
 #include "DataFormats/JetReco/interface/PFJetCollection.h"
+#include "DataFormats/JetReco/interface/GenJetCollection.h"
 #include "DataFormats/HcalRecHit/interface/HBHERecHit.h"
 #include "DataFormats/HcalRecHit/interface/HFRecHit.h"
 #include "DataFormats/HcalRecHit/interface/HORecHit.h"
@@ -37,6 +44,7 @@
 #include "DataFormats/ParticleFlowReco/interface/PFCluster.h"
 #include "DataFormats/ParticleFlowReco/interface/PFRecHit.h"
 #include "DataFormats/ParticleFlowReco/interface/PFRecHitFwd.h"
+#include "DataFormats/ParticleFlowCandidate/interface/PFCandidate.h"
 #include "DataFormats/HcalDetId/interface/HcalDetId.h"
 #include "DataFormats/TrackReco/interface/TrackFwd.h"
 #include "Geometry/CaloGeometry/interface/CaloGeometry.h"
@@ -44,8 +52,11 @@
 #include "Geometry/Records/interface/CaloGeometryRecord.h"
 #include "DataFormats/HepMCCandidate/interface/GenParticle.h"
 #include "SimDataFormats/GeneratorProducts/interface/GenEventInfoProduct.h"
+#include "JetMETCorrections/Objects/interface/JetCorrector.h"
 #include "CondFormats/JetMETObjects/interface/JetCorrectorParameters.h"
 #include "JetMETCorrections/Objects/interface/JetCorrectionsRecord.h"
+#include "DataFormats/VertexReco/interface/VertexFwd.h"
+#include "FWCore/Utilities/interface/EDMException.h"
 
 // forward declarations
 class TH1D;
@@ -57,38 +68,17 @@ class TTree;
 // class declarations
 //
 
-class CaloJetCorretPair : protected std::pair<const reco::CaloJet*, double> {
+class JetCorretPair : protected std::pair<const reco::PFJet*, double> {
  public:
-  CaloJetCorretPair() {
+  JetCorretPair() {
     first=0;
     second=1.0;
   }
-  CaloJetCorretPair(const reco::CaloJet* j, double s) {
+  JetCorretPair(const reco::PFJet* j, double s) {
     first=j;
     second=s;
   }
-  ~CaloJetCorretPair() {}
-
-  inline const reco::CaloJet* jet(void) const { return first; }
-  inline void jet(const reco::CaloJet* j) { first=j; return; }
-  inline double scale(void) const { return second; }
-  inline void scale(double d) { second=d; return; }
-
- private:
-  
-};
-
-class PFJetCorretPair : protected std::pair<const reco::PFJet*, double> {
- public:
-  PFJetCorretPair() {
-    first=0;
-    second=1.0;
-  }
-  PFJetCorretPair(const reco::PFJet* j, double s) {
-    first=j;
-    second=s;
-  }
-  ~PFJetCorretPair() {}
+  ~JetCorretPair() {}
 
   inline const reco::PFJet* jet(void) const { return first; }
   inline void jet(const reco::PFJet* j) { first=j; return; }
@@ -113,8 +103,6 @@ class CalcRespCorrDiJets : public edm::EDAnalyzer {
   
   // parameters
   bool debug_;                      // print debug statements
-  std::string caloJetCollName_;     // label for the calo jet collection
-  std::string caloJetCorrName_;     // label for the calo jet correction service
   std::string pfJetCollName_;       // label for the PF jet collection
   std::string pfJetCorrName_;       // label for the PF jet correction service
   std::string genJetCollName_;      // label for the genjet collection
@@ -132,49 +120,23 @@ class CalcRespCorrDiJets : public edm::EDAnalyzer {
   double minJetEt_;                 // minimum Jet Et
   double maxThirdJetEt_;            // maximum 3rd jet Et
   double maxJetEMF_;                // maximum EMF of the tag and probe jets
-  bool doCaloJets_;                 // use CaloJets
-  bool doPFJets_;                   // use PFJets
   bool doGenJets_;                  // use GenJets
+
+  edm::EDGetTokenT<reco::PFJetCollection>           tok_PFJet_;
+  edm::EDGetTokenT<std::vector<reco::GenJet> >      tok_GenJet_;
+  edm::EDGetTokenT<std::vector<reco::GenParticle> > tok_GenPart_;
+  edm::EDGetTokenT<GenEventInfoProduct>             tok_GenEvInfo_; 
+  edm::EDGetTokenT<edm::SortedCollection<HBHERecHit,edm::StrictWeakOrdering<HBHERecHit> > > tok_HBHE_;
+  edm::EDGetTokenT<edm::SortedCollection<HFRecHit,edm::StrictWeakOrdering<HFRecHit> > >     tok_HF_;
+  edm::EDGetTokenT<edm::SortedCollection<HORecHit,edm::StrictWeakOrdering<HORecHit> > >     tok_HO_;
+  edm::EDGetTokenT<reco::VertexCollection>           tok_Vertex_;
+
 
   // root file/histograms
   TFile* rootfile_;
 
-  TH1D* hPassSelCalo_;
-  TH1D* hPassSelPF_;
-  TH1D* h_types_;
-  TH1D* h_ntypes_;
-  TH1D* h_ietaHCAL_;
-  TH1D* h_etaHFHAD_;
-  TH1D* h_etaHFEM_;
-  TH1D* h_ietaHO_;
-  TH1D* h_HFHAD_n_;
-  TH1D* h_HFEM_n_;
-  TH1D* h_HFHAD_type_;
-  TH1D* h_HFEM_type_;
-  TH1D* h_HBHE_n_;
-  TH1D* h_HF_n_;
-  TH1D* h_HO_n_;
-  TH1D* h_twrietas_;
-  TH2D* h_rechitspos_;
-  TH1D* h_hbherecoieta_;
-  TTree* calo_tree_;
-  TTree* pf_tree_;
-  
-  float tcalojet_pt_, tcalojet_p_, tcalojet_eta_, tcalojet_phi_, tcalojet_emf_, tcalojet_scale_;
-  float tcalojet_gendr_, tcalojet_genpt_, tcalojet_genp_;
-  float tcalojet_EBE_, tcalojet_EEE_, tcalojet_HBE_, tcalojet_HEE_, tcalojet_HFE_;
-  int tcalojet_ntwrs_;
-  int tcalojet_twr_ieta_[100];
-  float tcalojet_twr_eme_[100], tcalojet_twr_hade_[100];
-  float pcalojet_pt_, pcalojet_p_, pcalojet_eta_, pcalojet_phi_, pcalojet_emf_, pcalojet_scale_;
-  float pcalojet_gendr_, pcalojet_genpt_, pcalojet_genp_;
-  float pcalojet_EBE_, pcalojet_EEE_, pcalojet_HBE_, pcalojet_HEE_, pcalojet_HFE_;
-  int pcalojet_ntwrs_;
-  int pcalojet_twr_ieta_[100];
-  float pcalojet_twr_eme_[100], pcalojet_twr_hade_[100];
-  float calo_dijet_deta_, calo_dijet_dphi_, calo_dijet_balance_;
-  float calo_thirdjet_px_, calo_thirdjet_py_;
-  int calo_Event_;
+  TH1D* h_PassSelPF_;
+  TTree* tree_;
 
   float tpfjet_pt_, tpfjet_p_, tpfjet_E_, tpfjet_eta_, tpfjet_phi_, tpfjet_EMfrac_, tpfjet_hadEcalEfrac_, tpfjet_scale_, tpfjet_area_;
   int tpfjet_jetID_;
@@ -225,15 +187,18 @@ class CalcRespCorrDiJets : public edm::EDAnalyzer {
   double deltaR(const double eta1, const double phi1, const double eta2, const double phi2);
   int getEtaPhi(const DetId id);
   int getEtaPhi(const HcalDetId id);
+<<<<<<< HEAD
 
   struct CaloJetCorretPairComp {
     inline bool operator() ( const CaloJetCorretPair& a, const CaloJetCorretPair& b) {
       return (a.jet()->pt()*a.scale()) > (b.jet()->pt()*b.scale());
     }
   };
+=======
+>>>>>>> upstream/master
 
-  struct PFJetCorretPairComp {
-    inline bool operator() ( const PFJetCorretPair& a, const PFJetCorretPair& b) {
+  struct JetCorretPairComp {
+    inline bool operator() ( const JetCorretPair& a, const JetCorretPair& b) {
       return (a.jet()->pt()*a.scale()) > (b.jet()->pt()*b.scale());
     }
   };
