@@ -3,7 +3,7 @@
 ##############
 # This script creates a configuration file that uses the HcalClosureTest's dijet balancing reponse corrections for a reconstruction.
 #
-# To run this script, e.g., from the same directory it is in, do source ./makeRerecoConfig.csh <1> <2> <3> <4> <5> <6>
+# To run this script, e.g., from the same directory it is in, do:  ./makeRerecoConfig.csh <1> <2> <3> <4> <5> <6>
 #
 # option 1 can be either "data" or "mc"
 # option 2 is the file to be rereco'd
@@ -16,8 +16,6 @@
 #
 # To find the global tag go here: https://twiki.cern.ch/twiki/bin/view/CMSPublic/SWGuideFrontierConditions
 # Then click on the correct global tag to find the HcalRespCorrsRcd and the run number.
-#
-# If scriptingtools isn't found, make sure CMSSW_SEARCH_PATH is pointing to the right place. You need to edit this script accordingly.
 ##############
 
 echo -e "\n--> Beginning creation of a rereco config file implementing dijet balancing response corrections."

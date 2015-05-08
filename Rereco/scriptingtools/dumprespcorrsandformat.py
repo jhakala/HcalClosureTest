@@ -11,7 +11,7 @@ file = r.TFile("DijetRespCorrs.root")
 # change this file ^^^ to point to the generated dijet balancing respcorrs.
 
 template = open("scriptingtools/preexisting_RespCorrs.txt", "r")
-out_file =  open("scriptingtools/output.txt", "w");
+out_file =  open("../../output.txt", "w");
 hist=file.Get("h_corr")
 
 # go through each line of the template

@@ -3,7 +3,7 @@ process.es_ascii2 = cms.ESSource("HcalTextCalibrations",
                                                                  input=cms.VPSet(
         cms.PSet(
         object = cms.string('RespCorrs'),
-        file = cms.FileInPath('./scriptingtools/output.txt')
+        file = cms.FileInPath('output.txt')
         ))
                                                                  )
 
