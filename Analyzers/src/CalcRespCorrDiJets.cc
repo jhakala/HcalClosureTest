@@ -188,8 +188,7 @@ CalcRespCorrDiJets::analyze(const edm::Event& iEvent, const edm::EventSetup& evS
 
     JetCorretPair pf_tag, pf_probe;
     pf_thirdjet_px_=pf_thirdjet_py_=0.0;
-    pf_realthirdjet_px_=pf_realthirdjet_py_=0.0;
-    pf_realthirdjet_scale_ = 1;
+    pf_thirdjet_px_uncorr_=pf_thirdjet_py_uncorr_=0.0;
     int cntr=0;
     for(std::set<JetCorretPair, JetCorretPairComp>::const_iterator it=pfjetcorretpairset.begin(); it!=pfjetcorretpairset.end(); ++it) {
       JetCorretPair jet=(*it);
@@ -199,14 +198,6 @@ CalcRespCorrDiJets::analyze(const edm::Event& iEvent, const edm::EventSetup& evS
       else {
 	pf_thirdjet_px_ += jet.scale()*jet.jet()->px();
 	pf_thirdjet_py_ += jet.scale()*jet.jet()->py();
-<<<<<<< HEAD
-	if(cntr==3){
-	  pf_realthirdjet_px_ = jet.jet()->px();
-	  pf_realthirdjet_py_ = jet.jet()->py();
-	  pf_realthirdjet_scale_ = jet.scale();
-	}
-=======
->>>>>>> upstream/master
       }
     }
     
@@ -1356,175 +1347,6 @@ void CalcRespCorrDiJets::beginJob()
 
   tree_ = new TTree("dijettree", "tree for dijet balancing");
 
-<<<<<<< HEAD
-    pf_tree_->Branch("tpfjet_pt",&tpfjet_pt_, "tpfjet_pt/F");
-    pf_tree_->Branch("tpfjet_p",&tpfjet_p_, "tpfjet_p/F");
-    pf_tree_->Branch("tpfjet_E",&tpfjet_E_, "tpfjet_E/F");
-    pf_tree_->Branch("tpfjet_eta",&tpfjet_eta_, "tpfjet_eta/F");
-    pf_tree_->Branch("tpfjet_phi",&tpfjet_phi_, "tpfjet_phi/F");
-    pf_tree_->Branch("tpfjet_EMfrac",&tpfjet_EMfrac_, "tpfjet_EMfrac/F");
-    pf_tree_->Branch("tpfjet_hadEcalEfrac",&tpfjet_hadEcalEfrac_, "tpfjet_hadEcalEfrac/F");
-    pf_tree_->Branch("tpfjet_scale",&tpfjet_scale_, "tpfjet_scale/F");
-    pf_tree_->Branch("tpfjet_area",&tpfjet_area_, "tpfjet_area/F");
-    pf_tree_->Branch("tpfjet_jetID",&tpfjet_jetID_, "tpfjet_jetID/I");
-    if(doGenJets_){
-      pf_tree_->Branch("tpfjet_genpt",&tpfjet_genpt_, "tpfjet_genpt/F");
-      pf_tree_->Branch("tpfjet_genp",&tpfjet_genp_, "tpfjet_genp/F");
-      pf_tree_->Branch("tpfjet_genE",&tpfjet_genE_, "tpfjet_genE/F");
-      pf_tree_->Branch("tpfjet_gendr",&tpfjet_gendr_, "tpfjet_gendr/F");
-    }
-    pf_tree_->Branch("tpfjet_unkown_E",&tpfjet_unkown_E_, "tpfjet_unkown_E/F");
-    pf_tree_->Branch("tpfjet_electron_E",&tpfjet_electron_E_, "tpfjet_electron_E/F");
-    pf_tree_->Branch("tpfjet_muon_E",&tpfjet_muon_E_, "tpfjet_muon_E/F");
-    pf_tree_->Branch("tpfjet_photon_E",&tpfjet_photon_E_, "tpfjet_photon_E/F");
-    pf_tree_->Branch("tpfjet_unkown_px",&tpfjet_unkown_px_, "tpfjet_unkown_px/F");
-    pf_tree_->Branch("tpfjet_electron_px",&tpfjet_electron_px_, "tpfjet_electron_px/F");
-    pf_tree_->Branch("tpfjet_muon_px",&tpfjet_muon_px_, "tpfjet_muon_px/F");
-    pf_tree_->Branch("tpfjet_photon_px",&tpfjet_photon_px_, "tpfjet_photon_px/F");
-    pf_tree_->Branch("tpfjet_unkown_py",&tpfjet_unkown_py_, "tpfjet_unkown_py/F");
-    pf_tree_->Branch("tpfjet_electron_py",&tpfjet_electron_py_, "tpfjet_electron_py/F");
-    pf_tree_->Branch("tpfjet_muon_py",&tpfjet_muon_py_, "tpfjet_muon_py/F");
-    pf_tree_->Branch("tpfjet_photon_py",&tpfjet_photon_py_, "tpfjet_photon_py/F");
-    pf_tree_->Branch("tpfjet_unkown_pz",&tpfjet_unkown_pz_, "tpfjet_unkown_pz/F");
-    pf_tree_->Branch("tpfjet_electron_pz",&tpfjet_electron_pz_, "tpfjet_electron_pz/F");
-    pf_tree_->Branch("tpfjet_muon_pz",&tpfjet_muon_pz_, "tpfjet_muon_pz/F");
-    pf_tree_->Branch("tpfjet_photon_pz",&tpfjet_photon_pz_, "tpfjet_photon_pz/F");
-    pf_tree_->Branch("tpfjet_unkown_EcalE",&tpfjet_unkown_EcalE_, "tpfjet_unkown_EcalE/F");
-    pf_tree_->Branch("tpfjet_electron_EcalE",&tpfjet_electron_EcalE_, "tpfjet_electron_EcalE/F");
-    pf_tree_->Branch("tpfjet_muon_EcalE",&tpfjet_muon_EcalE_, "tpfjet_muon_EcalE/F");
-    pf_tree_->Branch("tpfjet_photon_EcalE",&tpfjet_photon_EcalE_, "tpfjet_photon_EcalE/F");
-    pf_tree_->Branch("tpfjet_unkown_n",&tpfjet_unkown_n_, "tpfjet_unkown_n/I");
-    pf_tree_->Branch("tpfjet_electron_n",&tpfjet_electron_n_, "tpfjet_electron_n/I");
-    pf_tree_->Branch("tpfjet_muon_n",&tpfjet_muon_n_, "tpfjet_muon_n/I");
-    pf_tree_->Branch("tpfjet_photon_n",&tpfjet_photon_n_, "tpfjet_photon_n/I");
-    pf_tree_->Branch("tpfjet_had_n",&tpfjet_had_n_, "tpfjet_had_n/I");
-    pf_tree_->Branch("tpfjet_had_E",&tpfjet_had_E_);
-    pf_tree_->Branch("tpfjet_had_px",&tpfjet_had_px_);
-    pf_tree_->Branch("tpfjet_had_py",&tpfjet_had_py_);
-    pf_tree_->Branch("tpfjet_had_pz",&tpfjet_had_pz_);
-    pf_tree_->Branch("tpfjet_had_EcalE",&tpfjet_had_EcalE_);
-    pf_tree_->Branch("tpfjet_had_rawHcalE",&tpfjet_had_rawHcalE_);
-    pf_tree_->Branch("tpfjet_had_emf",&tpfjet_had_emf_);
-    pf_tree_->Branch("tpfjet_had_id",&tpfjet_had_id_);
-    pf_tree_->Branch("tpfjet_had_candtrackind",&tpfjet_had_candtrackind_);
-    if(doGenJets_){
-      pf_tree_->Branch("tpfjet_had_E_mctruth",&tpfjet_had_E_mctruth_);
-      pf_tree_->Branch("tpfjet_had_mcpdgId",&tpfjet_had_mcpdgId_);
-    }
-    pf_tree_->Branch("tpfjet_had_ntwrs",&tpfjet_had_ntwrs_);
-    pf_tree_->Branch("tpfjet_ntwrs",&tpfjet_ntwrs_, "tpfjet_ntwrs/I");
-    pf_tree_->Branch("tpfjet_twr_ieta",&tpfjet_twr_ieta_);
-    pf_tree_->Branch("tpfjet_twr_iphi",&tpfjet_twr_iphi_);
-    pf_tree_->Branch("tpfjet_twr_depth",&tpfjet_twr_depth_);
-    pf_tree_->Branch("tpfjet_twr_subdet",&tpfjet_twr_subdet_);
-    pf_tree_->Branch("tpfjet_twr_hade",&tpfjet_twr_hade_);
-    pf_tree_->Branch("tpfjet_twr_frac",&tpfjet_twr_frac_);
-    pf_tree_->Branch("tpfjet_twr_candtrackind",&tpfjet_twr_candtrackind_);
-    pf_tree_->Branch("tpfjet_twr_hadind",&tpfjet_twr_hadind_);
-    pf_tree_->Branch("tpfjet_twr_elmttype",&tpfjet_twr_elmttype_);
-    pf_tree_->Branch("tpfjet_twr_dR",&tpfjet_twr_dR_);
-    pf_tree_->Branch("tpfjet_twr_clusterind",&tpfjet_twr_clusterind_);
-    pf_tree_->Branch("tpfjet_cluster_n",&tpfjet_cluster_n_, "tpfjet_cluster_n/I");
-    pf_tree_->Branch("tpfjet_cluster_eta",&tpfjet_cluster_eta_);
-    pf_tree_->Branch("tpfjet_cluster_phi",&tpfjet_cluster_phi_);
-    pf_tree_->Branch("tpfjet_cluster_dR",&tpfjet_cluster_dR_);
-    pf_tree_->Branch("tpfjet_ncandtracks",&tpfjet_ncandtracks_, "tpfjet_ncandtracks/I");
-    pf_tree_->Branch("tpfjet_candtrack_px",&tpfjet_candtrack_px_);
-    pf_tree_->Branch("tpfjet_candtrack_py",&tpfjet_candtrack_py_);
-    pf_tree_->Branch("tpfjet_candtrack_pz",&tpfjet_candtrack_pz_);
-    pf_tree_->Branch("tpfjet_candtrack_EcalE",&tpfjet_candtrack_EcalE_);
-    pf_tree_->Branch("ppfjet_pt",&ppfjet_pt_, "ppfjet_pt/F");
-    pf_tree_->Branch("ppfjet_p",&ppfjet_p_, "ppfjet_p/F");
-    pf_tree_->Branch("ppfjet_E",&ppfjet_E_, "ppfjet_E/F");
-    pf_tree_->Branch("ppfjet_eta",&ppfjet_eta_, "ppfjet_eta/F");
-    pf_tree_->Branch("ppfjet_phi",&ppfjet_phi_, "ppfjet_phi/F");
-    pf_tree_->Branch("ppfjet_EMfrac",&ppfjet_EMfrac_, "ppfjet_EMfrac/F");
-    pf_tree_->Branch("ppfjet_hadEcalEfrac",&ppfjet_hadEcalEfrac_, "ppfjet_hadEcalEfrac/F");
-    pf_tree_->Branch("ppfjet_scale",&ppfjet_scale_, "ppfjet_scale/F");
-    pf_tree_->Branch("ppfjet_area",&ppfjet_area_, "ppfjet_area/F");
-    pf_tree_->Branch("ppfjet_jetID",&ppfjet_jetID_, "ppfjet_jetID/I");
-    if(doGenJets_){
-      pf_tree_->Branch("ppfjet_genpt",&ppfjet_genpt_, "ppfjet_genpt/F");
-      pf_tree_->Branch("ppfjet_genp",&ppfjet_genp_, "ppfjet_genp/F");
-      pf_tree_->Branch("ppfjet_genE",&ppfjet_genE_, "ppfjet_genE/F");
-      pf_tree_->Branch("ppfjet_gendr",&ppfjet_gendr_, "ppfjet_gendr/F");
-    }
-    pf_tree_->Branch("ppfjet_unkown_E",&ppfjet_unkown_E_, "ppfjet_unkown_E/F");
-    pf_tree_->Branch("ppfjet_electron_E",&ppfjet_electron_E_, "ppfjet_electron_E/F");
-    pf_tree_->Branch("ppfjet_muon_E",&ppfjet_muon_E_, "ppfjet_muon_E/F");
-    pf_tree_->Branch("ppfjet_photon_E",&ppfjet_photon_E_, "ppfjet_photon_E/F");
-    pf_tree_->Branch("ppfjet_unkown_px",&ppfjet_unkown_px_, "ppfjet_unkown_px/F");
-    pf_tree_->Branch("ppfjet_electron_px",&ppfjet_electron_px_, "ppfjet_electron_px/F");
-    pf_tree_->Branch("ppfjet_muon_px",&ppfjet_muon_px_, "ppfjet_muon_px/F");
-    pf_tree_->Branch("ppfjet_photon_px",&ppfjet_photon_px_, "ppfjet_photon_px/F");
-    pf_tree_->Branch("ppfjet_unkown_py",&ppfjet_unkown_py_, "ppfjet_unkown_py/F");
-    pf_tree_->Branch("ppfjet_electron_py",&ppfjet_electron_py_, "ppfjet_electron_py/F");
-    pf_tree_->Branch("ppfjet_muon_py",&ppfjet_muon_py_, "ppfjet_muon_py/F");
-    pf_tree_->Branch("ppfjet_photon_py",&ppfjet_photon_py_, "ppfjet_photon_py/F");
-    pf_tree_->Branch("ppfjet_unkown_pz",&ppfjet_unkown_pz_, "ppfjet_unkown_pz/F");
-    pf_tree_->Branch("ppfjet_electron_pz",&ppfjet_electron_pz_, "ppfjet_electron_pz/F");
-    pf_tree_->Branch("ppfjet_muon_pz",&ppfjet_muon_pz_, "ppfjet_muon_pz/F");
-    pf_tree_->Branch("ppfjet_photon_pz",&ppfjet_photon_pz_, "ppfjet_photon_pz/F");
-    pf_tree_->Branch("ppfjet_unkown_EcalE",&ppfjet_unkown_EcalE_, "ppfjet_unkown_EcalE/F");
-    pf_tree_->Branch("ppfjet_electron_EcalE",&ppfjet_electron_EcalE_, "ppfjet_electron_EcalE/F");
-    pf_tree_->Branch("ppfjet_muon_EcalE",&ppfjet_muon_EcalE_, "ppfjet_muon_EcalE/F");
-    pf_tree_->Branch("ppfjet_photon_EcalE",&ppfjet_photon_EcalE_, "ppfjet_photon_EcalE/F");
-    pf_tree_->Branch("ppfjet_unkown_n",&ppfjet_unkown_n_, "ppfjet_unkown_n/I");
-    pf_tree_->Branch("ppfjet_electron_n",&ppfjet_electron_n_, "ppfjet_electron_n/I");
-    pf_tree_->Branch("ppfjet_muon_n",&ppfjet_muon_n_, "ppfjet_muon_n/I");
-    pf_tree_->Branch("ppfjet_photon_n",&ppfjet_photon_n_, "ppfjet_photon_n/I");
-    pf_tree_->Branch("ppfjet_had_n",&ppfjet_had_n_, "ppfjet_had_n/I");
-    pf_tree_->Branch("ppfjet_had_E",&ppfjet_had_E_);
-    pf_tree_->Branch("ppfjet_had_px",&ppfjet_had_px_);
-    pf_tree_->Branch("ppfjet_had_py",&ppfjet_had_py_);
-    pf_tree_->Branch("ppfjet_had_pz",&ppfjet_had_pz_);
-    pf_tree_->Branch("ppfjet_had_EcalE",&ppfjet_had_EcalE_);
-    pf_tree_->Branch("ppfjet_had_rawHcalE",&ppfjet_had_rawHcalE_);
-    pf_tree_->Branch("ppfjet_had_emf",&ppfjet_had_emf_);
-    pf_tree_->Branch("ppfjet_had_id",&ppfjet_had_id_);
-    pf_tree_->Branch("ppfjet_had_candtrackind",&ppfjet_had_candtrackind_);
-    if(doGenJets_){
-      pf_tree_->Branch("ppfjet_had_E_mctruth",&ppfjet_had_E_mctruth_);
-      pf_tree_->Branch("ppfjet_had_mcpdgId",&ppfjet_had_mcpdgId_);
-    }
-    pf_tree_->Branch("ppfjet_had_ntwrs",&ppfjet_had_ntwrs_);
-    pf_tree_->Branch("ppfjet_ntwrs",&ppfjet_ntwrs_, "ppfjet_ntwrs/I");
-    pf_tree_->Branch("ppfjet_twr_ieta",&ppfjet_twr_ieta_);
-    pf_tree_->Branch("ppfjet_twr_iphi",&ppfjet_twr_iphi_);
-    pf_tree_->Branch("ppfjet_twr_depth",&ppfjet_twr_depth_);
-    pf_tree_->Branch("ppfjet_twr_subdet",&ppfjet_twr_subdet_);
-    pf_tree_->Branch("ppfjet_twr_hade",&ppfjet_twr_hade_);
-    pf_tree_->Branch("ppfjet_twr_frac",&ppfjet_twr_frac_);
-    pf_tree_->Branch("ppfjet_twr_candtrackind",&ppfjet_twr_candtrackind_);
-    pf_tree_->Branch("ppfjet_twr_hadind",&ppfjet_twr_hadind_);
-    pf_tree_->Branch("ppfjet_twr_elmttype",&ppfjet_twr_elmttype_);
-    pf_tree_->Branch("ppfjet_twr_dR",&ppfjet_twr_dR_);
-    pf_tree_->Branch("ppfjet_twr_clusterind",&ppfjet_twr_clusterind_);
-    pf_tree_->Branch("ppfjet_cluster_n",&ppfjet_cluster_n_, "ppfjet_cluster_n/I");
-    pf_tree_->Branch("ppfjet_cluster_eta",&ppfjet_cluster_eta_);
-    pf_tree_->Branch("ppfjet_cluster_phi",&ppfjet_cluster_phi_);
-    pf_tree_->Branch("ppfjet_cluster_dR",&ppfjet_cluster_dR_);
-    pf_tree_->Branch("ppfjet_ncandtracks",&ppfjet_ncandtracks_, "ppfjet_ncandtracks/I");
-    pf_tree_->Branch("ppfjet_candtrack_px",&ppfjet_candtrack_px_);
-    pf_tree_->Branch("ppfjet_candtrack_py",&ppfjet_candtrack_py_);
-    pf_tree_->Branch("ppfjet_candtrack_pz",&ppfjet_candtrack_pz_);
-    pf_tree_->Branch("ppfjet_candtrack_EcalE",&ppfjet_candtrack_EcalE_);
-    pf_tree_->Branch("pf_dijet_deta",&pf_dijet_deta_, "pf_dijet_deta/F");
-    pf_tree_->Branch("pf_dijet_dphi",&pf_dijet_dphi_, "pf_dijet_dphi/F");
-    pf_tree_->Branch("pf_dijet_balance",&pf_dijet_balance_, "pf_dijet_balance/F");
-    pf_tree_->Branch("pf_thirdjet_px",&pf_thirdjet_px_, "pf_thirdjet_px/F");
-    pf_tree_->Branch("pf_thirdjet_py",&pf_thirdjet_py_, "pf_thirdjet_py/F");
-    pf_tree_->Branch("pf_realthirdjet_px",&pf_realthirdjet_px_, "pf_realthirdjet_px/F");
-    pf_tree_->Branch("pf_realthirdjet_py",&pf_realthirdjet_py_, "pf_realthirdjet_py/F");
-    pf_tree_->Branch("pf_realthirdjet_scale",&pf_realthirdjet_scale_, "pf_realthirdjet_scale/F");
-    pf_tree_->Branch("pf_Run",&pf_Run_, "pf_Run/I");
-    pf_tree_->Branch("pf_Lumi",&pf_Lumi_, "pf_Lumi/I");
-    pf_tree_->Branch("pf_Event",&pf_Event_, "pf_Event/I");
-    pf_tree_->Branch("pf_NPV",&pf_NPV_, "pf_NPV/I");
-    if(doGenJets_){    
-      pf_tree_->Branch("pf_weight",&pf_weight_, "pf_weight/F");
-    }
-=======
   tree_->Branch("tpfjet_pt",&tpfjet_pt_, "tpfjet_pt/F");
   tree_->Branch("tpfjet_p",&tpfjet_p_, "tpfjet_p/F");
   tree_->Branch("tpfjet_E",&tpfjet_E_, "tpfjet_E/F");
@@ -1690,7 +1512,6 @@ void CalcRespCorrDiJets::beginJob()
   tree_->Branch("pf_NPV",&pf_NPV_, "pf_NPV/I");
   if(doGenJets_){    
     tree_->Branch("pf_weight",&pf_weight_, "pf_weight/F");
->>>>>>> upstream/master
   }
 
   return;
@@ -1737,9 +1558,6 @@ int CalcRespCorrDiJets::getEtaPhi(const HcalDetId id)
   return id.rawId() & 0x3FFF; // Get 14 least-significant digits
 }
 
-<<<<<<< HEAD
-=======
 
->>>>>>> upstream/master
 //define this as a plug-in
 DEFINE_FWK_MODULE(CalcRespCorrDiJets);
