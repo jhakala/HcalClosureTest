@@ -24,11 +24,7 @@ process.calcrespcorrdijets.rootHistFilename = cms.string('tree.root')
 #process.calcrespcorrdijets.maxDeltaEta = cms.double(0.5)
 process.calcrespcorrdijets.minJetEt = cms.double(20.)
 process.calcrespcorrdijets.minSumJetEt = cms.double(50.0)
-<<<<<<< HEAD
-process.calcrespcorrdijets.maxThirdJetEt = cms.double(10000.)
-=======
 process.calcrespcorrdijets.maxThirdJetEt = cms.double(75.)
->>>>>>> upstream/master
 
 #import FWCore.Python.FileUtils as FileUtils
 #readFiles = cms.untracked.vstring( FileUtils.loadListFromFile ('Pion_Pt-50.list') )
